@@ -18,6 +18,12 @@ class LinkedList
     self
   end
 
+  # Recursive
+  def include?(item)
+    @item == item or (not @next.nil? and @next.include? item)
+  end
+
+  # Iterative
   def pop
     if @next.nil?
       i = @item
