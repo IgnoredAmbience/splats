@@ -1,11 +1,17 @@
+# Simple LinkedList class
+# Implements a shed-load of derived functions thanks to the Enumerable mixin, if
+# we don't actually want to test all of that, then we should probably swap it
+# out for hand-written ones.
 class LinkedList
+  include Enumerable
+
   def initialize(item = nil)
     @item = nil
     @next = nil
     push item if item
   end
 
-  # Recursive
+  # Recursive implementation
   def push(item)
     if @item.nil?
       @item = item
@@ -18,11 +24,32 @@ class LinkedList
     self
   end
 
-  # Recursive
-  def include?(item)
-    @item == item or (not @next.nil? and @next.include? item)
+  # Iterative implementation
+  def pop
+    if @next.nil?
+      i = @item
+      @item = nil
+      unless i.nil?
+        return i
+      else
+        raise "List is empty"
+      end
+    end
+
+    elem = self
+
+    while elem
+      if elem.next.next.nil?
+        i = elem.next.item
+        elem.next = nil
+        return i
+      else
+        elem = elem.next
+      end
+    end
   end
 
+  # Iterative implementation
   def delete!(item)
     prev = nil
     curr = self
@@ -47,29 +74,12 @@ class LinkedList
     end
   end
 
-
-  # Iterative
-  def pop
-    if @next.nil?
-      i = @item
-      @item = nil
-      unless i.nil?
-        return i
-      else
-        raise "List is empty"
-      end
-    end
-
+  # Required for the Enumerable mixin
+  def each
     elem = self
-
-    while elem
-      if elem.next.next.nil?
-        i = elem.next.item
-        elem.next = nil
-        return i
-      else
-        elem = elem.next
-      end
+    while elem and elem.item
+      yield elem.item
+      elem = elem.next
     end
   end
 
