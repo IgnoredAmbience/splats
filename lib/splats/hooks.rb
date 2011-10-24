@@ -1,10 +1,10 @@
 # Overrided methods to hook into our framework
 
-$blah = Array.new
+$stringsPrinted = Array.new
 
 alias :oldPuts :puts
 def puts (x)
-  $blah.push(x)
+  $stringsPrinted.push([caller(),x])
 end
 
-at_exit {$blah.each{ |s| oldPuts s }}
+at_exit {$stringsPrinted.each{ |s| oldPuts "#{s[0][0]}: #{s[1]}" }}
