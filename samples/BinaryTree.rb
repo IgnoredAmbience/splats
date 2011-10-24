@@ -12,7 +12,20 @@ class BinaryTree
     def find(nodeVal)
         self.rootNode.findNode(nodeVal)
     end
+    
+    def delete(nodeVal)
+                    
+    end
 
+    def each(node=self.rootNode, &block)
+        if (node != nil)
+            yield(node.value)
+        
+        each(node.left, &block)
+        each(node.right, &block)
+        end
+    end
+   
     class Node
         def initialize(nodeVal, leftVal=nil, rightVal=nil)
             @value, @left, @right = nodeVal, leftVal, rightVal
