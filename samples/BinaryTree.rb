@@ -13,35 +13,46 @@ class BinaryTree
         self.rootNode.findNode(nodeVal)
     end
     
-    def delete(nodeVal)
-                    
+    def delete(deleteValue)
+        nodeToDelete = self.rootNode.findNode(deleteValue)
+        puts nodeToDelete
+        if nodeToDelete.leaf?
+            nodeToDelete.delete_parent_reference
+        elsif nodeToDelete.left ^ nodeToDelete.right
+            if nodeToDelete.left
+                nodeToDelete.delete_parent_reference(nodeToDelete.left)
+            else
+                nodeToDelete.delete_parent_reference(nodeToDelete.right)
+            end
+        else
+            
+        end
     end
 
     def each(node=self.rootNode, &block)
         if (node != nil)
+            each(node.left, &block)
             yield(node.value)
-        
-        each(node.left, &block)
-        each(node.right, &block)
+            each(node.right, &block)
         end
     end
    
     class Node
-        def initialize(nodeVal, leftVal=nil, rightVal=nil)
-            @value, @left, @right = nodeVal, leftVal, rightVal
+        def initialize(nodeVal, parent=nil, leftVal=nil, rightVal=nil)
+            @value, @parent, @left, @right = nodeVal, parent, leftVal, rightVal
         end
 
-        attr_accessor :value, :left, :right
+        attr_accessor :value, :parent, :left, :right
         def insert(insertValue)
             if insertValue < @value
 	            if @left == nil
-                    @left = Node.new(insertValue)
+                    @left = Node.new(insertValue, self)
                 else
                     @left.insert(insertValue)
                 end
             else 
                 if @right == nil
-                    @right = Node.new(insertValue)
+                    @right = Node.new(insertValue, self)
                 else
                     @right.insert(insertValue)
                 end
@@ -69,5 +80,24 @@ class BinaryTree
                 end
             end
         end 	
+
+	def delete_parent_reference(newVal=nil)
+        if self.parent.left == self
+            self.parent.left = newVal
+        else 
+            self.parent.right = newVal
+        end
+        if newVal
+            newVal.parent = self.parent
+        end
+    end
+    
+    def smallest_child
+        current_node = self
+        while current_node.left
+            current_node = current_node.left
+        return current_node
+    end
+
     end
 end
