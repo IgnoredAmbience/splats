@@ -10,6 +10,10 @@ module SPLATS
       m = @class.method(:new)
       im = @class.instance_method(:initialize)
       args, @obj = test_method(m, get_params(im))
+
+      @obj.methods.each do |m|
+        test_method @obj.method(m)
+      end
     end
 
     def test_method(method, params=nil)
