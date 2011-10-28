@@ -2,6 +2,7 @@ module SPLATS
   class Core
     def initialize(c)
       @class = c
+      puts c.new
     end
 
     def test_class
@@ -11,7 +12,7 @@ module SPLATS
       im = @class.instance_method(:initialize)
       args, @obj = test_method(m, get_params(im))
 
-      @obj.methods.each do |m|
+      @class.instance_methods(false).each do |m|
         test_method @obj.method(m)
       end
     end
