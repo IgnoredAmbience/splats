@@ -1,4 +1,5 @@
 require 'optparse'
+require_relative '../lib/splats/core.rb'
 
 #options parsed so far
 options = {}
@@ -17,6 +18,20 @@ OptionParser.new do |opts|
 
   opts.on("--help", "-h", "Display help screen") do |flag|
     puts opts
+    exit
+  end
+
+  # Apparently I need to put FILE in CAPS to tell
+  # optparser that this flag expects an argument
+  opts.on("--object-from-file FILE", "-f", "Test class from file. File & class must share names") do |flag|
+
+    if (not (require flag)) #try to load the passed in file
+      puts "Failed to load #{flag}"
+      exit
+    end
+
+#    In here we need some logic to load and then test the class
+
     exit
   end
 
