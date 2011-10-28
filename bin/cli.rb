@@ -9,8 +9,6 @@ options = {}
 
 OptionParser.new do |opts|
 
-  opts.banner = "Usage: splats [OPTIONS] file1 file2"
-
 #  This is the general shape of a flag option
 #  opts.on("--some-flag", "-s", "Flag description") do |flag|
 #    options[:flagName] = flag
