@@ -8,6 +8,9 @@ module SPLATS
   class Mock < BasicObject
     def method_missing(symbol, *args, &block)
       ::Kernel.puts "Method '#{symbol}' called with arguments #{args} and #{block.nil? && 'no' || 'a'} block"
+      if symbol == :inspect
+        "<Mock Object>"
+      end
     end
   end
 end
