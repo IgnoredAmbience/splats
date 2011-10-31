@@ -1,0 +1,10 @@
+## YAML Template.
+---
+## The modules and their classes to test
+modules:
+  classes.rb: [Testing1]
+
+## The folders in which to find the versions
+versions:
+ - version1.1
+ - version1.2

@@ -1,3 +1,5 @@
+# Look it's obviously horrible, I am trying things to see what happens
+
 class SplatsMain
     attr_accessor :testClass 
 
@@ -5,10 +7,12 @@ class SplatsMain
         @testClass = testClass
     end
 
-    def test()
+    def test
         for methodName in @testClass.methods
             begin
-                testClass.send(methodName).send(nil)
+                puts methodName
+                puts testClass.send(methodName).arity
+                #testClass.send(methodName).send(nil)
             rescue Exception => e
                 puts e.message
             end
