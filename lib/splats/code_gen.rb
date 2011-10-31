@@ -15,7 +15,7 @@ def printLine (line)
   end
 end
 
-def print (codeList)
+def printMethod (codeList)
   puts "def #{codeList.hash}"
   codeList[0..-2].each{ |line| printLine line }
   puts "assert_equal #{codeList[-1].obj}.#{codeList[-1].meth}#{argsToString line.args}, #{codeList[-1].out}"
