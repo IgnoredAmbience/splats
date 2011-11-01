@@ -18,6 +18,12 @@ end
 def printMethod (codeList)
   puts "def #{codeList.hash}"
   codeList[0..-2].each{ |line| printLine line }
-  puts "assert_equal #{codeList[-1].obj}.#{codeList[-1].meth}#{argsToString line.args}, #{codeList[-1].out}"
+  # Assume last line is assert statement
+  printAssert(codeList[-1])
   puts "end"
 end
+
+def printAssert (line)
+  puts "assert_equal #{line.obj}.#{line.meth}#{argsToString line.args}, #{line.out}"
+end
+
