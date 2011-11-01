@@ -27,3 +27,11 @@ def printAssert (line)
   puts "assert_equal #{line.obj}.#{line.meth}#{argsToString line.args}, #{line.out}"
 end
 
+# How to turn exceptional output to string
+def exceptionToString (ex)
+  ex.class.name
+end
+
+# Variables to compare against have symbols
+
+# Assume any concrete outputs have to_s method
