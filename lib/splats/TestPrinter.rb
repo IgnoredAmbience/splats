@@ -16,6 +16,7 @@ class TestPrinter
 
 private
   def header
+    "def #{@name}\n"
   end
 
   def body
@@ -25,6 +26,7 @@ private
   end
 
   def footer
+    "end\n"
   end
 
 end
