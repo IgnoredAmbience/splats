@@ -11,6 +11,9 @@ module SPLATS
     def test_class
       # We need to instantiate first, this may result in multiple returned
       # objects, if we can instantiate with parameters
+      # We can only read the number of parameters from the initialize method,
+      # since, def Class.new(*args), prevents any useful detail from being
+      # exposed
       m = @class.method(:new)
       im = @class.instance_method(:initialize)
       tree = Tree::TreeNode.new("CONSTRUCTOR", m)
