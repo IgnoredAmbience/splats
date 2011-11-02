@@ -23,10 +23,29 @@ private
   end
 
   def assert
+    "assert_equal #{methodcallToString @assertInst}, #{result}"
   end
 
   def footer
     "end\n"
+  end
+
+  def methodcallToString (line)
+    "#{line.obj}.#{line.meth} #{argsToString line.args}"
+  end
+
+  def argsToString (argsList)
+    if argsList.nil?
+      ""
+    else
+      out = "("
+      argsList[0..-2].each{ |a| out << "#{a}," }
+      out << "#{argsList[-1]})"
+    end
+  end
+
+  def result
+    @assertInst.out
   end
 
 end
