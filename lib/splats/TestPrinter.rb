@@ -20,7 +20,9 @@ private
   end
 
   def body
-    ""
+    out = ""
+    @instructions.each{ |l| out << "#{"#{l.out} = " if !l.out.nil?}#{methodcallToString l}\n" }
+    out
   end
 
   def assert
