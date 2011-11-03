@@ -54,8 +54,4 @@ private
     end
   end
 
-  def exceptionToString (ex)
-    ex.class.name
-  end
-
 end
