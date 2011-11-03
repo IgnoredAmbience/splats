@@ -1,9 +1,9 @@
 class TestPrinter
 
-  def initialize (abstractCode)
-    @instructions = abstractCode[0..-2]
-    @assertInst = abstractCode[-1]
-    @name = "test_#{abstractCode.hash.abs}"
+  def initialize (abstract_code)
+    @instructions = abstract_code[0..-2]
+    @assert_inst = abstract_code[-1]
+    @name = "test_#{abstract_code.hash.abs}"
   end
 
   def print
@@ -18,39 +18,36 @@ private
 
   def body
     out = ""
-    @instructions.each{ |l| out << "#{"#{l.out} = " if !l.out.nil?}#{methodcallToString l}\n" }
+    @instructions.each{ |l| out << "#{"#{l.out} = " if !l.out.nil?}#{methodcall_to_s l}\n" }
     out
   end
 
   def assert
-    "assert_equal #{methodcallToString @assertInst}, #{result}\n"
+    "assert_equal #{methodcall_to_s @assert_inst}, #{result}\n"
   end
 
   def footer
     "end\n"
   end
 
-  def methodcallToString (line)
-    "#{line.obj}.#{line.meth}#{argsToString line.args}"
+  def methodcall_to_s (line)
+    "#{line.obj}.#{line.meth}#{args_to_s line.args}"
   end
 
-  def argsToString (argsList)
-    if argsList.empty?
+  def args_to_s (args_list)
+    if args_list.empty?
       ""
     else
-      "(" << argsList.map{ |a| a.to_s}.join(',') << ")"
-      #out = "("
-      #argsList[0..-2].each{ |a| out << "#{a}," }
-      #out << "#{argsList[-1]})"
+      "(" << args_list.map{ |a| a.to_s}.join(',') << ")"
     end
   end
 
   def result
-    case @assertInst.out.class
+    case @assert_inst.out.class
     when Exception
-      @assertInst.out.class.name
+      @assert_inst.out.class.name
     else
-      @assertInst.out
+      @assert_inst.out
     end
   end
 
