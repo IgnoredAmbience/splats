@@ -20,6 +20,7 @@ private
   end
 
   def body
+    ""
   end
 
   def assert
