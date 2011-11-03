@@ -3,7 +3,7 @@ require 'tree'
 module SPLATS
   class Core
     def initialize(c)
-      # The class that we interested in testing
+      # The class that we are interested in testing
       @class = c
       @tree = nil
     end
@@ -19,6 +19,7 @@ module SPLATS
       tree = Tree::TreeNode.new("CONSTRUCTOR", m)
 
       # Indexing not unique = may cause future problems
+      # Create a tree, branching on every possible number of params
       generate_parameters(im).each_with_index {|params, i|
         tree << Tree::TreeNode.new(i, params)
       }
@@ -31,7 +32,8 @@ module SPLATS
       end
 =end
     end
-
+     
+    #Calls the method with the supplied params
     def test_method(method, params=nil)
       params = get_params(method) if params.nil?
       req_params, opt_params, rest_params, block_params = params
@@ -45,6 +47,7 @@ module SPLATS
     end
 
     # Takes a method object and generates a list of parameters to test it with
+    # Eg with 2 req 1 opt returns [[Mock, Mock], [Mock,Mock,Mock]]
     def generate_parameters(method)
       param_options = []
 
