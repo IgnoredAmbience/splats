@@ -3,7 +3,7 @@ class TestPrinter
   def initialize (abstractCode)
     @instructions = abstractCode[0..-2]
     @assertInst = abstractCode[-1]
-    @name = "_#{abstractCode.hash.abs}"
+    @name = "test_#{abstractCode.hash.abs}"
   end
 
   def print
