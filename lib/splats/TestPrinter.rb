@@ -15,6 +15,7 @@ class TestPrinter
   end
 
 private
+
   def header
     "def #{@name}\n"
   end
@@ -48,7 +49,16 @@ private
   end
 
   def result
-    @assertInst.out
+    case @assertInst.out.class
+    when Exception
+      @assertInst.out.class.name
+    else
+      @assertInst.out
+    end
+  end
+
+  def exceptionToString (ex)
+    ex.class.name
   end
 
 end
