@@ -34,11 +34,11 @@ private
   end
 
   def methodcallToString (line)
-    "#{line.obj}.#{line.meth} #{argsToString line.args}"
+    "#{line.obj}.#{line.meth}#{argsToString line.args}"
   end
 
   def argsToString (argsList)
-    if argsList.nil?
+    if argsList.empty?
       ""
     else
       out = "("
