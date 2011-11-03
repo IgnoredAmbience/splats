@@ -9,18 +9,14 @@ class TestSuitePrinter
   end
 
   def print
-    out = ""
-    out << requirements
-    out << header
-    out << tests
-    out << footer
+    requirements << header << tests << footer
   end
 
 private
 
   def requirements
-    out = "require \"test/unit\"\n"
-    @reqs.each{ |r| out << "require \"#{r}\"\n"}
+    out = "require 'test/unit'\n"
+    @reqs.each{ |r| out << "require '#{r}'\n"}
     out
   end
 

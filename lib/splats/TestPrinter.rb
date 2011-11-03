@@ -7,11 +7,7 @@ class TestPrinter
   end
 
   def print
-    out = ""
-    out << header
-    out << body
-    out << assert
-    out << footer
+    header << body << assert << footer
   end
 
 private
@@ -42,9 +38,10 @@ private
     if argsList.empty?
       ""
     else
-      out = "("
-      argsList[0..-2].each{ |a| out << "#{a}," }
-      out << "#{argsList[-1]})"
+      "(" << argsList.map{ |a| a.to_s}.join(',') << ")"
+      #out = "("
+      #argsList[0..-2].each{ |a| out << "#{a}," }
+      #out << "#{argsList[-1]})"
     end
   end
 
