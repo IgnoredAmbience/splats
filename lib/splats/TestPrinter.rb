@@ -24,7 +24,7 @@ private
   end
 
   def assert
-    "assert_equal #{methodcallToString @assertInst}, #{result}"
+    "assert_equal #{methodcallToString @assertInst}, #{result}\n"
   end
 
   def footer
