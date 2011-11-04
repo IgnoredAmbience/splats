@@ -9,25 +9,25 @@ class TestSuitePrinter
   end
 
   def print
-    requirements << header << tests << footer
+    (requirements + header + tests + footer).join("\n")
   end
 
 private
 
   def requirements
-    @reqs.map{ |r| "require '#{r}'" }.join("\n") << "\n"
+    @reqs.map{ |r| "require '#{r}'" }
   end
 
   def header
-    "class #{@name} < Test::Unit::TestCase\n"
+    ["class #{@name} < Test::Unit::TestCase"]
   end
 
   def tests
-    @tests.map{|t| t.print}.join("\n")
+    @tests.map{|t| t.print}
   end
   
   def footer
-    "end\n"
+    ["end"]
   end
 
 end
