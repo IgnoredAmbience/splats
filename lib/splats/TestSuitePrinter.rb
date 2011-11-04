@@ -25,9 +25,7 @@ private
   end
 
   def tests
-    out = ""
-    @tests.each{ |t| out << t.print}
-    out
+    @tests.map{|t| t.print}.join("\n")
   end
   
   def footer
