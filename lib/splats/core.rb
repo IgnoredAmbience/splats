@@ -21,9 +21,10 @@ module SPLATS
       # We can only read the number of parameters from the initialize method,
       # since, def Class.new(*args), prevents any useful detail from being
       # exposed
-      m = @class.method(:new)
-      im = @class.instance_method(:initialize)
-      tree = Tree::TreeNode.new("CONSTRUCTOR", m)
+      m = @class.method :new
+      im = @class.instance_method :initialize
+      tree = Tree::TreeNode.new "CONSTRUCTOR", m
+      generate_parameters! tree, im
     end
 
     def test_class(depth = 5)
@@ -32,25 +33,26 @@ module SPLATS
           path = leaf.parentage
           path ||= []
           path.reverse! << leaf.content
-          p path
         end
+        @tree.print_tree
         expand_tree
       end
     end
 
     def expand_tree
       @tree.each_leaf do |leaf|
-        unless leaf.content = nil
+        if leaf.content
           @class.instance_methods.each_with_index do |method, i|
-            leaf << Tree::TreeNode.new(i, method)
-            generate_parameters! leaf
+            newnode = Tree::TreeNode.new(i, method)
+            leaf << newnode
+            generate_parameters! newnode
           end
         end
       end
     end
 
-    def generate_parameters! node
-      method = @class.instance_method node.content
+    def generate_parameters!(node, method=nil)
+      method ||= @class.instance_method node.content
 
       req = opt = 0
       method.parameters.each do |type, name|
@@ -62,6 +64,8 @@ module SPLATS
       (req..opt+req).each_with_index do |n, i|
         node << Tree::TreeNode.new(i, Array.new(n) { Mock.new })
       end
+
+      node
     end
   end
 end
