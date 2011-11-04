@@ -5,10 +5,10 @@ module SPLATS
     def initialize(c)
       # The class that we interested in testing
       @class = c
-      @tree = nil
+      @tree = initialize_tree
     end
 
-    def test_class
+    def initialize_tree
       # We need to instantiate first, this may result in multiple returned
       # objects, if we can instantiate with parameters
       # We can only read the number of parameters from the initialize method,
@@ -23,26 +23,11 @@ module SPLATS
         tree << Tree::TreeNode.new(i, params)
       }
 
-=begin
-      args, @obj = test_method(m, get_params(im))
-
-      @class.instance_methods(false).each do |m|
-        test_method @obj.method(m)
-      end
-=end
+      tree
     end
 
-    def test_method(method, params=nil)
-      params = get_params(method) if params.nil?
-      req_params, opt_params, rest_params, block_params = params
+    def expand_tree
 
-      puts "%s has %d required parameters, %d optional parameters, %s extra parameters and %s block." %
-      [method, req_params.length, opt_params.length,
-        (rest_params ? "some" : "no"), (block_params ? "maybe a" : "no")]
-
-      args = Array.new(req_params.length) { Mock.new }
-      [args, method.call(*args)]
-    end
 
     # Takes a method object and generates a list of parameters to test it with
     def generate_parameters(method)
