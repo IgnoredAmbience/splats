@@ -4,9 +4,11 @@ require 'tree'
 require 'cartesian'
 
 module SPLATS
+  # Keeps track of the class being tested and does much of the testing
   class Core
     attr_reader :tree
 
+    # Stores the class and initialises the tree
     def initialize(c)
       # The class that we are interested in testing
       @class = c
@@ -16,19 +18,19 @@ module SPLATS
     def to_s
       ""
     end
-
-    def initialize_tree
-      # We need to instantiate first, this may result in multiple returned
-      # objects, if we can instantiate with parameters
-      # We can only read the number of parameters from the initialize method,
-      # since, def Class.new(*args), prevents any useful detail from being
-      # exposed
+    
+    # We need to instantiate first, this may result in multiple returned
+    # objects, if we can instantiate with parameters. <br>
+    # We can only read the number of parameters from the initialize method,
+    # as def Class.new(*args), prevents any useful detail from being exposed
+    def initialize_tree      
       m = @class.method :new
       im = @class.instance_method :initialize
       tree = Tree::TreeNode.new "CONST: new/initialize", m
       generate_parameters! tree, im
     end
 
+    # Goes through the tree doing magic
     def test_class(depth = 5)
       depth.times do
         @tree.each_leaf do |leaf|
@@ -39,7 +41,8 @@ module SPLATS
         expand_tree
       end
     end
-
+    
+    #Adds a new node to the leaf based on Tom magic
     def expand_tree
       @tree.postordered_each do |leaf|
         if leaf.is_leaf? and leaf.content
@@ -51,7 +54,9 @@ module SPLATS
         end
       end
     end
-
+    
+    #Creates a list of Mock objects based on the number of optional parameters
+    #For example, req=2, opt=1 gives [[M, M], [M, M, M]]
     def generate_parameters!(node, method=nil)
       method ||= @class.instance_method node.content
 
