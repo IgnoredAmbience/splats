@@ -5,6 +5,8 @@ require 'cartesian'
 
 module SPLATS
   class Core
+    attr_reader :tree
+
     def initialize(c)
       # The class that we are interested in testing
       @class = c
@@ -23,7 +25,7 @@ module SPLATS
       # exposed
       m = @class.method :new
       im = @class.instance_method :initialize
-      tree = Tree::TreeNode.new "CONSTRUCTOR", m
+      tree = Tree::TreeNode.new "CONST: new/initialize", m
       generate_parameters! tree, im
     end
 
@@ -34,18 +36,17 @@ module SPLATS
           path ||= []
           path.reverse! << leaf.content
         end
-        @tree.print_tree
         expand_tree
       end
     end
 
     def expand_tree
-      @tree.each_leaf do |leaf|
-        if leaf.content
-          @class.instance_methods.each_with_index do |method, i|
-            newnode = Tree::TreeNode.new(i, method)
-            leaf << newnode
+      @tree.postordered_each do |leaf|
+        if leaf.is_leaf? and leaf.content
+          @class.instance_methods(include_super=false).each_with_index do |method, i|
+            newnode = Tree::TreeNode.new("#{i}: #{method}", method)
             generate_parameters! newnode
+            leaf << newnode
           end
         end
       end
@@ -62,10 +63,19 @@ module SPLATS
       end
 
       (req..opt+req).each_with_index do |n, i|
-        node << Tree::TreeNode.new(i, Array.new(n) { Mock.new })
+        node << Tree::TreeNode.new("#{n} params", Array.new(n) { Mock.new })
       end
 
       node
+    end
+  end
+end
+
+module Tree
+  class TreeNode
+    def postordered_each(&block) # :yields: node
+      children { |child| child.postordered_each(&block) }
+      yield self
     end
   end
 end
