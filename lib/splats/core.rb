@@ -1,11 +1,15 @@
 require 'tree'
 
+# Provides ** array mixin ([1,2,3]**3 === [1,2,3]x[1,2,3]x[1,2,3])
+require 'cartesian'
+
 module SPLATS
   class Core
     def initialize(c)
       # The class that we are interested in testing
       @class = c
       @tree = initialize_tree
+      ""
     end
 
     def initialize_tree
@@ -20,31 +24,44 @@ module SPLATS
 
       # Indexing not unique = may cause future problems
       # Create a tree, branching on every possible number of params
-      generate_parameters(im).each_with_index {|params, i|
-        tree << Tree::TreeNode.new(i, params)
-      }
 
       tree
     end
 
-    def expand_tree
+    def test_class(depth = 5)
+      depth.times do
+        @tree.each_leaf do |leaf|
+          path = leaf.parentage.reverse << leaf.content
+          puts path
+        end
+        expand_tree
+      end
+    end
 
-    # Takes a method object and generates a list of parameters to test it with
-    # Eg with 2 req 1 opt returns [[Mock, Mock], [Mock,Mock,Mock]]
-    def generate_parameters(method)
-      param_options = []
+    def expand_tree
+      @tree.each_leaf do |leaf|
+        unless leaf.content = nil
+          @class.instance_methods.each_with_index do |method, i|
+            leaf << Tree::TreeNode.new(i, method)
+            generate_parameters! leaf
+          end
+        end
+      end
+    end
+
+    def generate_parameters! node
+      method = @class.instance_method node.content
 
       req = opt = 0
-      method.parameters.each {|type, name|
+      method.parameters.each do |type, name|
         req += 1 if type == :req
         opt += 1 if type == :opt
         # Other types are :rest, :block for * and & syntaxes, respectively
-      }
+      end
 
-      (req..opt+req).each { |n|
-        param_options.push(Array.new(n) { Mock.new })
-      }
-      param_options
+      (req..opt+req).each_with_index do |n, i|
+        node << Tree::TreeNode.new(i, Array.new(n) { Mock.new })
+      end
     end
   end
 end

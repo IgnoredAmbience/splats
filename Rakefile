@@ -4,7 +4,7 @@ task :gems do
   require 'rubygems/dependency_installer'
   installer = Gem::DependencyInstaller.new
 
-  %w{rubytree}.each do |gem|
+  %w{rubytree cartesian}.each do |gem|
     installer.install gem
   end
 end
