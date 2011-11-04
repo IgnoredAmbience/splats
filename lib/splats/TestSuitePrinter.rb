@@ -4,7 +4,7 @@ class TestSuitePrinter
   
   def initialize (name, reqs, tests)
     @name = name
-    @reqs = reqs
+    @reqs = reqs << "test/unit"
     @tests = tests
   end
 
@@ -15,9 +15,7 @@ class TestSuitePrinter
 private
 
   def requirements
-    out = "require 'test/unit'\n"
-    @reqs.each{ |r| out << "require '#{r}'\n"}
-    out
+    @reqs.map{ |r| "require '#{r}'" }.join("\n") << "\n"
   end
 
   def header
