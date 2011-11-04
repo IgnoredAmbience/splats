@@ -4,7 +4,9 @@ require 'tree'
 require 'cartesian'
 
 module SPLATS
+  # Keeps track of the class being tested and does much of the testing
   class Core
+    # Stores the class and initialises the tree
     def initialize(c)
       # The class that we are interested in testing
       @class = c
