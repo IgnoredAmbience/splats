@@ -9,7 +9,6 @@ module SPLATS
       # The class that we are interested in testing
       @class = c
       @tree = initialize_tree
-      ""
     end
 
     def initialize_tree
@@ -21,11 +20,6 @@ module SPLATS
       m = @class.method(:new)
       im = @class.instance_method(:initialize)
       tree = Tree::TreeNode.new("CONSTRUCTOR", m)
-
-      # Indexing not unique = may cause future problems
-      # Create a tree, branching on every possible number of params
-
-      tree
     end
 
     def test_class(depth = 5)
