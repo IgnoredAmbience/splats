@@ -11,6 +11,10 @@ module SPLATS
       @tree = initialize_tree
     end
 
+    def to_s
+      ""
+    end
+
     def initialize_tree
       # We need to instantiate first, this may result in multiple returned
       # objects, if we can instantiate with parameters
@@ -25,8 +29,10 @@ module SPLATS
     def test_class(depth = 5)
       depth.times do
         @tree.each_leaf do |leaf|
-          path = leaf.parentage.reverse << leaf.content
-          puts path
+          path = leaf.parentage
+          path ||= []
+          path.reverse! << leaf.content
+          p path
         end
         expand_tree
       end
