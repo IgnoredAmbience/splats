@@ -7,25 +7,25 @@ class TestPrinter
   end
 
   def print
-    header << body << assert << footer
+    (header + body + assert + footer).join("\n")
   end
 
 private
 
   def header
-    "def #{@name}\n"
+    ["def #{@name}"]
   end
 
   def body
-    @instructions.map{ |l| instruction_to_s l }.join("\n") << "\n"
+    @instructions.map{ |l| instruction_to_s l }
   end
 
   def assert
-    "assert_equal #{methodcall_to_s @assert_inst}, #{result}\n"
+    ["assert_equal #{methodcall_to_s @assert_inst}, #{result}"]
   end
 
   def footer
-    "end\n"
+    ["end"]
   end
 
   def instruction_to_s (line)
