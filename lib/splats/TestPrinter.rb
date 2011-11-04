@@ -17,9 +17,7 @@ private
   end
 
   def body
-    out = ""
-    @instructions.each{ |l| out << "#{"#{l.out} = " if !l.out.nil?}#{methodcall_to_s l}\n" }
-    out
+    @instructions.map{ |l| instruction_to_s l }.join("\n") << "\n"
   end
 
   def assert
@@ -28,6 +26,10 @@ private
 
   def footer
     "end\n"
+  end
+
+  def instruction_to_s (line)
+    "#{"#{line.out} = " if !line.out.nil?}#{methodcall_to_s line}"
   end
 
   def methodcall_to_s (line)
