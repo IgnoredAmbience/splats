@@ -38,19 +38,23 @@ module SPLATS
           path ||= []
           path.reverse! << leaf.content
         end
-        expand_tree
+        expand_tree!
       end
     end
     
     #Adds a new node to the leaf based on Tom magic
-    def expand_tree
+    def expand_tree!
       @tree.postordered_each do |leaf|
-        if leaf.is_leaf? and leaf.content
-          @class.instance_methods(include_super=false).each_with_index do |method, i|
-            newnode = Tree::TreeNode.new("#{i}: #{method}", method)
-            generate_parameters! newnode
-            leaf << newnode
-          end
+        expand_leaf! leaf
+      end
+    end
+
+    def expand_leaf! leaf
+      if leaf.is_leaf? and leaf.content
+        @class.instance_methods(include_super=false).each_with_index do |method, i|
+          newnode = Tree::TreeNode.new("#{i}: #{method}", method)
+          generate_parameters! newnode
+          leaf << newnode
         end
       end
     end
