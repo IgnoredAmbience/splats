@@ -4,14 +4,17 @@ module SPLATS
 # Prints a collection of tests into a suite
   class TestSuitePrinter
     
-    # Takes in the name of the test, requirements, and an array of TestPrinters
+    # Takes in
+		# * the name for the test suite
+		# * any required files
+		# * an array of TestPrinter objects
     def initialize (name, reqs, tests)
       @name = name
       @reqs = reqs << "test/unit"
       @tests = tests
     end
 
-    # Returns the final ruby code
+    # Returns a string of the suite of tests in test::unit
     def print
       (requirements + header + tests + footer).join("\n")
     end
