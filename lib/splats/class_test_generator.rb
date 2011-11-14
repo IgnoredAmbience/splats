@@ -1,7 +1,7 @@
 require 'tree'
 
 # Provides ** array mixin ([1,2,3]**3 === [1,2,3]x[1,2,3]x[1,2,3])
-require 'cartesian'
+# require 'cartesian'
 
 module SPLATS
   # Keeps track of the class being tested and does much of the testing
