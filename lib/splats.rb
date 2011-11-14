@@ -1,5 +1,5 @@
 # This is the class-loader for SpLATS
-require_relative 'splats/class_test_generator'
+require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test_line'
 require_relative 'splats/test_printer'
@@ -13,7 +13,7 @@ module SPLATS
     config["modules"].each{ |module_name, classes|
       load root_dir + "/" + config["versions"][0] + "/" + module_name
       classes.each{ |c|
-        s = ClassTestGenerator.new(Object.const_get(c))
+        s = Generator.new(Object.const_get(c))
         s.test_class
       }
     }
@@ -45,8 +45,7 @@ module SPLATS
     # Creates tests for a class by generating and traversing the tree
     # Then generating the code from the abstract syntax
     def single_class_test(testing_class)
-      cur_testing_class = ClassTestGenerator.new(testing_class)
-      test_counter = 0
+      cur_testing_class = Generator.new(testing_class)
       cur_testing_class.test_class { |test, result|
         test_printer = SPLATS::TestPrinter.new(test + [result])
         write(test_printer.print, testing_class ,test_counter)
