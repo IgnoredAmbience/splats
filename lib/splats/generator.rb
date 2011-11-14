@@ -5,7 +5,7 @@ require 'tree'
 
 module SPLATS
   # Keeps track of the class being tested and does much of the testing
-  class ClassTestGenerator
+  class Generator
     attr_reader :tree
 
     # Stores the class and initialises the tree

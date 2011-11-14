@@ -1,5 +1,5 @@
 # This is the class-loader for SpLATS
-require_relative 'splats/class_test_generator'
+require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test_line'
 
@@ -12,7 +12,7 @@ module SPLATS
     config["modules"].each{ |module_name, classes|
       load root_dir + "/" + config["versions"][0] + "/" + module_name
       classes.each{ |c|
-        s = ClassTestGenerator.new(Object.const_get(c))
+        s = Generator.new(Object.const_get(c))
         s.test_class
       }
     }
@@ -42,7 +42,7 @@ module SPLATS
     end
     
     def single_class_test(testing_class)
-      cur_testing_class = ClassTestGenerator.new(testing_class)
+      cur_testing_class = Generator.new(testing_class)
       cur_testing_class.test_class
     end
     
