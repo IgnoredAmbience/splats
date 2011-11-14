@@ -5,7 +5,7 @@ require 'cartesian'
 
 module SPLATS
   # Keeps track of the class being tested and does much of the testing
-  class Core
+  class ClassTestGenerator
     attr_reader :tree
 
     # Stores the class and initialises the tree
