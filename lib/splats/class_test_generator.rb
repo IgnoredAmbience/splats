@@ -63,7 +63,7 @@ module SPLATS
     
     #Creates a list of Mock objects based on the number of optional parameters
     #For example, req=2, opt=1 gives [[M, M], [M, M, M]]
-    def Core.generate_parameters!(node, method=nil)
+    def ClassTestGenerator.generate_parameters!(node, method=nil)
       # If and only if method doesn't have a value, assign
       method ||= @class.instance_method node.content
 
