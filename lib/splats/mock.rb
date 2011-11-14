@@ -20,5 +20,9 @@ module SPLATS
         "<Mock Object>"
       end
     end
+
+    def __SPLATS_is_mock?
+      true
+    end
   end
 end
