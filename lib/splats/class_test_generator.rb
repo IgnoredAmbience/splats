@@ -12,7 +12,7 @@ module SPLATS
     def initialize(c)
       # The class that we are interested in testing
       @class = c
-      @tree = initialize_tree
+      @tree = nil
     end
 
     def to_s
@@ -32,6 +32,8 @@ module SPLATS
 
     # Goes through the tree doing magic
     def test_class(depth = 5)
+      @tree = initialize_tree
+
       depth.times do
         @tree.each_leaf do |leaf|
           path = leaf.parentage || []
@@ -63,7 +65,7 @@ module SPLATS
     
     #Creates a list of Mock objects based on the number of optional parameters
     #For example, req=2, opt=1 gives [[M, M], [M, M, M]]
-    def ClassTestGenerator.generate_parameters!(node, method=nil)
+    def generate_parameters!(node, method=nil)
       # If and only if method doesn't have a value, assign
       method ||= @class.instance_method node.content
 
