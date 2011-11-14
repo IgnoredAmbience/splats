@@ -6,7 +6,7 @@ module SPLATS
   # explicity state Kernel for any builtin functions!
   class Mock < BasicObject
     # Rebind all defaulted methods to run via method_missing
-    (instance_methods - instance_methods(include_super = false) -
+    (instance_methods - instance_methods(false) -
                                                    [:__send__]).each do |method|
       define_method(method) do |*args, &block|
         __send__(:method_missing, method, *args, &block)
