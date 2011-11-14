@@ -34,4 +34,30 @@ module SPLATS
 
     (Module.constants - constants).map { |sym| const_get sym }
   end
+  class TestController
+    def initialize(input_file, output_dir)
+      @input_classes = SPLATS.load_class input_file
+      @output_dir = output_dir
+    end
+    
+    def single_class_test(testing_class)
+      cur_testing_class = ClassTestGenerator.new(testing_class)
+      cur_testing_class.test_class
+    end
+    
+    def multi_class_test 
+      @input_classes.each do |cla|
+        single_class_test(cla)
+      end
+    end
+
+    # Takes in the test to output, class being tested and test number
+    # Writes to a file - ouput_directory/test_className01.rb     
+    def write(test_as_string, cla, id)
+      File.open("#{@output_dir}test_#{cla}#{id}.rb", "w") do |x|
+        x.puts test_as_string
+      end
+    end
+  end
+
 end
