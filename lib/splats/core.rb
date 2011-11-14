@@ -51,7 +51,7 @@ module SPLATS
 
     def expand_leaf! leaf
       if leaf.is_leaf? and leaf.content
-        @class.instance_methods(include_super=false).each_with_index do |method, i|
+        @class.instance_methods(false).each_with_index do |method, i|
           newnode = Tree::TreeNode.new("#{i}: #{method}", method)
           generate_parameters! newnode
           leaf << newnode
@@ -61,7 +61,8 @@ module SPLATS
     
     #Creates a list of Mock objects based on the number of optional parameters
     #For example, req=2, opt=1 gives [[M, M], [M, M, M]]
-    def generate_parameters!(node, method=nil)
+    def Core.generate_parameters!(node, method=nil)
+      # If and only if method doesn't have a value, assign
       method ||= @class.instance_method node.content
 
       req = opt = 0
@@ -85,6 +86,11 @@ module Tree
     def postordered_each(&block) # :yields: node
       children { |child| child.postordered_each(&block) }
       yield self
+    end
+
+    def eql? other
+      # Loop through each node in this, and each node in the other.
+      # Generate an array and then compare the values of the array
     end
   end
 end
