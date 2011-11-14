@@ -17,7 +17,7 @@ module SPLATS
     end
 
     def to_s
-      assignment + object_call + method_name + arguments
+      assignment + object_call + method_name + args_to_s
     end
 
     private
@@ -47,6 +47,15 @@ module SPLATS
         method.to_s
       else
         method.owner.name + method.name.to_s
+      end
+    end
+
+    # Turns the array of arguments to a string
+    def args_to_s
+      if arguments.empty?
+        ""
+      else
+        "(" << arguments.map{ |a| a.to_s}.join(',') << ")"
       end
     end
   end
