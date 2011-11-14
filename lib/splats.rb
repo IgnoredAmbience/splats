@@ -2,6 +2,7 @@
 require_relative 'splats/class_test_generator'
 require_relative 'splats/mock'
 require_relative 'splats/test_line'
+require_relative 'splats/test_printer'
 
 module SPLATS
   def self.load_config(filename)
@@ -41,14 +42,22 @@ module SPLATS
       @output_dir = output_dir
     end
     
+    # Creates tests for a class by generating and traversing the tree
+    # Then generating the code from the abstract syntax
     def single_class_test(testing_class)
       cur_testing_class = ClassTestGenerator.new(testing_class)
-      cur_testing_class.test_class
+      test_counter = 0
+      cur_testing_class.test_class { |test, result|
+        test_printer = SPLATS::TestPrinter.new(test + [result])
+        write(test_printer.print, testing_class ,test_counter)
+        test_counter += 1
+      }
     end
     
+    # Creates tests for every class in @input_classes 
     def multi_class_test 
       @input_classes.each do |cla|
-        single_class_test(cla)
+      single_class_test(cla)
       end
     end
 
