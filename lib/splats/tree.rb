@@ -1,3 +1,5 @@
+require 'tree'
+
 module Tree
   class TreeNode
     def postordered_each(&block) # :yields: node
