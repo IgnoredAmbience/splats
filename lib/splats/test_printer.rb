@@ -37,7 +37,7 @@ module SPLATS
 
     # The final assert statement
     def assert
-      ["assert_equal #{methodcall_to_s @assert_inst}, #{result}"]
+      ["assert_equal result, #{result}"]
     end
 
     # The function footer
