@@ -18,12 +18,12 @@ module SPLATS
     def to_s
       ""
     end
-    
+
     # We need to instantiate first, this may result in multiple returned
     # objects, if we can instantiate with parameters. <br>
     # We can only read the number of parameters from the initialize method,
     # as def Class.new(*args), prevents any useful detail from being exposed
-    def initialize_tree      
+    def initialize_tree
       m = @class.method :new
       im = @class.instance_method :initialize
       tree = Tree::TreeNode.new "CONST: new/initialize", m
@@ -50,7 +50,7 @@ module SPLATS
         expand_tree!
       end
     end
-    
+
     #Adds a new node to the leaf based on Tom magic
     def expand_tree!
       @tree.postordered_each do |leaf|
@@ -67,7 +67,7 @@ module SPLATS
         end
       end
     end
-    
+
     #Creates a list of Mock objects based on the number of optional parameters
     #For example, req=2, opt=1 gives [[M, M], [M, M, M]]
     def generate_parameters!(node, method=nil)

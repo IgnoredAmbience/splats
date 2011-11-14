@@ -34,7 +34,7 @@ module SPLATS
 
     def object_call
       if object
-        object + '.'
+        object.to_s + '.'
       elsif method.is_a? Method
         method.class.name + '.'
       else
@@ -46,7 +46,7 @@ module SPLATS
       if method.is_a? Symbol
         method.to_s
       else
-        method.owner.name + method.name.to_s
+        method.name.to_s
       end
     end
 

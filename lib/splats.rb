@@ -3,6 +3,7 @@ require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test_line'
 require_relative 'splats/test_printer'
+require_relative 'splats/tree'
 
 module SPLATS
   def self.load_config(filename)
