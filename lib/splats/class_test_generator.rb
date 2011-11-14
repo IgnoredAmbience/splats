@@ -36,11 +36,16 @@ module SPLATS
 
       depth.times do
         @tree.each_leaf do |leaf|
+          # Flatten each leaf out as a path to it in the tree
           path = leaf.parentage || []
           path.reverse! << leaf
-          path_content = path.map {|node| node.content }
 
-          execute_test path_content
+          path_content = path.map {|node| node.content}
+
+          puts "Running test: " + path_content.inspect
+          test = path_to_test_lines path_content
+          result = execute_test test
+          yield(test, result)
         end
         expand_tree!
       end
@@ -83,25 +88,32 @@ module SPLATS
       node
     end
 
-    def execute_test test
-      puts "Running test: " + test.inspect
+    def path_to_test_lines path
+      test_lines = []
+      while path.length > 0
+        method = path.shift
+        parameters = path.shift
+        test_lines << TestLine.new(method, parameters)
+      end
+      test_lines
+    end
 
-      while test.length > 0
-        method = test.shift
-        parameters = test.shift
-
+    def execute_test test_lines
+      object = result = nil
+      test_lines.each do |test|
         begin
-          if method.respond_to? :call
-            object = method.call *parameters
-          elsif method.respond_to? :to_s
-            result = object.send method.to_s, *parameters
+          if test.method.respond_to? :call
+            object = test.method.call *test.arguments
+          else
+            result = object.send test.method, *test.arguments
           end
         rescue Exception => e
-          puts "=> " + e.to_s
+          puts "!> " + e.to_s
         end
       end
 
       puts "=> " + result.inspect + "\n\n"
+      result
     end
   end
 end

@@ -1,6 +1,7 @@
 # This is the class-loader for SpLATS
 require_relative 'splats/class_test_generator'
 require_relative 'splats/mock'
+require_relative 'splats/test_line'
 
 module SPLATS
   def self.load_config(filename)
