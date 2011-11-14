@@ -26,7 +26,7 @@ module SPLATS
       if output
         output + ' = '
       elsif method.is_a? Method and method.name == :new
-        object + ' = '
+        'object = '
       else
         ''
       end
