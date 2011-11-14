@@ -34,9 +34,11 @@ module SPLATS
     def test_class(depth = 5)
       depth.times do
         @tree.each_leaf do |leaf|
-          path = leaf.parentage
-          path ||= []
-          path.reverse! << leaf.content
+          path = leaf.parentage || []
+          path.reverse! << leaf
+          path_content = path.map {|node| node.content }
+
+          execute_test path_content
         end
         expand_tree!
       end
@@ -76,6 +78,27 @@ module SPLATS
       end
 
       node
+    end
+
+    def execute_test test
+      puts "Running test: " + test.inspect
+
+      while test.length > 0
+        method = test.shift
+        parameters = test.shift
+
+        begin
+          if method.respond_to? :call
+            object = method.call *parameters
+          elsif method.respond_to? :to_s
+            result = object.send method.to_s, *parameters
+          end
+        rescue Exception => e
+          puts "=> " + e.to_s
+        end
+      end
+
+      puts "=> " + result.inspect + "\n\n"
     end
   end
 end
