@@ -11,9 +11,9 @@ module SPLATS
     #  out = obj.meth(args)
     # except for the last item in the array, which is interpreted as
     #  assert_equal obj.meth(args),out
-    def initialize (abstract_code)
+    def initialize (abstract_code, output)
       @instructions = abstract_code[0..-2]
-      @assert_inst = abstract_code[-1]
+      @assert = output
       @name = "test_#{abstract_code.hash.abs}"
     end
 
@@ -47,11 +47,11 @@ module SPLATS
 
     # Turns the result from an abstract assert to a string
     def result
-      case @assert_inst.out.class
+      case @assert.class
       when Exception
-        @assert_inst.out.class.name
+        @assert.class.name
       else
-        @assert_inst.out
+        @assert
       end
     end
   end

@@ -47,8 +47,9 @@ module SPLATS
     # Then generating the code from the abstract syntax
     def single_class_test(testing_class)
       cur_testing_class = Generator.new(testing_class)
+      test_counter = 0
       cur_testing_class.test_class { |test, result|
-        test_printer = SPLATS::TestPrinter.new(test + [result])
+        test_printer = SPLATS::TestPrinter.new(test, result)
         write(test_printer.print, testing_class ,test_counter)
         test_counter += 1
       }
