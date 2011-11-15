@@ -38,9 +38,14 @@ module SPLATS
     (Module.constants - constants).map { |sym| const_get sym }
   end
   class TestController
+    #Stores the classes in the file and output directory
+    #Creates the output directory if it doesn't exist
     def initialize(input_file, output_dir)
       @input_classes = SPLATS.load_class input_file
       @output_dir = output_dir
+      if not File::directory?(output_dir)
+        Dir.mkdir(output_dir)
+      end
     end
     
     # Creates tests for a class by generating and traversing the tree
