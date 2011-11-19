@@ -19,7 +19,7 @@ module SPLATS
     end
 =end
 
-    def initialize
+    def initialize(abstract_code = nil)
       @test_lines = []
     end
     
@@ -45,7 +45,7 @@ module SPLATS
 
     # The function header
     def header
-      ["def #{@name}"]
+      ["def #{@name}"]@test_lines = []
     end
 
     # The body of instructions

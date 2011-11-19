@@ -65,36 +65,35 @@ module SPLATS
       end
     end
     
-    # Creates tests for a class by generating and traversing the tree
-    # then generating the code from the abstract syntax
-    #
-    # @param [Class] testing_class The class to be tested
-    def single_class_test(testing_class)
-      cur_testing_class = Generator.new(testing_class)
-      test_counter = 0
-      cur_testing_class.test_class do |test, result|
-        test_printer = SPLATS::TestPrinter.new(test, result)
-        write(test_printer.print, testing_class ,test_counter)
-        test_counter += 1
-      end
-    end
-    
     # Creates tests for every class in @input_classes 
     def multi_class_test 
-      @input_classes.each do |cla|
-        single_class_test(cla)
+      @input_classes.each do |c|
+        single_class_test(c)
       end
     end
 
     # Takes in the test to output, class being tested and test number
-    # Writes to a file - ouput_directory/test_className01.rb     
+    # Writes to a file - ouput_directory/test_className.rb
     #
-    # @param [String] test_as_string The finished generated test
-    # @param [Class] cla The class being tested
+    # @param [String] test The finished generated test
+    # @param [Class] c The class being tested
     # @param [Numeric] id Test counter
-    def write(test_as_string, cla, id)
-      File.open("#{@output_dir}test_#{cla}#{id}.rb", "w") do |x|
-        x.puts test_as_string
+    def write(test, c)
+      File.open("#{@output_dir}test_#{c}.rb", "w") do |x|
+        x.puts test
+      end
+    end
+    
+    private
+    
+    # Creates tests for a class by generating and traversing the tree
+    # then generating the code from the abstract syntax
+    #
+    # @param [Class] c The class to be tested
+    def single_class_test(c)
+      generator = Generator.new(c)
+      generator.test_class do |test|
+        write(test, c)
       end
     end
   end
