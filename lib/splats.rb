@@ -11,13 +11,13 @@ module SPLATS
     config = YAML.load_file(filename)
 
     # Load the first version modules
-    config["modules"].each{ |module_name, classes|
+    config["modules"].each do |module_name, classes|
       load root_dir + "/" + config["versions"][0] + "/" + module_name
-      classes.each{ |c|
+      classes.each do |c|
         s = Generator.new(Object.const_get(c))
         s.test_class
-      }
-    }
+      end
+    end
   end
 
   # Loads given file and returns classes defined within
@@ -35,7 +35,9 @@ module SPLATS
 
     load filename
 
-    (Module.constants - constants).map { |sym| const_get sym }
+    (Module.constants - constants).map do |sym|
+      const_get sym
+    end
   end
   class TestController
     #Stores the classes in the file and output directory
@@ -53,17 +55,17 @@ module SPLATS
     def single_class_test(testing_class)
       cur_testing_class = Generator.new(testing_class)
       test_counter = 0
-      cur_testing_class.test_class { |test, result|
+      cur_testing_class.test_class do |test, result|
         test_printer = SPLATS::TestPrinter.new(test, result)
         write(test_printer.print, testing_class ,test_counter)
         test_counter += 1
-      }
+      end
     end
     
     # Creates tests for every class in @input_classes 
     def multi_class_test 
       @input_classes.each do |cla|
-      single_class_test(cla)
+        single_class_test(cla)
       end
     end
 
