@@ -1,7 +1,7 @@
 require 'tree'
 
 # Provides ** array mixin ([1,2,3]**3 === [1,2,3]x[1,2,3]x[1,2,3])
-# require 'cartesian'
+require 'cartesian'
 
 module SPLATS
   # Generates tests for a given class
@@ -12,6 +12,7 @@ module SPLATS
     def initialize c
       @class = c
       @tree = nil
+      @pass_parameters = [Mock, nil]
     end
 
     def to_s
@@ -105,29 +106,50 @@ module SPLATS
         # Other types are :rest, :block for * and & syntaxes, respectively
       end
 
-      (req..opt+req).each_with_index do |n, i|
-        leaf << Tree::TreeNode.new("#{n} params", Array.new(n) { Mock.new })
+      (req..opt+req).each do |n|
+        if n == 1
+          iter = @pass_parameters.map{|p| [p]}.each
+        else
+          iter = (@pass_parameters ** n).each
+        end
+
+        if iter.count == 0
+          leaf << Tree::TreeNode.new("", [])
+        else
+          iter.each do |args|
+            leaf << Tree::TreeNode.new(args.hash, args)
+          end
+        end
       end
     end
 
     # Executes a given test
     #
-    # @param [Array<TestLine>] test_lines
+    # @param [Test] test
     def execute_test test
       object = result = nil
       test.each do |test_line|
         begin
+          # Construct any arguments that are Classes
+          arguments = test_line.arguments.map do |arg|
+            if arg.is_a? Class
+              arg.new
+            else
+              arg
+            end
+          end
+
           if test_line.method.respond_to? :call
-            object = test_line.method.call *test_line.arguments
+            object = test_line.method.call *arguments
           else
-            result = object.send test_line.method, *test_line.arguments
+            result = object.send test_line.method, *arguments
           end
         rescue Exception => e
           puts "!> " + e.to_s
         end
       end
 
-      puts "=> " + result.inspect + "\n\n"
+      puts "=> " + result.inspect
       result
     end
   end
