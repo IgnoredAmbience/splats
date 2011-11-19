@@ -16,8 +16,17 @@ module SPLATS
     # Prints information about the failed method call
     def method_missing(symbol, *args, &block)
       ::Kernel.puts "Method '#{symbol}' called with arguments #{args} and #{block.nil? && 'no' || 'a'} block"
-      if symbol == :inspect
+      case symbol
+      when :inspect
         "<Mock Object>"
+      when :to_r
+        0
+      when :coerce
+        [args[0], to_r]
+      when :to_str
+        ""
+      when :to_ary
+        []
       end
     end
 
