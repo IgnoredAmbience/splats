@@ -58,6 +58,20 @@ module SPLATS
         "(" << arguments.map{ |a| a.to_s}.join(',') << ")"
       end
     end
+
+    # Converts a Array of path elements into an Array of TestLines
+    #
+    # @param [Array<Method,Symbol,Array>] path A test execution path, as taken
+    #   from the search tree
+    # @return [Array<TestLine>]
+    def self.from_path path
+      test_lines = []
+      while path.length > 0
+        method = path.shift
+        parameters = path.shift
+        test_lines << TestLine.new(method, parameters)
+      end
+    end
   end
 end
 

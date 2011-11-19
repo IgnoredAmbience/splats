@@ -43,7 +43,7 @@ module SPLATS
           path_content = path.map {|node| node.content}
 
           puts "Running test: " + path_content.inspect
-          test = path_to_test_lines path_content
+          test = TestLine.from_path path_content
           result = execute_test test
           yield(test, result)
         end
