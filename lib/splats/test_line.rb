@@ -71,6 +71,7 @@ module SPLATS
         parameters = path.shift
         test_lines << TestLine.new(method, parameters)
       end
+      test_lines
     end
   end
 end
