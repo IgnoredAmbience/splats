@@ -41,9 +41,14 @@ module SPLATS
           path.reverse! << leaf
 
           path_content = path.map {|node| node.content}
+          test = Test.new
 
-          puts "Running test: " + path_content.inspect
-          test = TestLine.from_path path_content
+          puts "Generating test: " + path_content.inspect
+          while path_content.length > 0
+            method = path_content.shift
+            parameters = path_content.shift
+            test.add_line(method, parameters)
+          end
           result = execute_test test
           yield(test, result)
         end
@@ -88,24 +93,15 @@ module SPLATS
       node
     end
 
-    def path_to_test_lines path
-      test_lines = []
-      while path.length > 0
-        method = path.shift
-        parameters = path.shift
-        test_lines << TestLine.new(method, parameters)
-      end
-      test_lines
-    end
-
-    def execute_test test_lines
+    # Loops through the test object and does stuff on test lines
+    def execute_test test
       object = result = nil
-      test_lines.each do |test|
+      test.each do |test_line|
         begin
-          if test.method.respond_to? :call
-            object = test.method.call *test.arguments
+          if test_line.method.respond_to? :call
+            object = test_line.method.call *test_line.arguments
           else
-            result = object.send test.method, *test.arguments
+            result = object.send test_line.method, *test_line.arguments
           end
         rescue Exception => e
           puts "!> " + e.to_s

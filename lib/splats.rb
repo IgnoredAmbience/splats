@@ -1,8 +1,7 @@
 # This is the class-loader for SpLATS
 require_relative 'splats/generator'
 require_relative 'splats/mock'
-require_relative 'splats/test_line'
-require_relative 'splats/test_printer'
+require_relative 'splats/test'
 require_relative 'splats/tree'
 
 module SPLATS
