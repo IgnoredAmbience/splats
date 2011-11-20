@@ -16,17 +16,12 @@ optparse = OptionParser.new do |opts|
     exit
   end
 
-  options[:list] = nil
-  opts.on("--object-from-file FILES", "-f", Array, "Test classes from files. File & class must share names") do |files|
-    options[:list] = files
+  options[:file] = nil
+  opts.on("--object-from-file FILE", "-f", "Test classes from file. File & class must share names") do |file|
+    options[:file] = file
   end
 
-  options[:config] = nil
-  opts.on("--config FILE", "-c", "Configuration file") do |file|
-    options[:config] = file
-  end
-
-  options[:outdir] = nil
+  options[:outdir] = "tests"
   opts.on("--output-directory DIR", "-o", "Output directory (defaults to \"tests\")") do |dir|
     options[:outdir] = dir
   end
@@ -38,7 +33,7 @@ begin
   optparse.parse!
 
   # TODO: Other things may want to go here, eg, if config, assume outdir specified there?
-  if !(options[:list].nil? ^ options[:config].nil?)
+  if options[:file].nil?
     puts optparse
     exit
   end
@@ -47,8 +42,11 @@ rescue OptionParser::InvalidOption,OptionParser::MissingArgument
   exit
 end
 
-if (!options[:list].nil?)
-  SPLATS.load_classes(options[:config])
-elsif (!options[:config].nil?)
-  SPLATS.load_config(options[:config])
+begin
+	controller = SPLATS::TestController.new(options[:file],options[:outdir])
+rescue LoadError
+	puts "File doesn't exist"
+	exit
 end
+
+controller.test_classes
