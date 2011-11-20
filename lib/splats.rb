@@ -6,29 +6,6 @@ require_relative 'splats/test_printer'
 require_relative 'splats/tree'
 
 module SPLATS
-  # Loads a configuration file, written in YAML, outlining the classes to test
-  #
-  # Example:
-  #  modules:
-  #   classes.rb: [Testing1]
-  #  versions:
-  #    - 1.1
-  #    - 1.2
-  #
-  # @param [String] filename The YAML configuration file to load
-  def self.load_config(filename)
-    require "yaml"
-    config = YAML.load_file(filename)
-
-    # Load the modules of the baseline version of the code being tested
-    config["modules"].each do |module_name, classes|
-      load root_dir + "/" + config["versions"][0] + "/" + module_name
-      classes.each do |c|
-        s = Generator.new(Object.const_get(c))
-        s.test_class
-      end
-    end
-  end
 
   # Loads given file and returns classes defined within
   #
