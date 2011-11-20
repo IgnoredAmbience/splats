@@ -2,23 +2,6 @@ module SPLATS
   # Prints individual tests
   class Test
 
-    # Takes in abstract code in the form of a list of objects with parameters:
-    # [obj]  an object
-    # [meth] a method on that object
-    # [args] an array of arguments to that method
-    # [out]  a concrete, exception or variable for the result
-    # Representing
-    #  out = obj.meth(args)
-    # except for the last item in the array, which is interpreted as
-    #  assert_equal obj.meth(args),out
-=begin    def initialize (abstract_code, output)
-      @instructions = abstract_code[0..-2]
-      @assert = output
-      @name = "test_#{abstract_code.hash.abs}"
-      @lines = generate_lines @instructions
-    end
-=end
-
     def initialize
       @test_lines = []
     end
