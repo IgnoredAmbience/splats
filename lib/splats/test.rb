@@ -9,6 +9,10 @@ module SPLATS
     def add_line (method, parameters)
       @test_lines.push(TestLine.new(method, parameters))
     end
+
+		def add_result (result)
+			@result = result
+		end
     
     def execute
     end
@@ -33,12 +37,12 @@ module SPLATS
 
     # The body of instructions
     def body
-      @test_lines.map{ |l| l.to_s }
+      @test_lines[0..-2].map{ |l| l.to_s }
     end
 
     # The final assert statement
     def assert
-      ["assert_equal result, #{result}"]
+      ["assert_equal #{@test_lines[-1]}, #{result_to_s}"]
     end
 
     # The function footer
@@ -47,12 +51,12 @@ module SPLATS
     end
 
     # Turns the result from an abstract assert to a string
-    def result
-      case @assert.class
+    def result_to_s
+      case @result.class
       when Exception
-        @assert.class.name
+        @result.class.name
       else
-        @assert
+        @result
       end
     end
     

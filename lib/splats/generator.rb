@@ -49,8 +49,8 @@ module SPLATS
             parameters = path_content.shift
             test.add_line(method, parameters)
           end
-          result = execute_test test
-          yield(test, result)
+          test.add_result (execute_test test)
+          yield test
         end
         expand_tree!
       end
