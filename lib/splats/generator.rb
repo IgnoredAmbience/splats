@@ -4,33 +4,40 @@ require 'tree'
 # require 'cartesian'
 
 module SPLATS
-  # Keeps track of the class being tested and does much of the testing
+  # Generates tests for a given class
   class Generator
     attr_reader :tree
 
-    # Stores the class and initialises the tree
-    def initialize(c)
-      # The class that we are interested in testing
+    # Stores the class
+    def initialize c
       @class = c
       @tree = nil
     end
 
     def to_s
-      ""
+      "<SPLATS::Generator @class=#{@class}>"
     end
 
-    # We need to instantiate first, this may result in multiple returned
-    # objects, if we can instantiate with parameters. <br>
-    # We can only read the number of parameters from the initialize method,
-    # as def Class.new(*args), prevents any useful detail from being exposed
+    # Initializes the tree
+    # This is split out from the constructor for testing purposes
+    #
+    # @return [Tree::TreeNode] Newly constructed tree containing class constructor
     def initialize_tree
+      # Insert constructor into tree
       m = @class.method :new
-      im = @class.instance_method :initialize
       tree = Tree::TreeNode.new "CONST: new/initialize", m
+
+      # Use parameters from :initialize for :new, as its type definition
+      # prevents us from getting the detail we need
+      im = @class.instance_method :initialize
       generate_parameters! tree, im
+
+      tree
     end
 
-    # Goes through the tree doing magic
+    # Starts the test generation
+    #
+    # @param [Integer] depth The depth to traverse the search space
     def test_class(depth = 5)
       @tree = initialize_tree
 
@@ -38,6 +45,7 @@ module SPLATS
         @tree.each_leaf do |leaf|
           # Flatten each leaf out as a path to it in the tree
           path = leaf.parentage || []
+          # leaf.parentage does not contain leaf
           path.reverse! << leaf
 
           path_content = path.map {|node| node.content}
@@ -56,13 +64,19 @@ module SPLATS
       end
     end
 
-    #Adds a new node to the leaf based on Tom magic
+    private
+
+    # Expands the tree by one layer of method/argument sets
     def expand_tree!
       @tree.postordered_each do |leaf|
         expand_leaf! leaf
       end
     end
 
+    # Expands a leaf of the tree with methods to execute, followed by parameters
+    # for that method
+    #
+    # @param [Tree::TreeNode] leaf
     def expand_leaf! leaf
       if leaf.is_leaf? and leaf.content
         @class.instance_methods(false).each_with_index do |method, i|
@@ -73,11 +87,16 @@ module SPLATS
       end
     end
 
-    #Creates a list of Mock objects based on the number of optional parameters
-    #For example, req=2, opt=1 gives [[M, M], [M, M, M]]
-    def generate_parameters!(node, method=nil)
+    # Expands the given tree node with all possible argument sets
+    #
+    # @param [Tree::TreeNode<Symbol, Method>] leaf Leaf to be expanded with
+    #   arguments. Arity information will be retrieved from the instance method
+    #   of the given symbol
+    # @param [Method] method If given, arity information will always be
+    #   retrieved from this method.
+    def generate_parameters!(leaf, method=nil)
       # If and only if method doesn't have a value, assign
-      method ||= @class.instance_method node.content
+      method ||= @class.instance_method leaf.content
 
       req = opt = 0
       method.parameters.each do |type, name|
@@ -87,13 +106,13 @@ module SPLATS
       end
 
       (req..opt+req).each_with_index do |n, i|
-        node << Tree::TreeNode.new("#{n} params", Array.new(n) { Mock.new })
+        leaf << Tree::TreeNode.new("#{n} params", Array.new(n) { Mock.new })
       end
-
-      node
     end
 
-    # Loops through the test object and does stuff on test lines
+    # Executes a given test
+    #
+    # @param [Array<TestLine>] test_lines
     def execute_test test
       object = result = nil
       test.each do |test_line|

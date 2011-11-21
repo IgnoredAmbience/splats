@@ -90,7 +90,8 @@ module SPLATS
         elsif method.is_a? Method and method.name == :new
           'object = '
         else
-          'result = '
+					""
+          #'result = '
         end
       end
 
