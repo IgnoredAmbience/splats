@@ -37,7 +37,7 @@ module SPLATS
 
     # The body of instructions
     def body
-      @test_lines[0..-2].map{ |l| l.to_s }
+      @test_lines[0..-2]
     end
 
     # The final assert statement
