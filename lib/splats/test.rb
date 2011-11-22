@@ -1,5 +1,7 @@
 module SPLATS
-  # Prints individual tests
+  # This encapsulates a single test.
+  # It is responsible pretty printing the test i.e. writing the code of the test.
+  # It will become responsible for executing the test it encapsulates during the generation phase.
   class Test
 
     def initialize
@@ -22,7 +24,7 @@ module SPLATS
     end
 
     # Returns a string of the translation of the abstract code into a
-    # test::unit test
+    # test::unit testing method
     def to_s
       (header + body + assert + footer).join("\n")
     end
@@ -41,6 +43,7 @@ module SPLATS
 
     # The body of instructions
     def body
+      # The -2 is because we drop the last line; The last line output by the assert method.
       @test_lines[0..-2]
     end
 

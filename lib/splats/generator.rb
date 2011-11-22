@@ -27,7 +27,7 @@ module SPLATS
       m = @class.method :new
       tree = Tree::TreeNode.new "CONST: new/initialize", m
 
-      # Use parameters from :initialize for :new, as its type definition
+      # Use parameters from :initialize for :new, as its type definition (which is varargs)
       # prevents us from getting the detail we need
       im = @class.instance_method :initialize
       generate_parameters! tree, im
@@ -43,7 +43,7 @@ module SPLATS
 
       depth.times do
         @tree.each_leaf do |leaf|
-          # Flatten each leaf out as a path to it in the tree
+          # Flattens tree
           path = leaf.parentage || []
           # leaf.parentage does not contain leaf
           path.reverse! << leaf
@@ -67,6 +67,9 @@ module SPLATS
     private
 
     # Expands the tree by one layer of method/argument sets
+    # We use post order because we're modifying leaves as we go down
+    # Any other traversal method would be modifying leaves that we'd later
+    # visit again, which not terminate.
     def expand_tree!
       @tree.postordered_each do |leaf|
         expand_leaf! leaf
@@ -102,7 +105,7 @@ module SPLATS
       method.parameters.each do |type, name|
         req += 1 if type == :req
         opt += 1 if type == :opt
-        # Other types are :rest, :block for * and & syntaxes, respectively
+        # Other types are :rest, :block, for * and & syntaxes, respectively
       end
 
       (req..opt+req).each_with_index do |n, i|
