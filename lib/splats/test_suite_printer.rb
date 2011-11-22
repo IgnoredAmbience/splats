@@ -1,22 +1,26 @@
-require_relative "TestPrinter"
+require_relative "test"
 
 module SPLATS
 # Prints a collection of tests into a suite
   class TestSuitePrinter
     
     # Takes in
-		# * the name for the test suite
-		# * any required files
-		# * an array of TestPrinter objects
-    def initialize (name, reqs, tests)
-      @name = name
+    # * the name for the test suite
+    # * any required files
+    # * an array of TestPrinter objects
+    def initialize (klass, reqs)
+      @klass = klass
       @reqs = reqs << "test/unit"
-      @tests = tests
+      @tests = []
+    end
+
+    def add_test (test)
+      @tests << test
     end
 
     # Returns a string of the suite of tests in test::unit
-    def print
-      (requirements + header + tests + footer).join("\n")
+    def to_s
+      (requirements + header + @tests + footer).join("\n")
     end
 
   private
@@ -28,14 +32,9 @@ module SPLATS
 
     # The class header
     def header
-      ["class #{@name} < Test::Unit::TestCase"]
+      ["class test_#{@klass} < Test::Unit::TestCase"]
     end
 
-    # The list of test methods
-    def tests
-      @tests.map{|t| t.print}
-    end
-    
     # The class footer
     def footer
       ["end"]

@@ -2,6 +2,7 @@
 require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test'
+require_relative 'splats/test_suite_printer'
 require_relative 'splats/tree'
 
 module SPLATS
@@ -50,7 +51,7 @@ module SPLATS
     end
 
 
-		private
+    private
     
     # Creates tests for a class by generating and traversing the tree
     # then generating the code from the abstract syntax
@@ -58,9 +59,11 @@ module SPLATS
     # @param [Class] testing_class The class to be tested
     def single_class_test(testing_class)
       cur_testing_class = Generator.new(testing_class)
+      printer = TestSuitePrinter.new(testing_class,[])
       cur_testing_class.test_class do |test|
-        write(test, testing_class)
+        printer.add_test(test)
       end
+      write(printer,testing_class)
     end
 
     # Takes in the test to output, class being tested and test number
