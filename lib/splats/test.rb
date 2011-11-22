@@ -10,11 +10,34 @@ module SPLATS
       @test_lines.push(TestLine.new(method, parameters))
     end
 
-    def add_result (result)
-      @result = result
-    end
+    # Executes the test, sets the result parameter as the result of execution
+    def execute!
+      object = result = nil
+      @test_lines.each do |test_line|
+        # Construct any arguments that are Classes
+        arguments = test_line.arguments.map do |arg|
+          if arg.is_a? Class
+            arg.new
+          else
+            arg
+          end
+        end
 
-    def execute
+        begin
+          if test_line.method.respond_to? :call
+            object = test_line.method.call *arguments
+          else
+            result = object.send test_line.method, *arguments
+          end
+        rescue Exception => e
+          puts "!> " + e.to_s
+          result = e
+          break
+        end
+      end
+
+      puts "=> " + result.inspect
+      @result = result
     end
 
     def name

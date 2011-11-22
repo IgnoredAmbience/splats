@@ -58,7 +58,8 @@ module SPLATS
             parameters = path_content.shift
             test.add_line(method, parameters)
           end
-          test.add_result (execute_test test)
+
+          test.execute!
           yield test
         end
         expand_tree!
@@ -121,36 +122,6 @@ module SPLATS
           end
         end
       end
-    end
-
-    # Executes a given test
-    #
-    # @param [Test] test
-    def execute_test test
-      object = result = nil
-      test.each do |test_line|
-        begin
-          # Construct any arguments that are Classes
-          arguments = test_line.arguments.map do |arg|
-            if arg.is_a? Class
-              arg.new
-            else
-              arg
-            end
-          end
-
-          if test_line.method.respond_to? :call
-            object = test_line.method.call *arguments
-          else
-            result = object.send test_line.method, *arguments
-          end
-        rescue Exception => e
-          puts "!> " + e.to_s
-        end
-      end
-
-      puts "=> " + result.inspect
-      result
     end
   end
 end
