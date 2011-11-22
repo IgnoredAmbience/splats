@@ -68,7 +68,7 @@ module SPLATS
     end
 
     # Private inner class
-    TestLine = Class.new do
+    class TestLine
       attr_reader :object, :method, :arguments, :output
 
       def initialize method, arguments, object=nil, output=nil
