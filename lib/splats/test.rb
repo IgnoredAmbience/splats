@@ -5,15 +5,15 @@ module SPLATS
     def initialize
       @test_lines = []
     end
-    
+
     def add_line (method, parameters)
       @test_lines.push(TestLine.new(method, parameters))
     end
 
-		def add_result (result)
-			@result = result
-		end
-    
+    def add_result (result)
+      @result = result
+    end
+
     def execute
     end
 
@@ -22,7 +22,7 @@ module SPLATS
     def to_s
       (header + body + assert + footer).join("\n")
     end
-    
+
     # Loops through the test lines
     def each
       yield @test_lines.each
@@ -59,7 +59,7 @@ module SPLATS
         @result
       end
     end
-    
+
     # Private inner class
     TestLine = Class.new do
       attr_reader :object, :method, :arguments, :output
@@ -90,7 +90,7 @@ module SPLATS
         elsif method.is_a? Method and method.name == :new
           'object = '
         else
-					""
+          ""
           #'result = '
         end
       end
