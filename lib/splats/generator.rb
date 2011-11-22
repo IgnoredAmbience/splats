@@ -8,7 +8,7 @@ module SPLATS
   class Generator
     attr_reader :tree
 
-    # Stores the class
+    # @param [Class] c The class for the test generator to operate on
     def initialize c
       @class = c
       @tree = nil

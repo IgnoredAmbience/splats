@@ -17,6 +17,10 @@ module SPLATS
     def execute
     end
 
+    def name
+      "test_#{hash.abs}"
+    end
+
     # Returns a string of the translation of the abstract code into a
     # test::unit test
     def to_s
@@ -32,7 +36,7 @@ module SPLATS
 
     # The function header
     def header
-      ["def #{@name}"]
+      ["def #{name}"]
     end
 
     # The body of instructions
@@ -85,40 +89,39 @@ module SPLATS
       private
 
       def assignment
-        if output
-          output + ' = '
-        elsif method.is_a? Method and method.name == :new
+        if @output
+          @output + ' = '
+        elsif @method.is_a? Method and @method.name == :new
           'object = '
         else
           ""
-          #'result = '
         end
       end
 
       def object_call
-        if object
-          object.to_s + '.'
-        elsif method.is_a? Method
-          method.class.name + '.'
+        if @object
+          @object.to_s + '.'
+        elsif @method.is_a? Method
+          @method.class.name + '.'
         else
           'object.'
         end
       end
 
       def method_name
-        if method.is_a? Symbol
-          method.to_s
+        if @method.is_a? Symbol
+          @method.to_s
         else
-          method.name.to_s
+          @method.name.to_s
         end
       end
 
       # Turns the array of arguments to a string
       def args_to_s
-        if arguments.empty?
+        if @arguments.empty?
           ""
         else
-          "(" << arguments.map{ |a| a.to_s}.join(',') << ")"
+          "(" << @arguments.join(',') << ")"
         end
       end
     end
