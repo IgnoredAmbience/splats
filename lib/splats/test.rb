@@ -17,6 +17,10 @@ module SPLATS
     def execute
     end
 
+    def name
+      "test_#{hash.abs}"
+    end
+
     # Returns a string of the translation of the abstract code into a
     # test::unit test
     def to_s
@@ -32,7 +36,7 @@ module SPLATS
 
     # The function header
     def header
-      ["def #{@name}"]
+      ["def #{name}"]
     end
 
     # The body of instructions
