@@ -12,4 +12,13 @@ module Tree
       # Generate an array and then compare the values of the array
     end
   end
+  
+  class MockDecision < TreeNode
+  end
+  
+  class MethodNode < TreeNode
+  end
+  
+  class DecisionNode < TreeNode
+  end
 end
