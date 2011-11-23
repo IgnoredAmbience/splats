@@ -19,6 +19,6 @@ module Tree
   class MethodNode < TreeNode
   end
   
-  class DecisionNode < TreeNode
+  class ParameterNode < TreeNode
   end
 end
