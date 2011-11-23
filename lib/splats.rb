@@ -35,9 +35,10 @@ module SPLATS
     # @param [String] output_dir The directory for generated tests to be put
     #
     # @note Directory created if necessary
-    def initialize(input_file, output_dir)
+    def initialize(input_file, output_dir, depth)
       @input_classes = SPLATS.load_classes input_file
-      @output_dir = output_dir
+      @output_dir = output_dir || "tests"
+      @depth = depth || 3
       if not File::directory?(output_dir)
         Dir.mkdir(output_dir)
       end
@@ -60,7 +61,7 @@ module SPLATS
     def single_class_test(testing_class)
       cur_testing_class = Generator.new(testing_class)
       printer = TestSuitePrinter.new(testing_class,[])
-      cur_testing_class.test_class do |test|
+      cur_testing_class.test_class(@depth) do |test|
         printer.add_test(test)
       end
       write(printer,testing_class)

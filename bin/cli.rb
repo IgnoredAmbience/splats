@@ -21,7 +21,12 @@ optparse = OptionParser.new do |opts|
     options[:file] = file
   end
 
-  options[:outdir] = "tests"
+  options[:depth] = nil
+  opts.on("--depth", "-d", "Search space depth") do |depth|
+    options[:depth] = depth
+  end
+
+  options[:outdir] = nil
   opts.on("--output-directory DIR", "-o", "Output directory (defaults to \"tests\")") do |dir|
     options[:outdir] = dir
   end
@@ -43,10 +48,10 @@ rescue OptionParser::InvalidOption,OptionParser::MissingArgument
 end
 
 begin
-	controller = SPLATS::TestController.new(options[:file],options[:outdir])
+  controller = SPLATS::TestController.new(options[:file],options[:outdir],options[:depth])
 rescue LoadError
-	puts "File doesn't exist"
-	exit
+  puts "File doesn't exist"
+  exit
 end
 
 controller.test_classes

@@ -38,7 +38,7 @@ module SPLATS
     # Starts the test generation
     #
     # @param [Integer] depth The depth to traverse the search space
-    def test_class(depth = 5)
+    def test_class(depth)
       @tree = initialize_tree
 
       depth.times do
