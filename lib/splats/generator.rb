@@ -62,11 +62,20 @@ module SPLATS
           test.execute!
           yield test
         end
-        expand_tree!
+
+        if tree_expandable?
+          expand_tree!
+        else
+          break
+        end
       end
     end
 
     private
+
+    def tree_expandable?
+      not @class.instance_methods(false).empty?
+    end
 
     # Expands the tree by one layer of method/argument sets
     def expand_tree!
