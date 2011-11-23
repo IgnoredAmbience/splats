@@ -41,6 +41,7 @@ module SPLATS
     # @param [Integer] depth The depth to traverse the search space
     def test_class(depth = 5)
       @tree = initialize_tree
+      skipIter = false
 
       depth.times do
         @tree.each_leaf do |leaf|
@@ -50,16 +51,35 @@ module SPLATS
           path.reverse! << leaf
 
           path_content = path.map {|node| node.content}
+          puts "Generating test: " + path_content.inspect
+
+          if skipIter
+            puts "Skipping, as we've already done this!"
+            skipIter = false
+
+            if leaf.is_a? MockDecision
+              next
+            end
+          end
+
           test = Test.new
 
-          puts "Generating test: " + path_content.inspect
           while path_content.length > 0
             method = path_content.shift
             parameters = path_content.shift
             test.add_line(method, parameters)
           end
 
-          test.execute!
+          test.execute! do |mock_decisions|
+            # Because we're inserting to the tree and traversing pre-order at
+            # the same time, we need to skip the next iteration, as we'll have
+            # already covered it 'outside' of the traversal
+            skipIter = true
+            mock_decisions.each do |md|
+              leaf << md
+            end
+          end
+
           yield test
         end
 

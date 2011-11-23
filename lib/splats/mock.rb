@@ -12,9 +12,11 @@ module SPLATS
       end
     end
 
-    def initialize #generator
+    def initialize &branch_block
       @object = MockImplementation.new self
-      #@generator = generator
+
+      # This may turn out to be a horiffic idea
+      @branch_block = branch_block
     end
 
     # Prints information about the failed method call
@@ -32,7 +34,11 @@ module SPLATS
     end
 
     def __SPLATS_branch method, branches
-      @generator.add_branches 
+      r = branches.first
+      mds = branches.map {|b| MockDecision.new b.hash, b}
+      @branch_block.call mds
+
+      return r
     end
   end
 
@@ -58,8 +64,7 @@ module SPLATS
     end
 
     def coerce x
-      @mock.__SPLATS_branch :coerce [0, 1, -2]
-      item = 0
+      item = @mock.__SPLATS_branch :coerce, [0, 1, -1]
       @mock.__SPLATS_proxy = item
       [x, item]
     end

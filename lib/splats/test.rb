@@ -11,13 +11,15 @@ module SPLATS
     end
 
     # Executes the test, sets the result parameter as the result of execution
-    def execute!
+    #
+    # @param [Proc] block Block is passed to Mock.new
+    def execute! &block
       object = result = nil
       @test_lines.each do |test_line|
-        # Construct any arguments that are Classes
+        # Construct any arguments that are Mocks
         arguments = test_line.arguments.map do |arg|
-          if arg.is_a? Class
-            arg.new
+          if arg == Mock
+            arg.new &block
           else
             arg
           end
