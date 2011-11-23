@@ -83,7 +83,7 @@ module SPLATS
     def expand_leaf! leaf
       if leaf.is_leaf? and leaf.content
         @class.instance_methods(false).each_with_index do |method, i|
-          newnode = Tree::TreeNode::MethodNode.new("#{i}: #{method}", method)
+          newnode = Tree::MethodNode.new("#{i}: #{method}", method)
           generate_parameters! newnode
           leaf << newnode
         end
@@ -109,7 +109,7 @@ module SPLATS
       end
 
       (req..opt+req).each_with_index do |n, i|
-        leaf << Tree::TreeNode::ParameterNode.new("#{n} params", Array.new(n) { Mock.new })
+        leaf << Tree::ParameterNode.new("#{n} params", Array.new(n) { Mock.new })
       end
     end
 
