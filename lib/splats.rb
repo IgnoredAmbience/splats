@@ -72,7 +72,7 @@ module SPLATS
     # @param [String] test_as_string The finished generated test
     # @param [Class] klass The class being tested
     def write(test_as_string, klass)
-      File.open("#{@output_dir}/test_#{klass}.rb", "a") do |x|
+      File.open("#{@output_dir}/test_#{klass}.rb", "w") do |x|
         x.puts test_as_string
       end
     end
