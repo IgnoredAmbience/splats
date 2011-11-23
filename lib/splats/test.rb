@@ -6,20 +6,34 @@ module SPLATS
       @test_lines = []
     end
 
-    def add_line (method, parameters)
-      @test_lines.push(TestLine.new(method, parameters))
+    def add_line (method, parameters, decisions)
+      @test_lines.push(TestLine.new(method, parameters, decisions))
     end
 
     # Executes the test, sets the result parameter as the result of execution
     #
-    # @param [Proc] block Block is passed to Mock.new
-    def execute! &block
+    # @yield
+    def execute!
       object = result = nil
       @test_lines.each do |test_line|
         # Construct any arguments that are Mocks
         arguments = test_line.arguments.map do |arg|
           if arg == Mock
-            arg.new &block
+            arg.new do |branches|
+              puts "Checking branches: #{branches}"
+              p test_line
+              p test_line.decisions
+
+              # Passes options back to Generator to put into tree, or the option
+              # taken from the tree
+              if test_line.decisions.empty?
+                result = yield branches
+              else
+                result = test_line.decisions.shift
+              end
+              puts "Using branch: #{result}"
+              result
+            end
           else
             arg
           end
@@ -91,9 +105,9 @@ module SPLATS
 
     # Private inner class
     TestLine = Class.new do
-      attr_reader :object, :method, :arguments, :output
+      attr_reader :object, :method, :decisions, :arguments, :output
 
-      def initialize method, arguments, object=nil, output=nil
+      def initialize method, arguments, decisions, object=nil, output=nil
         if method.respond_to? :to_sym
           @method = method.to_sym
         elsif method.respond_to? :call
@@ -103,6 +117,7 @@ module SPLATS
         end
 
         @arguments = arguments
+        @decisions = decisions
         @object = object
         @output = output
       end

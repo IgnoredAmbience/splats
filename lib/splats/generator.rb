@@ -64,17 +64,26 @@ module SPLATS
 
           test = Test.new
 
-          while path_content.length > 0
-            method = path_content.shift
-            parameters = path_content.shift
-            test.add_line(method, parameters)
+          while path.length > 0
+            method = path.shift.content
+            parameters = path.shift.content
+
+            decisions = path.take_while{|n| n.is_a? MockDecision }
+            decisions.map! {|d| d.content }
+
+            test.add_line(method, parameters, decisions)
+
+            path = path.drop_while {|n| n.is_a? MockDecision }
           end
 
-          test.execute! do |mock_decisions|
+          test.execute! do |branch_values|
             # Because we're inserting to the tree and traversing pre-order at
             # the same time, we need to skip the next iteration, as we'll have
             # already covered it 'outside' of the traversal
             skipIter = true
+
+            puts "Inserting branches: #{branch_values}"
+            mock_decisions = branch_values.map {|v| MockDecision.new v.hash, v}
             mock_decisions.each do |md|
               leaf << md
             end

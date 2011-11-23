@@ -34,11 +34,7 @@ module SPLATS
     end
 
     def __SPLATS_branch method, branches
-      r = branches.first
-      mds = branches.map {|b| MockDecision.new b.hash, b}
-      @branch_block.call mds
-
-      return r
+      @branch_block.call branches
     end
   end
 
