@@ -13,8 +13,3 @@ module Tree
     end
   end
 end
-
-module SPLATS
-  class MockDecision < Tree::TreeNode
-  end
-end

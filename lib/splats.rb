@@ -77,5 +77,17 @@ module SPLATS
       end
     end
   end
-
+  
+  class MockDecision < Tree::TreeNode
+  end
+  
+  class StopNode < Tree::TreeNode
+  end
+  
+  class MethodNode < Tree::TreeNode
+  end
+  
+  class ParameterNode < Tree::TreeNode
+  end
+  
 end

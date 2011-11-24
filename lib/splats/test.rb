@@ -92,9 +92,10 @@ module SPLATS
 
     # Turns the result from an abstract assert to a string
     def result_to_s
-      case @result.class
-      when Exception
-        @result.class.name
+      if @result.is_a? TypeError
+         "\"" + @result.to_s + "\""
+      elsif @result.is_a? NilClass
+        "nil"
       else
         @result
       end
