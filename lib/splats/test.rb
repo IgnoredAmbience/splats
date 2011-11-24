@@ -20,10 +20,6 @@ module SPLATS
         arguments = test_line.arguments.map do |arg|
           if arg == Mock
             arg.new do |branches|
-              puts "Checking branches: #{branches}"
-              p test_line
-              p test_line.decisions
-
               # Passes options back to Generator to put into tree, or the option
               # taken from the tree
               if test_line.decisions.empty?
