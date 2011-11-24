@@ -1,7 +1,7 @@
 require 'tree'
 
 # Provides ** array mixin ([1,2,3]**3 === [1,2,3]x[1,2,3]x[1,2,3])
-# require 'cartesian'
+require 'cartesian'
 
 module SPLATS
   # Generates tests for a given class
@@ -12,6 +12,7 @@ module SPLATS
     def initialize c
       @class = c
       @tree = nil
+      @pass_parameters = [Mock, nil]
     end
 
     def to_s
@@ -40,6 +41,7 @@ module SPLATS
     # @param [Integer] depth The depth to traverse the search space
     def test_class(depth)
       @tree = initialize_tree
+      skipIter = false
 
       depth.times do
         @tree.each_leaf do |leaf|
@@ -49,22 +51,61 @@ module SPLATS
           path.reverse! << leaf
 
           path_content = path.map {|node| node.content}
+          puts
+          puts "Generating test: " + path_content.inspect
+
+          if skipIter
+            puts "Skipping, as we've already done this!"
+            skipIter = false
+
+            if leaf.is_a? MockDecision
+              next
+            end
+          end
+
           test = Test.new
 
-          puts "Generating test: " + path_content.inspect
-          while path_content.length > 0
-            method = path_content.shift
-            parameters = path_content.shift
-            test.add_line(method, parameters)
+          while path.length > 0
+            method = path.shift.content
+            parameters = path.shift.content
+
+            decisions = path.take_while{|n| n.is_a? MockDecision }
+            decisions.map! {|d| d.content }
+
+            test.add_line(method, parameters, decisions)
+
+            path = path.drop_while {|n| n.is_a? MockDecision }
           end
-          test.add_result (execute_test test)
+
+          test.execute! do |branch_values|
+            # Because we're inserting to the tree and traversing pre-order at
+            # the same time, we need to skip the next iteration, as we'll have
+            # already covered it 'outside' of the traversal
+            skipIter = true
+
+            puts "Inserting branches: #{branch_values}"
+            mock_decisions = branch_values.map {|v| MockDecision.new v.hash, v}
+            mock_decisions.each do |md|
+              leaf << md
+            end
+          end
+
           yield test
         end
-        expand_tree!
+
+        if tree_expandable?
+          expand_tree!
+        else
+          break
+        end
       end
     end
 
     private
+
+    def tree_expandable?
+      not @class.instance_methods(false).empty?
+    end
 
     # Expands the tree by one layer of method/argument sets
     # We use post order because we're modifying leaves as we go down
@@ -108,30 +149,21 @@ module SPLATS
         # Other types are :rest, :block, for * and & syntaxes, respectively
       end
 
-      (req..opt+req).each_with_index do |n, i|
-        leaf << ParameterNode.new("#{n} params", Array.new(n) { Mock.new })
-      end
-    end
+      (req..opt+req).each do |n|
+        if n == 1
+          iter = @pass_parameters.map{|p| [p]}.each
+        else
+          iter = (@pass_parameters ** n).each
+        end
 
-    # Executes a given test
-    #
-    # @param [Array<TestLine>] test_lines
-    def execute_test test
-      object = result = nil
-      test.each do |test_line|
-        begin
-          if test_line.method.respond_to? :call
-            object = test_line.method.call *test_line.arguments
-          else
-            result = object.send test_line.method, *test_line.arguments
+        if iter.count == 0
+          leaf << ParameterNode.new("", [])
+        else
+          iter.each do |args|
+            leaf << ParameterNode.new(args.hash, args)
           end
-        rescue Exception => e
-          puts "!> " + e.to_s
         end
       end
-
-      puts "=> " + result.inspect + "\n\n"
-      result
     end
   end
 end

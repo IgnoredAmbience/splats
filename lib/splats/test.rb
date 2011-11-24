@@ -8,15 +8,51 @@ module SPLATS
       @test_lines = []
     end
 
-    def add_line (method, parameters)
-      @test_lines.push(TestLine.new(method, parameters))
+    def add_line (method, parameters, decisions)
+      @test_lines.push(TestLine.new(method, parameters, decisions))
     end
 
-    def add_result (result)
+    # Executes the test, sets the result parameter as the result of execution
+    #
+    # @yield
+    def execute!
+      object = result = nil
+      @test_lines.each do |test_line|
+        # Construct any arguments that are Mocks
+        arguments = test_line.arguments.map do |arg|
+          if arg == Mock
+            arg.new do |branches|
+              # Passes options back to Generator to put into tree, or the option
+              # taken from the tree
+              if test_line.decisions.empty?
+                yield branches
+                result = branches.shift
+              else
+                result = test_line.decisions.shift
+              end
+              puts "Using branch: #{result}"
+              result
+            end
+          else
+            arg
+          end
+        end
+
+        begin
+          if test_line.method.respond_to? :call
+            object = test_line.method.call *arguments
+          else
+            result = object.send test_line.method, *arguments
+          end
+        rescue Exception => e
+          puts "!> " + e.to_s
+          result = e
+          break
+        end
+      end
+
+      puts "=> " + result.inspect
       @result = result
-    end
-
-    def execute
     end
 
     def name
@@ -69,9 +105,9 @@ module SPLATS
 
     # Private inner class
     class TestLine
-      attr_reader :object, :method, :arguments, :output
+      attr_reader :object, :method, :decisions, :arguments, :output
 
-      def initialize method, arguments, object=nil, output=nil
+      def initialize method, arguments, decisions, object=nil, output=nil
         if method.respond_to? :to_sym
           @method = method.to_sym
         elsif method.respond_to? :call
@@ -81,6 +117,7 @@ module SPLATS
         end
 
         @arguments = arguments
+        @decisions = decisions
         @object = object
         @output = output
       end
