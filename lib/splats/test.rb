@@ -62,7 +62,11 @@ module SPLATS
     # Returns a string of the translation of the abstract code into a
     # test::unit testing method
     def to_s
-      (header + body + assert + footer).join("\n")
+      if @result.is_a? Exception
+        (header + assert_raises + footer).join("\n")
+      else
+        (header + body + assert + footer).join("\n")
+      end
     end
 
     # Loops through the test lines
@@ -86,6 +90,10 @@ module SPLATS
     # The final assert statement
     def assert
       ["assert_equal #{@test_lines[-1]}, #{result_to_s}"]
+    end
+
+    def assert_raises
+      ["assert_raises #{@result.class.name} do"] + body + ["end"]
     end
 
     # The function footer
