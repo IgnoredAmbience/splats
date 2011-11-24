@@ -13,12 +13,15 @@ module Tree
     end
   end
   
-  class MockDecision < TreeNode
+end
+
+module SPLATS
+  class MethodNode < Tree::TreeNode
   end
-  
-  class MethodNode < TreeNode
+
+  class ParameterNode < Tree::TreeNode
   end
-  
-  class ParameterNode < TreeNode
+
+  class MockDecision < Tree::TreeNode
   end
 end

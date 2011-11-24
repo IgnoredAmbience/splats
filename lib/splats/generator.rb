@@ -25,7 +25,7 @@ module SPLATS
     def initialize_tree
       # Insert constructor into tree
       m = @class.method :new
-      tree = Tree::TreeNode.new "CONST: new/initialize", m
+      tree = MethodNode.new "CONST: new/initialize", m
 
       # Use parameters from :initialize for :new, as its type definition (which is varargs)
       # prevents us from getting the detail we need
@@ -83,7 +83,7 @@ module SPLATS
     def expand_leaf! leaf
       if leaf.is_leaf? and leaf.content
         @class.instance_methods(false).each_with_index do |method, i|
-          newnode = Tree::MethodNode.new("#{i}: #{method}", method)
+          newnode = MethodNode.new("#{i}: #{method}", method)
           generate_parameters! newnode
           leaf << newnode
         end
@@ -109,7 +109,7 @@ module SPLATS
       end
 
       (req..opt+req).each_with_index do |n, i|
-        leaf << Tree::ParameterNode.new("#{n} params", Array.new(n) { Mock.new })
+        leaf << ParameterNode.new("#{n} params", Array.new(n) { Mock.new })
       end
     end
 
