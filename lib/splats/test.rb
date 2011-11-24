@@ -23,7 +23,8 @@ module SPLATS
               # Passes options back to Generator to put into tree, or the option
               # taken from the tree
               if test_line.decisions.empty?
-                result = yield branches
+                yield branches
+                result = branches.shift
               else
                 result = test_line.decisions.shift
               end
