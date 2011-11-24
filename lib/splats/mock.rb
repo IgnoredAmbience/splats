@@ -15,7 +15,7 @@ module SPLATS
     def initialize &branch_block
       @object = MockImplementation.new self
 
-      # This may turn out to be a horiffic idea
+      # This may turn out to be a horrific idea
       @branch_block = branch_block
     end
 
@@ -26,6 +26,7 @@ module SPLATS
       result
     end
 
+    # Predicate to test if an object is mock
     def __SPLATS_is_mock?
       true
     end
@@ -73,5 +74,18 @@ module SPLATS
     def to_ary
       []
     end
+  end
+end
+
+# These classes adds to Object our own functions for dealing with mock objects
+class Object
+  def __SPLATS_is_mock?
+    false
+  end
+end
+
+class NilClass
+  def __SPLATS_is_mock?
+    false
   end
 end
