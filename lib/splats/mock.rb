@@ -21,8 +21,9 @@ module SPLATS
 
     # Prints information about the failed method call
     def method_missing(symbol, *args, &block)
-      ::Kernel.puts "Method '#{symbol}' called with arguments #{args} and #{block.nil? && 'no' || 'a'} block"
-      @object.__send__(symbol, *args, &block)
+      result = @object.__send__(symbol, *args, &block)
+      ::Kernel.puts "Method '#{symbol}' called with arguments #{args} and #{block.nil? && 'no' || 'a'} block. Returns '#{result}'"
+      result
     end
 
     def __SPLATS_is_mock?

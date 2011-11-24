@@ -51,6 +51,7 @@ module SPLATS
           path.reverse! << leaf
 
           path_content = path.map {|node| node.content}
+          puts
           puts "Generating test: " + path_content.inspect
 
           if skipIter
