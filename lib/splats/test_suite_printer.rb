@@ -8,14 +8,21 @@ module SPLATS
     # * the name for the test suite
     # * any required files
     # * an array of TestPrinter objects
-    def initialize (klass, reqs)
+    def initialize (klass, reqs, file = $stdout)
       @klass = klass
       @reqs = reqs << "test/unit"
+      @file = file
       @tests = []
+      
+      @file << (requirements + header).join("\n") << "\n"
     end
 
-    def add_test (test)
-      @tests << test
+    def << test
+      @file << test << "\n"
+    end
+
+    def close
+      @file << footer
     end
 
     # Returns a string of the suite of tests in test::unit
@@ -37,7 +44,7 @@ module SPLATS
 
     # The class footer
     def footer
-      ["end"]
+      "end"
     end
 
   end
