@@ -15,7 +15,7 @@ module SPLATS
     def initialize &branch_block
       @object = MockImplementation.new self
 
-      # This may turn out to be a horiffic idea
+      # This may turn out to be a horrific idea
       @branch_block = branch_block
     end
 
@@ -26,14 +26,18 @@ module SPLATS
       result
     end
 
+    # Predicate to test if an object is mock 
+    # @return true
     def __SPLATS_is_mock?
       true
     end
 
+    # Sets what mock is
     def __SPLATS_proxy= obj
       @object = obj
     end
 
+    # Adds branches to the tree based on varying results of operations
     def __SPLATS_branch method, branches
       @branch_block.call branches
     end
@@ -60,7 +64,9 @@ module SPLATS
       0
     end
 
+    # This is called when a Ruby object tries to perform an arithemetical operation on a mock
     def coerce x
+      # Adding branches to the tree with different outcomes of the value of the operation
       item = @mock.__SPLATS_branch :coerce, [0, 1, -1]
       @mock.__SPLATS_proxy = item
       [x, item]
@@ -73,5 +79,18 @@ module SPLATS
     def to_ary
       []
     end
+  end
+end
+
+# These classes adds to Object our own functions for dealing with mock objects
+class Object
+  def __SPLATS_is_mock?
+    false
+  end
+end
+
+class NilClass
+  def __SPLATS_is_mock?
+    false
   end
 end
