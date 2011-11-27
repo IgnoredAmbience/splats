@@ -1,15 +1,18 @@
 require_relative "test"
 
 module SPLATS
-	class TestFile < File
+  class TestFile < File
 
-		def self.open(klass, reqs, out_dir, &block)
-			super("#{out_dir}/test_#{klass}.rb","w",nil) do |file|
-				file << ((requirements reqs) + (header klass)).join("\n") << "\n"
-				yield file
-				file << footer
-			end
-		end
+		# @param[Class] klass The class having tests printed
+		# @param[Array] reqs The list of file requirements
+		# @param[String] out_dir The output directory
+    def self.open(klass, reqs, out_dir, &block)
+      super("#{out_dir}/test_#{klass}.rb","w",nil) do |file|
+        file << ((requirements reqs) + (header klass)).join("\n") << "\n"
+        yield file
+        file << footer
+      end
+    end
 
   private
 
@@ -28,5 +31,5 @@ module SPLATS
       "end"
     end
 
-	end
+  end
 end
