@@ -68,5 +68,6 @@ module SPLATS
         printer.close
       end
     end
+	end
 
 end
