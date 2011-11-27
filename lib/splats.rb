@@ -2,7 +2,7 @@
 require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test'
-require_relative 'splats/test_suite_printer'
+require_relative 'splats/test_file'
 require_relative 'splats/tree'
 
 module SPLATS
@@ -60,14 +60,12 @@ module SPLATS
     # @param [Class] testing_class The class to be tested
     def single_class_test(testing_class)
       cur_testing_class = Generator.new(testing_class)
-      File.open("#{@output_dir}/test_#{testing_class}.rb","w") do |file|
-        printer = TestSuitePrinter.new(testing_class,[],file)
+      TestFile.open(testing_class,[],@output_dir) do |file|
         cur_testing_class.test_class(@depth) do |test|
-          printer << test
+          file << test << "\n"
         end
-        printer.close
       end
     end
-	end
+  end
 
 end
