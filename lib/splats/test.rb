@@ -46,7 +46,7 @@ module SPLATS
           end
         rescue Exception => e
           puts "!> " + e.to_s
-          result = e
+          @exception = e
           break
         end
       end
@@ -62,7 +62,7 @@ module SPLATS
     # Returns a string of the translation of the abstract code into a
     # test::unit testing method
     def to_s
-      if @result.is_a? Exception
+      if ! @exception.nil?
         (header + assert_raises + footer).join("\n")
       else
         (header + body + assert + footer).join("\n")
@@ -93,7 +93,7 @@ module SPLATS
     end
 
     def assert_raises
-      ["assert_raises #{@result.class.name} do"] + body + ["end"]
+      ["assert_raises #{@exception.class.name} do"] + body + ["end"]
     end
 
     # The function footer
@@ -107,6 +107,8 @@ module SPLATS
          "\"" + @result.to_s + "\""
       elsif @result.is_a? NilClass
         "nil"
+      elsif @result.is_a? Exception
+        @result.class.name
       else
         @result
       end
