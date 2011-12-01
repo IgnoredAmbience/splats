@@ -17,7 +17,7 @@ optparse = OptionParser.new do |opts|
   end
 
   options[:file] = nil
-  opts.on("--object-from-file FILE", "-f", "Test classes from file. File & class must share names") do |file|
+  opts.on("--file FILE", "-f", "File containing classes to analyse") do |file|
     options[:file] = file
   end
 
