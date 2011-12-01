@@ -32,8 +32,7 @@ module SPLATS
   class TestController
 
     # @param [String] input_file The ruby code file to be tested
-    # @param [String] output_dir The directory for generated tests to be put. Default: tests/
-    # @param [String] depth The depth limit for the search space. Default: 3
+    # @param [String] output_dir The directory for generated tests to be put
     #
     # @note Directory created if necessary
     def initialize(input_file, output_dir, depth)

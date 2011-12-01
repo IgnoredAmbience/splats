@@ -14,7 +14,6 @@ module SPLATS
 
     def initialize &branch_block
       @object = MockImplementation.new self
-      @child_objects = []
 
       # This may turn out to be a horrific idea
       @branch_block = branch_block
@@ -24,7 +23,6 @@ module SPLATS
     def method_missing(symbol, *args, &block)
       result = @object.__send__(symbol, *args, &block)
       ::Kernel.puts "Method '#{symbol}' called with arguments #{args} and #{block.nil? && 'no' || 'a'} block. Returns '#{result}'"
-      child objects << [symbol, self.__id__]
       result
     end
 
@@ -43,9 +41,6 @@ module SPLATS
     def __SPLATS_branch method, branches
       @branch_block.call branches
     end
-
-    def __SPLATS_print
-      puts "Mock '#{self.__id__} had #{child_objects.length} methods called on it. List names?>'"
   end
 
   class MockImplementation < BasicObject
