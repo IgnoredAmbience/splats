@@ -11,9 +11,12 @@ module SPLATS
         __send__(:method_missing, method, *args, &block)
       end
     end
-
+    @@id = 0
     def initialize &branch_block
       @object = MockImplementation.new self
+      @child_objects = []
+      @id = @@id
+      @@id += 1
 
       # This may turn out to be a horrific idea
       @branch_block = branch_block
@@ -21,9 +24,15 @@ module SPLATS
 
     # Prints information about the failed method call
     def method_missing(symbol, *args, &block)
+      newMock = Mock.new()
+
       result = @object.__send__(symbol, *args, &block)
+      @child_objects << [symbol, newMock.id]
+      ::Kernel.puts "Current children #{@child_objects}"
       ::Kernel.puts "Method '#{symbol}' called with arguments #{args} and #{block.nil? && 'no' || 'a'} block. Returns '#{result}'"
       result
+      
+
     end
 
     # Predicate to test if an object is mock 
@@ -40,6 +49,9 @@ module SPLATS
     # Adds branches to the tree based on varying results of operations
     def __SPLATS_branch method, branches
       @branch_block.call branches
+    end
+    def __SPLATS_print
+      puts "Mock '#{self.__id__} had #{child_objects.length} methods called on it. List names?>'"
     end
   end
 
