@@ -18,7 +18,7 @@ module SPLATS
 
     # The list of require statements
     def self.requirements reqs
-      reqs.map{ |r| "require '#{r}'" }
+      (['test/unit'] + reqs).map{ |r| "require '#{r}'" }
     end
 
     # The class header
