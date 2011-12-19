@@ -3,56 +3,57 @@ module SPLATS
   # It is responsible pretty printing the test i.e. writing the code of the test.
   # It will become responsible for executing the test it encapsulates during the generation phase.
   class Test
-
     def initialize
       @test_lines = []
+      @result = nil
+      @exception = nil
     end
 
-    def add_line (method, parameters, decisions)
-      @test_lines.push(TestLine.new(method, parameters, decisions))
+    def add_line (method, parameters)
+      @test_lines.push(TestLine.new(method, parameters))
     end
 
-    # Executes the test, sets the result parameter as the result of execution
-    #
-    # @yield
-    def execute!
-      object = result = nil
-      @test_lines.each do |test_line|
-        # Construct any arguments that are Mocks
-        arguments = test_line.arguments.map do |arg|
-          if arg == Mock
-            arg.new do |branches|
-              # Passes options back to Generator to put into tree, or the option
-              # taken from the tree
-              if test_line.decisions.empty?
-                yield branches
-                result = branches.shift
-              else
-                result = test_line.decisions.shift
-              end
-              puts "Using branch: #{result}"
-              result
-            end
-          else
-            arg
-          end
-        end
+    # Executes the most recently added line to the test
+    def execute_last &decision
+      execute_line @test_lines[-1], &decision
+    end
 
-        begin
-          if test_line.method.respond_to? :call
-            object = test_line.method.call *arguments
-          else
-            result = object.send test_line.method, *arguments
-          end
-        rescue Exception => e
-          puts "!> " + e.to_s
-          result = e
-          break
+    # Executes the entire test
+    def execute_all &decision
+      @result = nil
+      @exception = nil
+
+      @test_lines.each do |line|
+        execute_line line, &decision
+        break if @exception
+      end
+      unless @exception
+        puts "=> " + @result.inspect
+      else
+        puts "!> " + @exception.to_s
+      end
+    end
+
+    # Executes the TestLine, sets the result parameter as the result of execution
+    def execute_line test_line, &decision
+      # Construct any arguments that are Mocks
+      arguments = test_line.arguments.map do |arg|
+        if arg == Mock
+          arg.new &decision
+        else
+          arg
         end
       end
 
-      puts "=> " + result.inspect
-      @result = result
+      begin
+        if test_line.method.respond_to? :call
+          @object = test_line.method.call *arguments
+        else
+          @result = @object.send(test_line.method, *arguments)
+        end
+      rescue Exception => e
+        @exception = e
+      end
     end
 
     def name
@@ -67,11 +68,6 @@ module SPLATS
       else
         (header + body + assert + footer).join("\n")
       end
-    end
-
-    # Loops through the test lines
-    def each
-      yield @test_lines.each
     end
 
     private
@@ -116,7 +112,7 @@ module SPLATS
     class TestLine
       attr_reader :object, :method, :decisions, :arguments, :output
 
-      def initialize method, arguments, decisions, object=nil, output=nil
+      def initialize method, arguments, decisions=nil, object=nil, output=nil
         if method.respond_to? :to_sym
           @method = method.to_sym
         elsif method.respond_to? :call
@@ -126,7 +122,7 @@ module SPLATS
         end
 
         @arguments = arguments
-        @decisions = decisions
+        @decisions = decisions || []
         @object = object
         @output = output
       end

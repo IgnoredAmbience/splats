@@ -1,18 +1,17 @@
 require 'tree'
 
-# Provides ** array mixin ([1,2,3]**3 === [1,2,3]x[1,2,3]x[1,2,3])
-require 'cartesian'
-
 module SPLATS
   # Generates tests for a given class
   class Generator
-    attr_reader :tree
 
     # @param [Class] c The class for the test generator to operate on
-    def initialize c
+    # @param [Traversal] traversal The traversal object to use to direct the
+    #   search
+    def initialize(c, traversal)
       @class = c
       @tree = nil
       @pass_parameters = [Mock, nil]
+      @traversal = traversal
     end
 
     def to_s
@@ -34,6 +33,19 @@ module SPLATS
       generate_parameters! tree, im
 
       tree
+    end
+
+    def produce_test
+      test = Test.new
+      method = @traversal.select_method [@class.method(:new)]
+      args = @traversal.select_arguments generate_parameters(:initialize)
+      test.add_line(method, args)
+
+      while @traversal.continue_descent?
+        method = @traversal.select_method @class.instance_methods(false)
+        args = @traversal.select_arguments generate_parameters(method)
+        test.add_line(method, args)
+      end
     end
 
     # Starts the test generation
@@ -101,7 +113,6 @@ module SPLATS
       end
     end
 
-    private
 
     def tree_expandable?
       not @class.instance_methods(false).empty?
@@ -133,36 +144,23 @@ module SPLATS
 
     # Expands the given tree node with all possible argument sets
     #
-    # @param [Tree::TreeNode<Symbol, Method>] leaf Leaf to be expanded with
-    #   arguments. Arity information will be retrieved from the instance method
-    #   of the given symbol
-    # @param [Method] method If given, arity information will always be
-    #   retrieved from this method.
-    def generate_parameters!(leaf, method=nil)
-      # If and only if method doesn't have a value, assign
-      method ||= @class.instance_method leaf.content
-
-      req = opt = 0
-      method.parameters.each do |type, name|
-        req += 1 if type == :req
-        opt += 1 if type == :opt
-        # Other types are :rest, :block, for * and & syntaxes, respectively
+    # @param [Symbol,Method] method Method to retrieve arity information from.
+    #   If a symbol is passed, it represents an instance method of the class
+    #   under testing.
+    # @return [Array<@pass_parameters>] Array of all possible argument sets,
+    #   valid for the given method.
+    def generate_parameters(method)
+      # If it's not a method, try to make it one
+      unless method.respond_to? :parameters
+        method = @class.instance_method method
       end
 
-      (req..opt+req).each do |n|
-        if n == 1
-          iter = @pass_parameters.map{|p| [p]}.each
-        else
-          iter = (@pass_parameters ** n).each
-        end
+      req = method.parameters.count :req
+      opt = method.parameters.count :opt
+      # Other types are :rest, :block, for * and & syntaxes, respectively
 
-        if iter.count == 0
-          leaf << ParameterNode.new("", [])
-        else
-          iter.each do |args|
-            leaf << ParameterNode.new(args.hash, args)
-          end
-        end
+      (req..opt+req).flat_map do |n|
+        @pass_parameters.repeated_permutation(n).to_a
       end
     end
   end
