@@ -1,5 +1,5 @@
-# This module enforces an abstract pattern
 module SPLATS
+  # @abstract Include this module and implement all methods
   module Traversal
     def select_method methods
       raise NotImplementedError
@@ -14,6 +14,10 @@ module SPLATS
     end
 
     def continue_descent?
+      raise NotImplementedError
+    end
+
+    def continue_generation?
       raise NotImplementedError
     end
   end

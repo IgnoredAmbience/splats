@@ -34,7 +34,20 @@ module SPLATS
         decision = gets.chomp
         puts ["Y", "y", "N", "n"].include? decision
       end while (not (["Y", "y", "N", "n"].include? decision))
-      (decision == 'Y' || decision == 'y') ? true : false
+      decision == 'Y' || decision == 'y'
+    end
+
+    def continue_generation?
+      unless @firstrun
+        @firstrun = true
+      else
+        begin puts "Continue with generation? (Y or N)"
+          # 'gets' includes the newline, so need chomp to prevent the include? from returning false
+          decision = gets.chomp
+          puts ["Y", "y", "N", "n"].include? decision
+        end while (not (["Y", "y", "N", "n"].include? decision))
+        decision == 'Y' || decision == 'y'
+      end
     end
   end
 end
