@@ -1,9 +1,10 @@
+# This module enforces an abstract pattern
 module SPLATS
-  class Traversal
+  module Traversal
     def select_method methods
       raise NotImplementedError
     end
-    
+
     def select_arguments arguments
       raise NotImplementedError
     end

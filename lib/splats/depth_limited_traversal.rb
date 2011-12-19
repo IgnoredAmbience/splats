@@ -1,4 +1,5 @@
 module SPLATS
-  class DepthFirstTraversal < Traversal
+  class DepthLimitedTraversal
+    include Traversal
   end
 end
