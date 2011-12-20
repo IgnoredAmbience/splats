@@ -4,8 +4,12 @@ module SPLATS
     include Traversal
     # If there's already a seed in use, then initialise the RNG with the seed
     # Also keeps an eye on the seed, for possibly returning it in the future
-    def initialize seed=0
-      @rng = Random.new seed
+    def initialize seed=nil
+      if seed
+        @rng = Random.new seed
+      else
+        @rng = Random.new
+      end
     end
 
     def seed
