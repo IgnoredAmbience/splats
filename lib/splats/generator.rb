@@ -58,8 +58,8 @@ module SPLATS
         method = @class.instance_method method
       end
 
-      req = method.parameters.count :req
-      opt = method.parameters.count :opt
+      req = method.parameters.count {|type, o| type == :req}
+      opt = method.parameters.count {|type, o| type == :opt}
       # Other types are :rest, :block, for * and & syntaxes, respectively
 
       (req..opt+req).flat_map do |n|
