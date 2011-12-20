@@ -30,6 +30,7 @@ module SPLATS
     # @return [Test] A generated test
     def produce_test
       test = Test.new
+      @traversal.notify_new_traversal
       decision = @traversal.method(:select_decision)
 
       method = @traversal.select_method [@class.method(:new)]
@@ -42,6 +43,10 @@ module SPLATS
         args = @traversal.select_arguments generate_parameters(method)
         test.add_line(method, args)
         continue_execution = test.execute_last &decision
+      end
+
+      if not continue_execution
+        @traversal.notify_exception_raised
       end
 
       return test
