@@ -14,8 +14,10 @@ module SPLATS
     end
 
     # Executes the most recently added line to the test
+    # @return [boolean] Returns false if an exception was raised on the
+    #   execution of this line
     def execute_last &decision
-      execute_line @test_lines[-1], &decision
+      return execute_line @test_lines[-1], &decision
     end
 
     # Executes the entire test
@@ -24,17 +26,17 @@ module SPLATS
       @exception = nil
 
       @test_lines.each do |line|
-        execute_line line, &decision
-        break if @exception
+        break if not execute_line line, &decision
       end
       unless @exception
         puts "=> " + @result.inspect
-      else
-        puts "!> " + @exception.to_s
       end
     end
 
     # Executes the TestLine, sets the result parameter as the result of execution
+    #
+    # @return [boolean] Returns false if an exception was raised on the
+    #   execution of this line
     def execute_line test_line, &decision
       # Construct any arguments that are Mocks
       arguments = test_line.arguments.map do |arg|
@@ -53,7 +55,10 @@ module SPLATS
         end
       rescue Exception => e
         @exception = e
+        puts "!> " + @exception.to_s
+        return false
       end
+      return true
     end
 
     def name
