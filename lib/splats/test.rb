@@ -105,12 +105,16 @@ module SPLATS
 
     # Turns the result from an abstract assert to a string
     def result_to_s
-      if @result.is_a? NilClass
+      self.class.construct_value @result
+    end
+
+    def self.construct_value value
+      if value.is_a? NilClass
         "nil"
-      elsif @result.is_a? Exception
-        @result.class.name
+      elsif value.is_a? Exception
+        value.class.name
       else
-        @result.inspect
+        value.inspect
       end
     end
 
@@ -169,7 +173,7 @@ module SPLATS
         if @arguments.empty?
           ""
         else
-          "(" << @arguments.join(',') << ")"
+          "(" << @arguments.map{|a| Test.construct_value(a)}.join(', ') << ")"
         end
       end
     end
