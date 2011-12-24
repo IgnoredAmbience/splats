@@ -1,4 +1,4 @@
 wiki
 doc
 .yardoc
-*.{aux,dvi,log,out,ps}
+*.{aux,dvi,log,out,ps,pdf}
