@@ -73,6 +73,7 @@ Ruby developer & find out if two versions of my code have the same functionality
 \hline
 Ruby developer & set configuration options to select which classes and/or methods to test & I won't necessarily want to test the entire system \\
 \hline
+Ruby developer & specify how the tests should be generated (human-directed, random or depth-first limited) & different traversal methods give different results of tests produced \\
 Ruby developer & inspect code coverage of generated tests & I need to know how much of my code has been tested \\
 \hline
 Ruby developer & reproduce tests & a test will highlight issues, I will change the code and then want to run the same tests to check the problem has disappeared. \\
@@ -81,8 +82,29 @@ Ruby developer & use a Command Line Interface to interact with the system & it's
 \hline
 \end{tabular}
 \subsection{Extensions}
+\begin{tabular}{| c | p{5cm} | p{5cm} |}
+\hline
+\textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
+\hline
+Ruby developer & use a User Interface to interact with the system & if I'm not used to Command Line Interfaces, it will be the easiest way for me to interact. \\
+\hline
+Ruby developer & automatically run regression tests on two versions of the code under version control & I won't have to specify where the versions are, I can just run a command telling it to use references in version control \\
+\hline
+Ruby developer & test basic program semantics (whitebox testing) & two versions of the same code may have the same functionality, but they could be fundamentally wrong \\
+\hline
+Ruby developer & test my code on a distributed system & parallelisation would allow for more tests to be created in a quicker amount of time, and the processing power could enable more tests to be produced which find bugs that otherwise wouldn't have been found. \\
+\hline
+\end{tabular}
 \subsection{Future Enhancements}
-
+\begin{tabular}{| c | p{5cm} | p{5cm} |}
+\hline
+\textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
+\hline
+Generic user & Use a website to interact with the testing & I want to learn how to test and therefore what good tests should look like. \\
+\hline
+Ruby developer & Have additional options to generate the tests, for example breadth-first and random-directed & My program may respond better to different traversal methods \\
+\hline
+\end{tabular}
 \section{Architecture}
 
 
