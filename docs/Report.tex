@@ -54,13 +54,13 @@ There are many types of tests we could have produced with SpLATS. Fundamentally,
 \subsection{Selenium}
 Selenium enables testing web page for Ruby, but we wanted this project to be more generalised than that.
 \subsection{Test::Unit}
-Ruby comes shipped with a module test unit \url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html} which offers to programmers the ability to write test suites, tests and cases. The tests are not automatically produced, and are not automatically run on later versions of the code.
+Ruby comes shipped with this module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}} which offers to programmers the ability to write test suites, tests and cases. The tests are not automatically produced, and are not automatically run on later versions of the code.
 \subsection{ZenTest}
 ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}} uses Ruby's Test::Unit to automatically test code, both blackbox and whitebox. As a file is saved, ZenTest automatically runs itself again. ZenTest uses code coverage to highlight tests which need to be written by the developer, and generates stubs for these. ZenTest also uses whitebox testing to check if a method has been implemented or not. Whilst this tool is extremely useful, it still expects developers to write the tests themselves. The aim of SpLATS is to focus the attention away from writing tests, and to allow a developer to just code. The aim of ZenTest is to make test writing as easy as possible.
 \subsection{IRULAN}
-IRULAN is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis. \url{http://www.doc.ic.ac.uk/~tora/thesis.pdf} IRULAN performs directed random testing, which is a different method to how SpLATS performs (see below).
+IRULAN\footnote\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}{} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis. IRULAN performs directed random testing, which is a different method to how SpLATS performs (see below).
 \subsection{Tickling Java with a Feather}
-This is another of Dr Allwood's research papers, where he performs automated testing on a subset of the Java language. Some of the methods outlined here are useful. \url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}
+This\footnote{\url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}} is another of Dr Allwood's research papers, where he performs automated testing on a subset of the Java language. Some of the methods outlined here are useful.
 
 \section{Features}
 Below is an extract from the first report that was written explaining what the requirements are. These have been modified slightly to take into consideration how the requirements have changed as the project has evolved.
