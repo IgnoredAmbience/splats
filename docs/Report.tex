@@ -1,0 +1,93 @@
+\documentclass{report}
+\usepackage{hyperref}
+\newcommand{\mail}[1]{\href{mailto:#1@doc.ic.ac.uk}{#1@doc.ic.ac.uk}}
+% \renewcommand{\thesection}{\arabic{subsection}}
+% \renewcommand{\thesubsection}{(\alph{subsection})}
+% \renewcommand{\thesubsubsection}{\roman{subsection}.} 
+
+\begin{document}
+\title{SpLATS Lazy Automated Test System}
+\author{Caroline Glassberg-Powell}
+\date{December 2011}
+\maketitle
+
+\begin{abstract}
+Blah
+\end{abstract}
+
+\chapter{Introduction}
+This report is the presentation of the third year group project, which we named SpLATS Lazy Automated Test System (SpLATS).
+
+The aim of this project is to automatically perform regression testing for Ruby. Regression testing is where two versions of the same piece of software are checked to confirm they still perform the same function. The project is aimed at Ruby developers.
+
+The original proposal for the project can be found on Susan Eisenbach's homepage.
+
+\section{About us}
+The group is made of five undergraduate Department of Computing students:
+\begin{itemize}
+\item{Ethel Bardsley \mail{eb2009} (MEng)}
+\item{Caroline Glassberg-Powell \mail{cg408} (BEng)}
+\item{Christopher Keeley \mail{ck1209} (MEng)}
+\item{Joseph Slade \mail{js5409} (MEng)}
+\item{Thomas Wood \mail{tw1509} (MEng)}
+\end{itemize}
+
+The project is supervised by Prof. Susan Eisenbach (\mail{sue}) and Dr Tristan Allwood (\mail{tora}).
+
+\section{Project Links}
+wiki??
+
+\section{Previous Reports}
+Along with this report, there were three other reports which we produced.
+\subsection{Report 1}
+\subsection{Report 2}
+\subsection{Report 3}
+
+\chapter{Technical Description}
+\section{Choice of Language}
+Initially the project offered a choice of three languages to work with: JavaScript, Python and Ruby. All three are dynamically typed, which causes many issues with automatically writing tests, but more on that later. All three enable object-orientation, but Ruby is the only one of the three which is purely object-oriented. Python and JavaScript are therefore more unstructured in terms of their code, and we decided Ruby would be easier to work with. Another advantage that Ruby offered was that none of the group had used it before. This meant that we would all start with the same disability, and it would ensure the group would remain equal.
+
+\section{Choice of Test Method to Implement}
+There are many types of tests we could have produced with SpLATS. Fundamentally, there is whitebox and blackbox testing. We decided to choose blackbox testing with the option of implementing some whitebox testing as an extension. Because Ruby is dynamically typed, the types of whitebox testing which can be implemented are limited to generic conditions. [examples here]
+
+\section{Existing Products}
+\subsection{Selenium}
+Selenium enables testing web page for Ruby, but we wanted this project to be more generalised than that.
+\subsection{Test::Unit}
+Ruby comes shipped with a module test unit \url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html} which offers to programmers the ability to write test suites, tests and cases. The tests are not automatically produced, and are not automatically run on later versions of the code.
+\subsection{ZenTest}
+ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}} uses Ruby's Test::Unit to automatically test code, both blackbox and whitebox. As a file is saved, ZenTest automatically runs itself again. ZenTest uses code coverage to highlight tests which need to be written by the developer, and generates stubs for these. ZenTest also uses whitebox testing to check if a method has been implemented or not. Whilst this tool is extremely useful, it still expects developers to write the tests themselves. The aim of SpLATS is to focus the attention away from writing tests, and to allow a developer to just code. The aim of ZenTest is to make test writing as easy as possible.
+\subsection{IRULAN}
+IRULAN is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis. \url{http://www.doc.ic.ac.uk/~tora/thesis.pdf} IRULAN performs directed random testing, which is a different method to how SpLATS performs (see below).
+\subsection{Tickling Java with a Feather}
+This is another of Dr Allwood's research papers, where he performs automated testing on a subset of the Java language. Some of the methods outlined here are useful. \url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}
+
+\section{Features}
+Below is an extract from the first report that was written explaining what the requirements are. These have been modified slightly to take into consideration how the requirements have changed as the project has evolved.
+\subsection{Minimum Requirements}
+\subsection{Extensions}
+\subsection{Future Enhancements}
+
+\section{Architecture}
+
+
+\chapter{Software Engineering}
+\section{Technical Challenges}
+\section{Collaboration and Coordination}
+\section{Development Methods}
+\section{Effort Measure}
+\section{Summary of team member contributions}
+
+\chapter{Validation and Conclusions}
+\section{Performance of SpLATS}
+\subsection{Feature Matrix}
+\subsection{Code Coverage}
+\subsection{ZenTest}
+\subsection{Feature 1}
+\subsubsection{Analysis}
+\subsubsection{Design}
+\subsubsection{Implementation}
+\subsubsection{Testing}
+
+\appendix
+\end{document}
