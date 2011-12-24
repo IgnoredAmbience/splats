@@ -38,7 +38,7 @@ module SPLATS
       test.add_line(method, args)
       continue_execution = test.execute_last &decision
 
-      while @traversal.continue_descent? and continue_execution
+      while continue_execution and @traversal.continue_descent?
         method = @traversal.select_method @class.instance_methods(false)
         args = @traversal.select_arguments generate_parameters(method)
         test.add_line(method, args)
