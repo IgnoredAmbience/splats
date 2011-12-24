@@ -3,7 +3,7 @@ require 'rake/testtask'
 # Installs required rubygems, probably requires root permissions
 # 'rake gems'
 task :gems do
-  %w{rubytree cartesian yard rbeautify}.each do |gem|
+  %w{yard}.each do |gem|
     if not system "gem install #{gem}"
       system "gem install --user-install #{gem}"
     end

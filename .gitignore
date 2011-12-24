@@ -2,3 +2,4 @@ wiki
 doc
 .yardoc
 *.{aux,dvi,log,out,ps,pdf}
+coverage
