@@ -10,14 +10,14 @@ class DepthLimitedTraversalTest < Test::Unit::TestCase
       d.notify_new_traversal
       path = []
       begin
-        path << d.select_method([1,2])
-        path << d.select_arguments([1,2])
+        path << d.select_method([0,1])
+        path << d.select_arguments([0,1])
       end while d.continue_descent?
       paths << path
     end
 
-    d1 = [1,2].repeated_permutation(2).to_a
-    d2 = [1,2].repeated_permutation(4).to_a
+    d1 = [0,1].repeated_permutation(2).to_a
+    d2 = [0,1].repeated_permutation(4).to_a
     expected = d1 + d2
 
     assert_empty expected - paths, "Not all expected items were returned"
@@ -29,7 +29,7 @@ class DepthLimitedTraversalTest < Test::Unit::TestCase
     assert_empty paths - expected, "Unexpected items were returned"
   end
 
-  def test_exception
+  def test_exception_pruning
     d = SPLATS::DepthLimitedTraversal.new 2
     paths = []
 
@@ -37,11 +37,11 @@ class DepthLimitedTraversalTest < Test::Unit::TestCase
       d.notify_new_traversal
       path = []
       begin
-        path << d.select_method([1])
-        args = d.select_arguments([1,2])
+        path << d.select_method([0])
+        args = d.select_arguments([0,1])
         path << args
 
-        if args == 2
+        if args == 1
           d.notify_exception_raised
           break
         end
@@ -49,8 +49,8 @@ class DepthLimitedTraversalTest < Test::Unit::TestCase
       paths << path
     end
 
-    expected = [[1,1], [1,2], [1,1,1,1], [1,1,1,2]]
+    expected = [[0,0], [0,1], [0,0,0,0], [0,0,0,1]]
     assert_empty expected - paths, "Not all expected items were returned"
-    assert_empty paths - expected, "Unexpected items were returned"
+    assert_empty paths - expected, "Unexpected items were returned - pruning not working as expected!"
   end
 end
