@@ -55,7 +55,7 @@ module SPLATS
           new_layer << idx
           new_item = @item.clone
           new_item[-1] = new_layer
-          @queue << new_item
+          @queue.unshift(new_item)
         end
         @layer << 0
       end
