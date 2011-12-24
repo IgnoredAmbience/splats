@@ -3,10 +3,10 @@ require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test'
 require_relative 'splats/test_file'
-require_relative 'splats/traversal'
-require_relative 'splats/human_traversal'
-require_relative 'splats/depth_limited_traversal'
-require_relative 'splats/random_traversal'
+require_relative 'splats/Traversal/traversal'
+require_relative 'splats/Traversal/human_traversal'
+require_relative 'splats/Traversal/random_traversal'
+require_relative 'splats/Traversal/depth_limited_traversal'
 
 module SPLATS
 
