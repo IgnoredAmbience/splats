@@ -1,4 +1,4 @@
-require_relative '../lib/splats/traversal'
+require_relative '../lib/splats'
 require 'test/unit'
 
 class Traversal

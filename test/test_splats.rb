@@ -6,4 +6,5 @@ $:.unshift File.join(File.dirname(__FILE__))
 
 require 'splats'
 require 'tc_traversal'
+require 'tc_random_traversal'
 
