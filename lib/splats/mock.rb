@@ -11,7 +11,9 @@ module SPLATS
         __send__(:method_missing, method, *args, &block)
       end
     end
+
     @@id = 0
+
     def initialize &branch_block
       @object = MockImplementation.new self
       @child_objects = []
@@ -24,15 +26,14 @@ module SPLATS
 
     # Prints information about the failed method call
     def method_missing(symbol, *args, &block)
-      newMock = Mock.new()
-
-      result = @object.__send__(symbol, *args, &block)
-      @child_objects << [symbol, newMock.id]
-      ::Kernel.puts "Current children #{@child_objects}"
-      ::Kernel.puts "Method '#{symbol}' called with arguments #{args} and #{block.nil? && 'no' || 'a'} block. Returns '#{result}'"
+      #::Kernel.puts "Method '#{symbol}' called with arguments #{args} on mock ##{@id}"
+      if @object.__SPLATS_orig_respond_to? symbol
+        result = @object.__SPLATS_orig_send(symbol, *args, &block)
+      else
+        result = Mock.new &@branch_block
+        @child_objects << [symbol, result]
+      end
       result
-      
-
     end
 
     # Predicate to test if an object is mock 
@@ -41,22 +42,19 @@ module SPLATS
       true
     end
 
-    # Sets what mock is
-    def __SPLATS_proxy= obj
-      @object = obj
-    end
-
     # Adds branches to the tree based on varying results of operations
     def __SPLATS_branch method, branches
       @branch_block.call branches
     end
+
     def __SPLATS_print
-      puts "Mock '#{self.__id__} had #{child_objects.length} methods called on it. List names?>'"
+      puts "Mock #'#{@id} had #{child_objects.length} methods called on it. List names?>'"
     end
   end
 
-  class MockImplementation < BasicObject
-    (instance_methods - instance_methods(false) - [:__send__]).each do |method|
+  class MockImplementation < Object
+    (instance_methods - instance_methods(false)).each do |method|
+      alias_method ("__SPLATS_orig_" + method.to_s).to_sym, method
       private method
     end
 
@@ -80,7 +78,6 @@ module SPLATS
     def coerce x
       # Adding branches to the tree with different outcomes of the value of the operation
       item = @mock.__SPLATS_branch :coerce, [0, 1, -1]
-      @mock.__SPLATS_proxy = item
       [x, item]
     end
 
