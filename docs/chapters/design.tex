@@ -1,82 +1,87 @@
 \chapter{Technical Description}
-\section{Choice of Language}
-Initially the project offered a choice of three languages to target: JavaScript, Python or Ruby.
-These languages are all dynamically typed, introducing similar issues with automatically generating tests.
-All three allow object-oriented approaches, but Ruby is the only one which is purely object-oriented.
-Python and JavaScript therefore have less structured code, so we decided Ruby would be easier to work with.
-Another advantage that Ruby offered was that none of the group had used it before.
-This meant that we would all start with the same ability level, and it would ensure the group would remain equal.
 
-\section{Choice of Test Method to Implement}
-There are many types of tests we could have produced with SpLATS.
-Fundamentally, there is whitebox and blackbox testing.
-We decided to choose blackbox testing with the option of implementing some whitebox testing as an extension.
-Because Ruby is dynamically typed, the types of whitebox testing which can be implemented are limited to generic conditions.
-[examples here]
+\section{Choice of Language}%\begin
+  Initially the project offered a choice of three languages to target: JavaScript, Python or Ruby.
+  These languages are all dynamically typed, introducing similar issues with automatically generating tests.
+  All three allow object-oriented approaches, but Ruby is the only one which is purely object-oriented.
+  Python and JavaScript therefore have less structured code, so we decided Ruby would be easier to work with.
+  Another advantage that Ruby offered was that none of the group had used it before.
+  This meant that we would all start with the same ability level, and it would ensure the group would remain equal.%\end
+
+\section{Choice of Test Method to Implement}%\begin
+  There are many types of tests we could have produced with SpLATS.
+  Fundamentally, there is whitebox and blackbox testing.
+  We decided to choose blackbox testing with the option of implementing some whitebox testing as an extension.
+  Because Ruby is dynamically typed, the types of whitebox testing which can be implemented are limited to generic conditions.
+  [examples here]%\end
 
 \section{Existing Products}
-\subsection{Selenium}
-Selenium enables testing web page for Ruby, but we wanted this project to be more generalised than that.
-\subsection{Test::Unit}
-Ruby comes shipped with this module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}} which offers to programmers the ability to write test suites, tests and cases.
-The tests are not automatically produced, and are not automatically run on later versions of the code.
-\subsection{ZenTest}
-ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}} uses Ruby's Test::Unit to automatically test code, both blackbox and whitebox.
-As a file is saved, ZenTest automatically runs itself again.
-ZenTest uses code coverage to highlight tests which need to be written by the developer, and generates stubs for these.
-ZenTest also uses whitebox testing to check if a method has been implemented or not.
-Whilst this tool is extremely useful, it still expects developers to write the tests themselves.
-The aim of SpLATS is to focus the attention away from writing tests, and to allow a developer to just code.
-The aim of ZenTest is to make test writing as easy as possible.
-\subsection{IRULAN}
-IRULAN\footnote\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}{} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis.
-IRULAN performs directed random testing, which is a different method to how SpLATS performs (see below).
-\subsection{Tickling Java with a Feather}
-This\footnote{\url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}} is another of Dr Allwood's research papers, where he performs automated testing on a subset of the Java language.
-Some of the methods outlined here are useful.
+  \subsection{Selenium}
+    Selenium enables testing web page for Ruby, but we wanted this project to be more generalised than that.
+
+  \subsection{Test::Unit}
+    Ruby comes shipped with this module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}} which offers to programmers the ability to write test suites, tests and cases.
+    The tests are not automatically produced, and are not automatically run on later versions of the code.
+
+  \subsection{ZenTest}
+    ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}} uses Ruby's Test::Unit to automatically test code, both blackbox and whitebox.
+    As a file is saved, ZenTest automatically runs itself again.
+    ZenTest uses code coverage to highlight tests which need to be written by the developer, and generates stubs for these.
+    ZenTest also uses whitebox testing to check if a method has been implemented or not.
+    Whilst this tool is extremely useful, it still expects developers to write the tests themselves.
+    The aim of SpLATS is to focus the attention away from writing tests, and to allow a developer to just code.
+    The aim of ZenTest is to make test writing as easy as possible.
+
+  \subsection{IRULAN}
+    IRULAN\footnote\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}{} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis.
+    IRULAN performs directed random testing, which is a different method to how SpLATS performs (see below).
+
+  \subsection{Tickling Java with a Feather}
+    This\footnote{\url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}} is another of Dr Allwood's research papers, where he performs automated testing on a subset of the Java language.
+    Some of the methods outlined here are useful.
 
 \section{Features}
-Below is an extract from the first report that was written explaining what the requirements are.
-These have been modified slightly to take into consideration how the requirements have changed as the project has evolved.
-\subsection{Minimum Requirements}
-\begin{tabular}{| c | p{5cm} | p{5cm} |}
-\hline
-\textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
-\hline
-Ruby developer & find out if two versions of my code have the same functionality & any changes to the codebase should only affect a specific subset of the program’s output. \\
-\hline
-Ruby developer & set configuration options to select which classes and/or methods to test & I won't necessarily want to test the entire system \\
-\hline
-Ruby developer & specify how the tests should be generated (human-directed, random or depth-first limited) & different traversal methods give different results of tests produced \\
-Ruby developer & inspect code coverage of generated tests & I need to know how much of my code has been tested \\
-\hline
-Ruby developer & reproduce tests & a test will highlight issues, I will change the code and then want to run the same tests to check the problem has disappeared. \\
-\hline
-Ruby developer & use a Command Line Interface to interact with the system & it's the quickest method for me to run tests \\
-\hline
-\end{tabular}
-\subsection{Extensions}
-\begin{tabular}{| c | p{5cm} | p{5cm} |}
-\hline
-\textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
-\hline
-Ruby developer & use a User Interface to interact with the system & if I'm not used to Command Line Interfaces, it will be the easiest way for me to interact. \\
-\hline
-Ruby developer & automatically run regression tests on two versions of the code under version control & I won't have to specify where the versions are, I can just run a command telling it to use references in version control \\
-\hline
-Ruby developer & test basic program semantics (whitebox testing) & two versions of the same code may have the same functionality, but they could be fundamentally wrong \\
-\hline
-Ruby developer & test my code on a distributed system & parallelisation would allow for more tests to be created in a quicker amount of time, and the processing power could enable more tests to be produced which find bugs that otherwise wouldn't have been found. \\
-\hline
-\end{tabular}
-\subsection{Future Enhancements}
-\begin{tabular}{| c | p{5cm} | p{5cm} |}
-\hline
-\textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
-\hline
-Generic user & Use a website to interact with the testing & I want to learn how to test and therefore what good tests should look like. \\
-\hline
-Ruby developer & Have additional options to generate the tests, for example breadth-first and random-directed & My program may respond better to different traversal methods \\
-\hline
-\end{tabular}
-\section{Architecture}
+  Below is an extract from the first report that was written explaining what the requirements are.
+  These have been modified slightly to take into consideration how the requirements have changed as the project has evolved.
+  \subsection{Minimum Requirements}
+    \begin{tabular}{| c | p{5cm} | p{5cm} |}
+    \hline
+    \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
+    \hline
+    Ruby developer & find out if two versions of my code have the same functionality & any changes to the codebase should only affect a specific subset of the program’s output. \\
+    \hline
+    Ruby developer & set configuration options to select which classes and/or methods to test & I won't necessarily want to test the entire system \\
+    \hline
+    Ruby developer & specify how the tests should be generated (human-directed, random or depth-first limited) & different traversal methods give different results of tests produced \\
+    Ruby developer & inspect code coverage of generated tests & I need to know how much of my code has been tested \\
+    \hline
+    Ruby developer & reproduce tests & a test will highlight issues, I will change the code and then want to run the same tests to check the problem has disappeared. \\
+    \hline
+    Ruby developer & use a Command Line Interface to interact with the system & it's the quickest method for me to run tests \\
+    \hline
+    \end{tabular}
+  \subsection{Extensions}
+    \begin{tabular}{| c | p{5cm} | p{5cm} |}
+    \hline
+    \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
+    \hline
+    Ruby developer & use a User Interface to interact with the system & if I'm not used to Command Line Interfaces, it will be the easiest way for me to interact. \\
+    \hline
+    Ruby developer & automatically run regression tests on two versions of the code under version control & I won't have to specify where the versions are, I can just run a command telling it to use references in version control \\
+    \hline
+    Ruby developer & test basic program semantics (whitebox testing) & two versions of the same code may have the same functionality, but they could be fundamentally wrong \\
+    \hline
+    Ruby developer & test my code on a distributed system & parallelisation would allow for more tests to be created in a quicker amount of time, and the processing power could enable more tests to be produced which find bugs that otherwise wouldn't have been found. \\
+    \hline
+    \end{tabular}
+  \subsection{Future Enhancements}
+    \begin{tabular}{| c | p{5cm} | p{5cm} |}
+    \hline
+    \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
+    \hline
+    Generic user & Use a website to interact with the testing & I want to learn how to test and therefore what good tests should look like. \\
+    \hline
+    Ruby developer & Have additional options to generate the tests, for example breadth-first and random-directed & My program may respond better to different traversal methods \\
+    \hline
+    \end{tabular}
+  \section{Architecture}
