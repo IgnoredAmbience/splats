@@ -39,48 +39,70 @@
     This\footnote{\url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}} is another of Dr Allwood's research papers, where he performs automated testing on a subset of the Java language.
     Some of the methods outlined here are useful.
 
+\def \colwidth {0.35\textwidth}
 \section{Features}
-  Below is an extract from the first report that was written explaining what the requirements are.
+  Below is an extract from the first report explaining what the requirements are.
   These have been modified slightly to take into consideration how the requirements have changed as the project has evolved.
   \subsection{Minimum Requirements}
-    \begin{tabular}{| c | p{5cm} | p{5cm} |}
+    \begin{tabular}{| c | p{\colwidth} | p{\colwidth} |}
     \hline
     \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
     \hline
-    Ruby developer & find out if two versions of my code have the same functionality & any changes to the codebase should only affect a specific subset of the program’s output. \\
+    Ruby developer &
+    Find out if two versions of my code have the same functionality &
+    Any changes to the codebase should not break existing code. \\
     \hline
-    Ruby developer & set configuration options to select which classes and/or methods to test & I won't necessarily want to test the entire system \\
+    Ruby developer &
+    Set configuration options to select which classes and/or methods to test &
+    I won't necessarily want to test the entire system \\
     \hline
-    Ruby developer & specify how the tests should be generated (human-directed, random or depth-first limited) & different traversal methods give different results of tests produced \\
-    Ruby developer & inspect code coverage of generated tests & I need to know how much of my code has been tested \\
+    Ruby developer &
+    Inspect code coverage of generated tests &
+    I need to know how much of my code has been tested \\
     \hline
-    Ruby developer & reproduce tests & a test will highlight issues, I will change the code and then want to run the same tests to check the problem has disappeared. \\
+    Ruby developer &
+    Reproduce tests &
+    A test will highlight issues, I will change the code and then want to run the same tests to check the problem has disappeared. \\
     \hline
-    Ruby developer & use a Command Line Interface to interact with the system & it's the quickest method for me to run tests \\
+    Ruby developer &
+    Use a command line interface to interact with the system &
+    It's the quickest method for me to run tests and is easily automated, eg, by git bisect \\
     \hline
     \end{tabular}
   \subsection{Extensions}
-    \begin{tabular}{| c | p{5cm} | p{5cm} |}
+    \begin{tabular}{| c | p{\colwidth} | p{\colwidth} |}
     \hline
     \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
     \hline
-    Ruby developer & use a Graphical User Interface to interact with the system & if I'm not used to Command Line Interfaces, it will be the easiest way for me to interact. \\
+    Ruby developer &
+    Use a graphical interface to interact with the system &
+    If I'm not used to command line interfaces, it will be the easiest way for me to use the system. \\
     \hline
-    Ruby developer & automatically run regression tests on two versions of the code under version control & I won't have to specify where the versions are, I can just run a command telling it to use references in version control \\
+    Ruby developer &
+    Automatically run regression tests on two versions of the code under version control &
+    I won't have to specify where the versions are, I can let it work that out itself \\
     \hline
-    Ruby developer & test basic program semantics (whitebox testing) & two versions of the same code may have the same functionality, but they could be fundamentally wrong \\
+    Ruby developer &
+    Test basic program semantics (whitebox testing) &
+    Two versions of the same code may have the same tested functionality, but they could be wrong in other ways \\
     \hline
-    Ruby developer & test my code on a distributed system & parallelisation would allow for more tests to be created in a quicker amount of time, and the processing power could enable more tests to be produced which find bugs that otherwise wouldn't have been found. \\
+    Ruby developer &
+    Test my code across multiple computers at once &
+    Parallelisation would allow for more tests to be created in less time, either speeding up the test cycle or allowing it to be more rigorous. \\
     \hline
     \end{tabular}
   \subsection{Future Enhancements}
-    \begin{tabular}{| c | p{5cm} | p{5cm} |}
+    \begin{tabular}{| c | p{\colwidth} | p{\colwidth} |}
     \hline
     \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
     \hline
-    Generic user & Use a website to interact with the testing & I want to learn how to test and therefore what good tests should look like. \\
+    Generic user &
+    Use a website to interact with the testing &
+    I want to learn how to test and therefore what good tests should look like. \\
     \hline
-    Ruby developer & Have additional options to generate the tests, for example breadth-first and random-directed & My program may respond better to different traversal methods \\
+    Ruby developer &
+    Have additional options to generate the tests, for example breadth-first and random-directed &
+    My program may respond better to different traversal methods \\
     \hline
     \end{tabular}
   \section{Architecture}
