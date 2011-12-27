@@ -16,13 +16,16 @@ module SPLATS
       raise NotImplementedError
     end
 
-    # Select a decision from a given array of decisions. A decision is a value
-    # that should be returned when a concrete cast is called.
-    # TODO: Check that this is our intended input type
+    # Given a type, return a value of that type
+    # This function could always return nil as a valid return value
+    # This function could raise a NoMethodError, if the method is decided not to
+    # exist
     #
-    # @param [Array<Object>] decisions
+    # @param [Symbol] type The symbol of the class of the type of value we wish
+    #   to generate
     # @return [Object] The selected decision
-    def select_decision decisions
+    # @raise NoMethodError
+    def generate_value type
       raise NotImplementedError
     end
 

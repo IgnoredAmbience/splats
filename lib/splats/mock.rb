@@ -12,6 +12,25 @@ module SPLATS
       end
     end
 
+    RETURN_TYPES = {
+      :! => :Bool,
+      :!= => :Bool,
+      :== => :Bool,
+      :=== => :Bool,
+      :to_a => :Array,
+      :to_ary => :Array,
+      :to_c => :Complex,
+      :to_d => :BigDecimal,
+      :to_f => :Float,
+      :to_hash => :Hash,
+      :to_i => :Integer,
+      :to_int => :Integer,
+      :to_r => :Rational,
+      :to_s => :String,
+      :to_str => :String,
+      :to_sym => :Symbol,
+    }
+
     @@id = 0
 
     def initialize &branch_block
@@ -27,7 +46,11 @@ module SPLATS
     # Prints information about the failed method call
     def method_missing(symbol, *args, &block)
       #::Kernel.puts "Method '#{symbol}' called with arguments #{args} on mock ##{@id}"
-      if @object.__SPLATS_orig_respond_to? symbol
+      if RETURN_TYPES.include? symbol
+        result = @branch_block.call RETURN_TYPES[symbol]
+      elsif symbol[-1] == '?'
+        result = @branch_block.call :Bool
+      elsif @object.__SPLATS_orig_respond_to? symbol
         result = @object.__SPLATS_orig_send(symbol, *args, &block)
       else
         result = Mock.new &@branch_block
@@ -43,8 +66,8 @@ module SPLATS
     end
 
     # Adds branches to the tree based on varying results of operations
-    def __SPLATS_branch method, branches
-      @branch_block.call branches
+    def __SPLATS_branch type
+      @branch_block.call type
     end
 
     def __SPLATS_print
@@ -52,6 +75,8 @@ module SPLATS
     end
   end
 
+  # Used for any other non-trivial, but well-defined ruby 'interfaces' such as
+  # coerce
   class MockImplementation < Object
     (instance_methods - instance_methods(false)).each do |method|
       alias_method ("__SPLATS_orig_" + method.to_s).to_sym, method
@@ -62,31 +87,12 @@ module SPLATS
       @mock = mock
     end
 
-    def to_s
-      inspect
-    end
-
-    def inspect
-      "<Mock Object>"
-    end
-
-    def to_r
-      0
-    end
-
-    # This is called when a Ruby object tries to perform an arithemetical operation on a mock
+    # This is called when a Ruby object tries to perform an arithemetical
+    # operation on a mock
     def coerce x
       # Adding branches to the tree with different outcomes of the value of the operation
-      item = @mock.__SPLATS_branch :coerce, [0, 1, -1]
+      item = @mock.__SPLATS_branch x.class.to_s.to_sym
       [x, item]
-    end
-
-    def to_str
-      ""
-    end
-
-    def to_ary
-      []
     end
   end
 end
