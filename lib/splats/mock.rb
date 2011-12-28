@@ -12,25 +12,6 @@ module SPLATS
       end
     end
 
-    RETURN_TYPES = {
-      :! => :Bool,
-      :!= => :Bool,
-      :== => :Bool,
-      :=== => :Bool,
-      :to_a => :Array,
-      :to_ary => :Array,
-      :to_c => :Complex,
-      :to_d => :BigDecimal,
-      :to_f => :Float,
-      :to_hash => :Hash,
-      :to_i => :Integer,
-      :to_int => :Integer,
-      :to_r => :Rational,
-      :to_s => :String,
-      :to_str => :String,
-      :to_sym => :Symbol,
-    }
-
     @@id = 0
 
     def initialize &branch_block

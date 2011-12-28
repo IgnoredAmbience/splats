@@ -22,6 +22,26 @@ module SPLATS
     Hash
   ]
 
+  RETURN_TYPES = {
+    :! => :Bool,
+    :!= => :Bool,
+    :== => :Bool,
+    :=== => :Bool,
+    :to_a => :Array,
+    :to_ary => :Array,
+    :to_c => :Complex,
+    :to_d => :BigDecimal,
+    :to_f => :Float,
+    :to_hash => :Hash,
+    :to_i => :Integer,
+    :to_int => :Integer,
+    :to_r => :Rational,
+    :to_s => :String,
+    :to_str => :String,
+    :to_sym => :Symbol,
+  }
+
+
   # Loads given file and returns classes defined within
   #
   # This does *not* guarantee that any other code held within the file will not
