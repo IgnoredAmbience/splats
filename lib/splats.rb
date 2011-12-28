@@ -10,6 +10,18 @@ require_relative 'splats/random_traversal'
 
 module SPLATS
 
+  BASE_CLASSES = [
+    Integer,
+    String,
+    Fixnum,
+    Float,
+    Array,
+    TrueClass,
+    FalseClass,
+    NilClass,
+    Hash
+  ]
+
   # Loads given file and returns classes defined within
   #
   # This does *not* guarantee that any other code held within the file will not

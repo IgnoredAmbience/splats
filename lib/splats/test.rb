@@ -90,8 +90,11 @@ module SPLATS
 
     # The final assert statement
     def assert
-      ["assert_instance_of #{@result.class}, result",
-       "assert_equal #{result_to_s}, result"]
+      if @result.__SPLATS_is_mock?
+        ["assert mock!?"]
+      else
+        ["assert_instance_of #{@result.class}, result"] + (is_base_class(@result) ? ["assert_equal #{result_to_s}, result"] : [])
+      end
     end
 
     def assert_raises
@@ -101,6 +104,10 @@ module SPLATS
     # The function footer
     def footer
       ["end"]
+    end
+
+    def is_base_class value
+      BASE_CLASSES.include? value.class
     end
 
     # Turns the result from an abstract assert to a string
