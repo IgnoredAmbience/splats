@@ -17,17 +17,26 @@ class RandomTraversalTest < Test::Unit::TestCase
   def test_all_options_returned
     random_all :select_method
     random_all :select_arguments
-    random_all :select_decision
+  end
+
+  def test_all_generate_value_options_returned
+    r = SPLATS::RandomTraversal.new
+    elems = [nil, true, false]
+    results = []
+    50.times do
+      results << r.generate_value(:Bool)
+    end
+    assert_equal [], (elems - results)
   end
 
   def test_same_seed_produces_same_result
     r1 = SPLATS::RandomTraversal.new 1
     r2 = SPLATS::RandomTraversal.new 1
     elem = [1, 'a', 'z', 2]
-    10.times do
+    50.times do
       assert_equal r1.select_method(elem), r2.select_method(elem)
       assert_equal r1.select_arguments(elem), r2.select_arguments(elem)
-      assert_equal r1.select_decision(elem), r2.select_decision(elem)
+      assert_equal r1.generate_value(:Bool), r2.generate_value(:Bool)
       assert_equal r1.continue_descent?, r2.continue_descent?
       assert_equal r1.continue_generation?, r2.continue_generation?
     end
@@ -59,7 +68,7 @@ class RandomTraversalTest < Test::Unit::TestCase
     new_random_numbers << rand(10)
     r.select_arguments [1,2,3]
     new_random_numbers << rand(10)
-    r.select_decision [1,2,3]
+    r.generate_value :Bool
     new_random_numbers << rand(10)
     r.continue_descent?
     new_random_numbers << rand(10)

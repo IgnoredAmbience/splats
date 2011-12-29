@@ -20,13 +20,16 @@ module SPLATS
     # This function could always return nil as a valid return value
     # This function could raise a NoMethodError, if the method is decided not to
     # exist
+    # By default this returns the first element of generate_values, as raising a
+    #   NotImplementedError would erroneously carry through to the executing
+    #   method.
     #
     # @param [Symbol] type The symbol of the class of the type of value we wish
     #   to generate
     # @return [Object] The selected decision
     # @raise NoMethodError
     def generate_value type
-      raise NotImplementedError
+      generate_values(type)[0]
     end
 
     # @return [Boolean] Returns true if we should continue building the test
@@ -47,6 +50,31 @@ module SPLATS
     # Called to notify the traverser that an exception has arisen during
     # execution, and that no further progress can be made on this branch
     def notify_exception_raised
+    end
+
+    # Given a type (inclusive of :Bool), return a default list of values to try
+    #   for that type.
+    #
+    # @param [Symbol] type The symbol of the class of types to return.
+    # @return [Array] An array containing elements of that type.
+    def generate_values type
+      values = [nil]
+      case type
+      when :Bool
+        values + [true, false]
+      when :Integer
+        values + [0, 1, -1]
+      when :Float
+        values + [0.0, 1.1, -1.1]
+      when :String
+        values + ["", "string"]
+      when :Symbol
+        values + [:Symbol]
+      when :Array
+        values + [[]]
+      when :Hash
+        values + [{}]
+      end
     end
   end
 end
