@@ -26,6 +26,16 @@ module SPLATS
       result
     end
 
+    # def __graph_gen
+      # digraph do
+        # @child_objects.each  do |child|
+          # edge @id, child[1].id #[label= @child[0].to_s]
+          # # Call again on child[1]
+        # end
+        # save "mock_graph", "png"
+      # end  
+    # end
+    
     # Predicate to test if an object is mock 
     # @return true
     def __SPLATS_is_mock?
