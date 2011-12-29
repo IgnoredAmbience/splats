@@ -29,6 +29,24 @@ class DepthLimitedTraversalTest < Test::Unit::TestCase
     assert_empty paths - expected, "Unexpected items were returned"
   end
 
+  def test_generate_value
+    d = SPLATS::DepthLimitedTraversal.new 1
+    paths = []
+
+    while d.continue_generation?
+      d.notify_new_traversal
+      path = []
+      begin
+        path << d.select_method([0])
+        path << d.select_arguments([0])
+        path << d.generate_value(:Bool)
+      end while d.continue_descent?
+      paths << path
+    end
+
+    assert_equal [[0,0,nil],[0,0,false],[0,0,true]], paths
+  end
+
   def test_exception_pruning
     d = SPLATS::DepthLimitedTraversal.new 2
     paths = []
