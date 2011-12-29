@@ -1,6 +1,96 @@
 \chapter{Software Engineering}
 \section{Technical Challenges}
 \section{Collaboration and Coordination}
+
+  \subsection{Meeting Styles}
+    We started with the aim of having regular, daily meetings, in the style of scrum.
+    However, conflicting timetables lead to these quickly falling apart, as, between us, we covered all but one lecture series, and thus finding times when we were all available was difficult.
+
+    We eventually settled on a single weekly meet with our supervisors, and two group meetings a week, one before the supervisor one.
+
+    We also found, later on, that a project IRC channel was helpful.
+
+
 \section{Development Methods}
-\section{Effort Measure}
+
+  \subsection{Working Styles}
+    We tried a number of styles, including individual and pair work, and a long group hack session.
+
+    The hack session worked best.
+    Should have done more of them.
+    Damnit.
+
+  \subsection{Tools Used}
+    \subsubsection{Code Control}
+      We decided at the outset to use the git\footnote{\url{http://git-scm.com}} revision control system.
+      We had all used it in the past, and were comfortable with it.
+      It is a distributed revision control system, which grants additional flexibility compared to centralized systems, as it allows for such things as offline working and private branches.
+
+      For where to host the central repository, we had 3 main options: github\footnote{\url{http://github.com}}, bitbucket\footnote{\url{http://bitbucket.org}} and the department's own servers.
+      Some of us already had github accounts and workflows set up for it, however private repositories are a paid-only feature.
+      The department's own servers have good uptime, but have been known to become inaccessable at short notice, and they don't offer as many options as the others.
+      Bitbucket allow private repositories for unpaid accounts, and have other additional extras, such as a project wiki and bug tracking system.
+
+			As such, we decided to use bitbucket.
+			It wuz pretty gud, akshully.
+
+    \subsection{Documentation Control}
+      For writing reports, we primarily used two systems for both writing and revision control.
+
+      Initial drafts were done in Google Docs\footnote{\url{http://docs.google.com}}.
+      In addition to a simple WSYWIG interface, it allows for real-time simultaneous editing and collaboration, as well as rudimentary revision control, and as such is well suited to rapid prototyping of a document.
+
+      Final drafts were done in \LaTeX\footnote{\url{http://latex-project.org}}, a document markup language and typesetter.
+      \LaTeX is more complex to use than Google Docs, being a programming language in its own right, however it produces `prettier' output.
+      Being written as plain text, it is easiest to track changes using our existing git setup.
+
+  \subsection{Code Style Guidelines}
+    \begin{itemize}
+      \item Standard Ruby naming conventions
+    \end{itemize}
+
+
 \section{Summary of team member contributions}
+% http://www.doc.ic.ac.uk/~tw1509/splatstats/
+Disclaimer: not all commits are created equal
+
+  \subsection{Ethel}
+    Fiddly bits around the edges.
+
+    First started with writing the output module, to turn symbolic tests to actual ruby code to be run later.
+
+    Wrote the bulk of the command-line interface.
+
+    Also tweaked and documented various other bits of code.
+    \begin{description}
+      \item[Commits] 70
+      \item[Lines]
+    \end{description}
+
+  \subsection{Caz}
+    Secretary, report writing, core work
+    \begin{description}
+      \item[Commits] 20
+      \item[Lines]
+    \end{description}
+
+  \subsection{Chris}
+    Stuff on core, outer core
+    \begin{description}
+      \item[Commits] 21
+      \item[Lines]
+    \end{description}
+
+  \subsection{Joe}
+    Freeloader in chief
+    \begin{description}
+      \item[Commits] 13
+      \item[Lines]
+    \end{description}
+
+  \subsection{Tom}
+    Lead developer, lots on the core
+    \begin{description}
+      \item[Commits] 74
+      \item[Lines]
+    \end{description}
