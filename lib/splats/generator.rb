@@ -30,14 +30,23 @@ module SPLATS
     # @return [Test] A generated test
     def produce_test
       test = Test.new
+      @traversal.notify_new_traversal
+      decision = @traversal.method(:select_decision)
+
       method = @traversal.select_method [@class.method(:new)]
       args = @traversal.select_arguments generate_parameters(:initialize)
       test.add_line(method, args)
+      continue_execution = test.execute_last &decision
 
-      while @traversal.continue_descent?
+      while continue_execution and @traversal.continue_descent?
         method = @traversal.select_method @class.instance_methods(false)
         args = @traversal.select_arguments generate_parameters(method)
         test.add_line(method, args)
+        continue_execution = test.execute_last &decision
+      end
+
+      if not continue_execution
+        @traversal.notify_exception_raised
       end
 
       return test
@@ -58,8 +67,8 @@ module SPLATS
         method = @class.instance_method method
       end
 
-      req = method.parameters.count :req
-      opt = method.parameters.count :opt
+      req = method.parameters.count {|type, o| type == :req}
+      opt = method.parameters.count {|type, o| type == :opt}
       # Other types are :rest, :block, for * and & syntaxes, respectively
 
       (req..opt+req).flat_map do |n|

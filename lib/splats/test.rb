@@ -14,8 +14,10 @@ module SPLATS
     end
 
     # Executes the most recently added line to the test
+    # @return [boolean] Returns false if an exception was raised on the
+    #   execution of this line
     def execute_last &decision
-      execute_line @test_lines[-1], &decision
+      return execute_line @test_lines[-1], &decision
     end
 
     # Executes the entire test
@@ -24,17 +26,17 @@ module SPLATS
       @exception = nil
 
       @test_lines.each do |line|
-        execute_line line, &decision
-        break if @exception
+        break if not execute_line line, &decision
       end
       unless @exception
         puts "=> " + @result.inspect
-      else
-        puts "!> " + @exception.to_s
       end
     end
 
     # Executes the TestLine, sets the result parameter as the result of execution
+    #
+    # @return [boolean] Returns false if an exception was raised on the
+    #   execution of this line
     def execute_line test_line, &decision
       # Construct any arguments that are Mocks
       arguments = test_line.arguments.map do |arg|
@@ -47,13 +49,16 @@ module SPLATS
 
       begin
         if test_line.method.respond_to? :call
-          @object = test_line.method.call *arguments
+          @result = @object = test_line.method.call *arguments
         else
           @result = @object.send(test_line.method, *arguments)
         end
       rescue Exception => e
         @exception = e
+        puts "!> " + @exception.to_s
+        return false
       end
+      return true
     end
 
     def name
@@ -80,12 +85,13 @@ module SPLATS
     # The body of instructions
     def body
       # The -2 is because we drop the last line; The last line output by the assert method.
-      @test_lines[0..-2]
+      @test_lines[0..-2] + ["result = " + @test_lines[-1].to_s]
     end
 
     # The final assert statement
     def assert
-      ["assert_equal #{@test_lines[-1]}, #{result_to_s}"]
+      ["assert_instance_of #{@result.class}, result",
+       "assert_equal #{result_to_s}, result"]
     end
 
     def assert_raises
@@ -99,14 +105,16 @@ module SPLATS
 
     # Turns the result from an abstract assert to a string
     def result_to_s
-      if @result.is_a? TypeError
-         "\"" + @result.to_s + "\""
-      elsif @result.is_a? NilClass
+      self.class.construct_value @result
+    end
+
+    def self.construct_value value
+      if value.is_a? NilClass
         "nil"
-      elsif @result.is_a? Exception
-        @result.class.name
+      elsif value.is_a? Exception
+        value.class.name
       else
-        @result
+        value.inspect
       end
     end
 
@@ -114,7 +122,7 @@ module SPLATS
     class TestLine
       attr_reader :object, :method, :decisions, :arguments, :output
 
-      def initialize method, arguments, decisions=nil, object=nil, output=nil
+      def initialize method, arguments, decisions=nil, object=nil
         if method.respond_to? :to_sym
           @method = method.to_sym
         elsif method.respond_to? :call
@@ -126,7 +134,6 @@ module SPLATS
         @arguments = arguments
         @decisions = decisions || []
         @object = object
-        @output = output
       end
 
       def to_s
@@ -136,9 +143,7 @@ module SPLATS
       private
 
       def assignment
-        if @output
-          @output + ' = '
-        elsif @method.is_a? Method and @method.name == :new
+        if @method.is_a? Method and @method.name == :new
           'object = '
         else
           ""
@@ -149,7 +154,7 @@ module SPLATS
         if @object
           @object.to_s + '.'
         elsif @method.is_a? Method
-          @method.class.name + '.'
+          @method.receiver.name + '.'
         else
           'object.'
         end
@@ -168,7 +173,7 @@ module SPLATS
         if @arguments.empty?
           ""
         else
-          "(" << @arguments.join(',') << ")"
+          "(" << @arguments.map{|a| Test.construct_value(a)}.join(', ') << ")"
         end
       end
     end

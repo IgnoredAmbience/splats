@@ -1,3 +1,16 @@
 wiki
 doc
 .yardoc
+
+# Tex related files
+*.aux
+*.dvi
+*.log
+*.out
+*.ps
+*.pdf
+
+# Backups
+*~
+
+coverage
