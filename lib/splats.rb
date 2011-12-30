@@ -37,10 +37,20 @@ module SPLATS
     # @param [String] output_dir The directory for generated tests to be put
     #
     # @note Directory created if necessary
-    def initialize(input_file, output_dir, depth)
+    def initialize(input_file, output_dir, depth, seed, traversal)
       @input_classes = SPLATS.load_classes input_file
       @output_dir = output_dir || "tests"
       @depth = depth || 3
+      case traversal
+        when 1
+          @traversal = SPLATS::HumanTraversal.new()
+        when 2
+          seed = seed || 0
+          @traversal = SPLATS::RandomTraversal.new(seed)
+        else
+          @traversal = SPLATS::DepthLimitedTraversal.new(@depth)
+      end 
+      @traversal = traversal || SPLATS::DepthLimitedTraversal.new(@depth)
       if not File::directory?(output_dir)
         Dir.mkdir(output_dir)
       end
@@ -61,9 +71,9 @@ module SPLATS
     #
     # @param [Class] testing_class The class to be tested
     def single_class_test(testing_class)
-      cur_testing_class = Generator.new(testing_class)
+      cur_testing_class = Generator.new(testing_class, @traversal)
       TestFile.open(testing_class,[],@output_dir) do |file|
-        cur_testing_class.test_class(@depth) do |test|
+        cur_testing_class.test_class do |test|
           file << test << "\n"
         end
       end
