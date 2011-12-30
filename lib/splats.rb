@@ -50,10 +50,9 @@ module SPLATS
           @traversal = SPLATS::RandomTraversal.new(seed)
         else
           @traversal = SPLATS::DepthLimitedTraversal.new(@depth)
-      end 
-      @traversal = traversal || SPLATS::DepthLimitedTraversal.new(@depth)
-      if not File::directory?(output_dir)
-        Dir.mkdir(output_dir)
+      end
+      if not File::directory?(@output_dir)
+        Dir.mkdir(@output_dir)
       end
     end
     

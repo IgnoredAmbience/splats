@@ -92,7 +92,7 @@ module SPLATS
   end
 end
 
-# These classes adds to Object our own functions for dealing with mock objects
+# These classes add to Object our own functions for dealing with mock objects
 class Object
   def __SPLATS_is_mock?
     false
