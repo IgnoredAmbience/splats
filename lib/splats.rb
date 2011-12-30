@@ -3,9 +3,10 @@ require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test'
 require_relative 'splats/test_file'
-require_relative 'splats/Traversal/human'
-require_relative 'splats/Traversal/random'
-require_relative 'splats/Traversal/depth_limited'
+require_relative 'splats/Traversal/traversal'
+require_relative 'splats/Traversal/human_traversal'
+require_relative 'splats/Traversal/random_traversal'
+require_relative 'splats/Traversal/depth_limited_traversal'
 
 module SPLATS
 
@@ -49,10 +50,9 @@ module SPLATS
           @traversal = SPLATS::RandomTraversal.new(seed)
         else
           @traversal = SPLATS::DepthLimitedTraversal.new(@depth)
-      end 
-      @traversal = traversal || SPLATS::DepthLimitedTraversal.new(@depth)
-      if not File::directory?(output_dir)
-        Dir.mkdir(output_dir)
+      end
+      if not File::directory?(@output_dir)
+        Dir.mkdir(@output_dir)
       end
     end
     

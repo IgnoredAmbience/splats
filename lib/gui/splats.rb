@@ -1,10 +1,10 @@
-require 'test'
+require '../splats.rb'
 
 # Present the main application window
 Shoes.app(:title => "SpLATS", :width => 500, :height => 500){
   # Initialise variables
   @page = 0
-  @traversal_methods = ['Guided', 'Depth-First', 'Breadth-First']
+  @traversal_methods = ['Depth-Limited', 'Guided', 'Random']
 
   # Define the 'next' button
   def next_button
@@ -18,14 +18,22 @@ Shoes.app(:title => "SpLATS", :width => 500, :height => 500){
     @page += 1
     if @page == 1
       @next_area.clear do
+        # Loop through the traversal methods and print the radio buttons
+        # Also assign an index to them
         @traversal_methods.map! do |method|
           flow { @r = radio :traversal; para method }
           [@r, method]
         end
       end
     elsif @page == 2
-      selected = @traversal_methods.map { |r, method| method if r.checked? }
-      # Load the generator ? clear the next button ?
+      # Determine which traversal method was chosen
+      selected = 0
+      @traversal_methods.each_with_index{|tm, i|
+        selected = i if tm[0].checked?
+      }
+      # Filename, output directory, depth (depth-limited only), seed, traversal method
+      controller = SPLATS::TestController.new(@file, nil, nil, nil, selected)
+      controller.test_classes
     end
   end
 
@@ -45,7 +53,7 @@ Shoes.app(:title => "SpLATS", :width => 500, :height => 500){
           # Because there's a cancel button, need to check the file again
           if @file[-2, 2] == "rb"
             # Display the next button
-            @next_button.append {next_button}
+            @next_button.clear {next_button}
           end
         end
       end
