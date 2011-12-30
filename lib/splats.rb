@@ -40,7 +40,7 @@ module SPLATS
     # @note Directory created if necessary
     def initialize(input_file, output_dir, depth, seed, traversal)
       @input_classes = SPLATS.load_classes input_file
-      @output_dir = output_dir || "tests"
+      @output_dir = output_dir || "tests/"
       @depth = depth || 3
       case traversal
         when 1
@@ -50,10 +50,9 @@ module SPLATS
           @traversal = SPLATS::RandomTraversal.new(seed)
         else
           @traversal = SPLATS::DepthLimitedTraversal.new(@depth)
-      end 
-      @traversal = traversal || SPLATS::DepthLimitedTraversal.new(@depth)
-      if not File::directory?(output_dir)
-        Dir.mkdir(output_dir)
+      end       
+      if not File::directory?(@output_dir)
+        Dir.mkdir(@output_dir)
       end
     end
     
