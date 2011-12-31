@@ -14,7 +14,6 @@
   The two main categories are whitebox\footnote{Testing the components} and blackbox\footnote{Testing the application as a whole} testing.
   We decided to choose blackbox testing with the option of implementing some whitebox testing as an extension.
   Because Ruby is dynamically typed, the types of whitebox testing which can be implemented are limited to generic conditions.
-  [examples here]
 
 \section{Existing Products}
 
@@ -114,9 +113,10 @@
 \section{Architecture}
 
   \subsection{Choices}
-    It would generate tests for test::unit, though should in theory be able to target other test frameworks with little modification.
+    It would generate tests for test::unit, as this will always be present, negating the need for a dependency.
+    As a possible extension, it should be able to target other test frameworks with minimal modification.
 
-    It would generate the tests, rather than by randomly chaining methods together, as in Randoop, by executing the program with a `mock' object that would collect data about what it was needed to be at each stage.
+    The test generation method, rather than by randomly chaining methods together, as in Randoop, by executing the program with a `mock' object that would collect data about what it was needed to be at each stage.
 
   \subsection{Layout}
     There's an inner core that generates the tests, an outer layer that controls it and handles file input and output, and a wrapper to pass options to the outer layer.
