@@ -58,7 +58,6 @@ module SPLATS
         end
       rescue Exception => e
         @exception = e
-        puts "!> " + @exception.to_s
         return false
       end
       return true
