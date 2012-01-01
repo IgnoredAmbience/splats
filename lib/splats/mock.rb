@@ -35,8 +35,8 @@ module SPLATS
         result = @object.__SPLATS_orig_send(symbol, *args, &block)
       else
         result = Mock.new &@branch_block
-        @child_objects << [symbol, result]
       end
+      @child_objects << ([symbol, result] + args)
       result
     end
 
@@ -51,8 +51,17 @@ module SPLATS
       @branch_block.call type
     end
 
+    def __SPLATS_id
+      @id
+    end
+
     def __SPLATS_print
-      puts "Mock #'#{@id} had #{child_objects.length} methods called on it. List names?>'"
+      "mock#{@id}"
+    end
+
+    def __SPLATS_child_objects
+      [[self, @child_objects]] + @child_objects.select{|o| o[1].__SPLATS_is_mock?}
+                                      .flat_map{|m| m[1].__SPLATS_child_objects}
     end
   end
 
