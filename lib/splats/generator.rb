@@ -6,6 +6,7 @@ module SPLATS
     # @param [Traversal] traversal The traversal object to use to direct the
     #   search
     def initialize(c, traversal)
+      puts "generator init"
       @class = c
       @pass_parameters = [Mock, nil]
       @traversal = traversal
@@ -22,6 +23,7 @@ module SPLATS
     # @yield [Test] A generated test
     def test_class
       while @traversal.continue_generation?
+        puts "gen test_class"
         yield produce_test 
       end
     end
@@ -29,6 +31,7 @@ module SPLATS
     # Produces a single test
     # @return [Test] A generated test
     def produce_test
+      puts "produce test"
       test = Test.new
       @traversal.notify_new_traversal
       decision = @traversal.method(:select_decision)

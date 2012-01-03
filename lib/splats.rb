@@ -7,6 +7,7 @@ require_relative 'splats/Traversal/traversal'
 require_relative 'splats/Traversal/human_traversal'
 require_relative 'splats/Traversal/random_traversal'
 require_relative 'splats/Traversal/depth_limited_traversal'
+require 'green_shoes'
 
 module SPLATS
 
@@ -38,18 +39,19 @@ module SPLATS
     # @param [String] output_dir The directory for generated tests to be put
     #
     # @note Directory created if necessary
-    def initialize(input_file, output_dir, depth, seed, traversal)
+    def initialize(input_file, output_dir, depth, seed, traversal, gui_controller)
+      puts "test controller initialize"
       @input_classes = SPLATS.load_classes input_file
       @output_dir = output_dir || "tests"
       @depth = depth || 3
       case traversal
         when 1
-          @traversal = SPLATS::HumanTraversal.new()
+          @traversal = SPLATS::HumanTraversal.new(gui_controller)
         when 2
           seed = seed || 0
-          @traversal = SPLATS::RandomTraversal.new(seed)
+          @traversal = SPLATS::RandomTraversal.new(seed, gui_controller)
         else
-          @traversal = SPLATS::DepthLimitedTraversal.new(@depth)
+          @traversal = SPLATS::DepthLimitedTraversal.new(@depth, gui_controller)
       end
       if not File::directory?(@output_dir)
         Dir.mkdir(@output_dir)
@@ -58,7 +60,8 @@ module SPLATS
     
     # Creates tests for every class in the given file
     def test_classes
-      @input_classes.each do |c|
+      @input_classes.each do |c|  
+        puts "test_classes"
         single_class_test(c)
       end
     end
@@ -71,9 +74,10 @@ module SPLATS
     #
     # @param [Class] testing_class The class to be tested
     def single_class_test(testing_class)
-      cur_testing_class = Generator.new(testing_class, @traversal)
+      puts "single class test"
+      generator = Generator.new(testing_class, @traversal)
       TestFile.open(testing_class,[],@output_dir) do |file|
-        cur_testing_class.test_class do |test|
+        generator.test_class do |test|
           file << test << "\n"
         end
       end

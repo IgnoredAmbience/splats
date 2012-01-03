@@ -4,9 +4,10 @@ module SPLATS
 
     # Functions are listed in execution order
 
-    def initialize(maxdepth=3)
+    def initialize(maxdepth=3, gui_controller)
       @maxdepth = maxdepth
-
+      @gc = gui_controller
+      
       # [[[method, argument, decisions...], layers...], paths...]
       @queue = [[[]]]
     end
