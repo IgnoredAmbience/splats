@@ -16,7 +16,7 @@ class SPLATSGUI < Shoes
     tagline "SpLATS Lazy Automated Test System", :align => "center"
       
     # Initialise variables
-    @page = 1
+    @page = 0
     @traversal_methods = ["Depth-Limited", "Guided", "Random"]
     
     #TODO Put this in a config file
@@ -96,8 +96,8 @@ class SPLATSGUI < Shoes
         @file_info = stack {}
       end
     elsif @page == 2
-      @next_area = stack :width => '100%' do
-#      @next_area.clear do
+#      @next_area = stack :width => '100%' do
+      @next_area.clear do
         para "Select which method you would like to use to run the tests"
         traversal_buttons
         button "Select the output directory for the tests" do
@@ -138,6 +138,7 @@ class SPLATSGUI < Shoes
           button "Click!" do
             # Loop through the selection, and ask the user which they'd like
             puts "pre"
+            #TODO if there's an error message returned, don't make the button do anything
             @selection.each do |sel|
               button sel.to_s do
                 
