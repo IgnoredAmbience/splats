@@ -23,8 +23,12 @@ module SPLATS
   # @return [Array<Class>] The classes defined within the file
   def self.load_classes filename
     constants = Module.constants
-
-    load filename
+    
+    # Have to wrap in thread because otherwise causes seg fault in GUI
+    t = Thread.new do
+      load filename
+    end
+    t.join
 
     (Module.constants - constants).map do |sym|
       const_get sym
@@ -39,19 +43,19 @@ module SPLATS
     # @param [String] output_dir The directory for generated tests to be put
     #
     # @note Directory created if necessary
-    def initialize(input_file, output_dir, depth, seed, traversal, gui_controller)
-      puts "test controller initialize"
+    def initialize(input_file, output_dir, depth, seed, traversal, fiber=nil)
+      @fiber = fiber
       @input_classes = SPLATS.load_classes input_file
       @output_dir = output_dir || "tests"
       @depth = depth || 3
       case traversal
         when 1
-          @traversal = SPLATS::HumanTraversal.new(gui_controller)
+          @traversal = SPLATS::HumanTraversal.new(fiber)
         when 2
           seed = seed || 0
-          @traversal = SPLATS::RandomTraversal.new(seed, gui_controller)
+          @traversal = SPLATS::RandomTraversal.new(seed, fiber)
         else
-          @traversal = SPLATS::DepthLimitedTraversal.new(@depth, gui_controller)
+          @traversal = SPLATS::DepthLimitedTraversal.new(@depth, fiber)
       end
       if not File::directory?(@output_dir)
         Dir.mkdir(@output_dir)
@@ -59,10 +63,15 @@ module SPLATS
     end
     
     # Creates tests for every class in the given file
+    # If GUI and the input classes is empty, need to end
+    # @param If GUI, need to pass the response of the user
+    # into the test
     def test_classes
-      @input_classes.each do |c|  
-        puts "test_classes"
-        single_class_test(c)
+      if(@fiber && @input_classes.size == 0)
+        @fiber.transfer [false, "Could not find any classes"]
+      end
+      @input_classes.each do |c|
+        single_class_test c
       end
     end
 
@@ -73,8 +82,7 @@ module SPLATS
     # then generating the code from the abstract syntax
     #
     # @param [Class] testing_class The class to be tested
-    def single_class_test(testing_class)
-      puts "single class test"
+    def single_class_test testing_class
       generator = Generator.new(testing_class, @traversal)
       TestFile.open(testing_class,[],@output_dir) do |file|
         generator.test_class do |test|
