@@ -22,7 +22,7 @@ optparse = OptionParser.new do |opts|
   end
 
   options[:depth] = nil
-  opts.on("--depth", "-d", "Search space depth") do |depth|
+  opts.on("--depth", "-d", "Search space depth for depth-limited traversal (defaults to 3)") do |depth|
     options[:depth] = depth
   end
 
@@ -30,7 +30,17 @@ optparse = OptionParser.new do |opts|
   opts.on("--output-directory DIR", "-o", "Output directory (defaults to \"tests\")") do |dir|
     options[:outdir] = dir
   end
+  
+  options[:seed] = nil
+  opts.on("--seed", "-s", "Seed for random traversal. Defaults to 0") do |seed|
+    options[:seed] = seed
+  end
 
+  options[:traversal] = nil
+  opts.on("--traversal-method", "-t", "Tree traversal method. 0: Depth Limited, 1: Human, 2: Random") do |trav|
+    options[:traversal] = trav
+  end
+  
 end
 
 
@@ -48,7 +58,7 @@ rescue OptionParser::InvalidOption,OptionParser::MissingArgument
 end
 
 begin
-  controller = SPLATS::TestController.new(options[:file],options[:outdir],options[:depth])
+  controller = SPLATS::TestController.new(options[:file],options[:outdir],options[:depth], options[:seed], options[:traversal])
 rescue LoadError
   puts "File doesn't exist"
   exit
