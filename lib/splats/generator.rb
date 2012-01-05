@@ -33,10 +33,7 @@ module SPLATS
       @traversal.notify_new_traversal
       decision = @traversal.method(:select_decision)
       method = @traversal.select_method [@class.method(:new)]
-      puts method
-            
       args = @traversal.select_arguments generate_parameters(:initialize)
-      puts args
       
       test.add_line(method, args)
       continue_execution = test.execute_last &decision

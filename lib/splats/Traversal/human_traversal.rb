@@ -19,7 +19,7 @@ module SPLATS
         methods[index-1]
       else
         # Send the GUI controller the options back
-        @gc.transfer methods
+        @gc.transfer Hash["type" => "method", "options" => methods]
       end
     end
 
@@ -31,7 +31,7 @@ module SPLATS
         end while (index < 1 || index > arguments.length)
         arguments[index-1]
       else
-        @gc.transfer arguments
+        @gc.transfer Hash["type" => "argument", "options" => arguments]
       end
     end
 
@@ -43,8 +43,7 @@ module SPLATS
         end while (index < 1 || index > decisions.length)
         decisions[index-1]
       else
-        Fiber.yield arguments
-        @response
+        @gc.transfer Hash["type" => "decision", "options" => decisions]
       end
     end
 
@@ -57,8 +56,7 @@ module SPLATS
         end while (not (["Y", "y", "N", "n"].include? decision))
         decision == 'Y' || decision == 'y'
       else
-        Fiber.yield :yes_or_no
-        @response
+          @gc.transfer Hash["type" => "descent", "options" => :y_or_n]
       end
     end
 
@@ -73,8 +71,7 @@ module SPLATS
           end while (not (["Y", "y", "N", "n"].include? decision))
           decision == 'Y' || decision == 'y'
         else
-          Fiber.yield :yes_or_no
-          @response
+          @gc.transfer Hash["type" => "generation", "options" => :y_or_n]
         end
       end
     end
