@@ -21,9 +21,9 @@ class SPLATSGUI < Shoes
     
     #TODO Put this in a config file
     # Defaults
-    @file = '/home/caz/Uni/splats/samples/LinkedList.rb'
+    @file = '../../samples/LinkedList.rb'
 #    @file = '/home/caz/Uni/splats/lib/gui/gui.rb'
-    @output_dir = '/home/caz/Uni/splats/lib/gui/tests'
+    @output_dir = 'tests'
 #    @depth = edit_line :text => 3
 #    @seed = edit_line :text => 0
     @traversal_method = 1
