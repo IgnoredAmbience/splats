@@ -16,7 +16,7 @@ class SPLATSGUI < Shoes
     tagline "SpLATS Lazy Automated Test System", :align => "center"
       
     # Initialise variables
-    @page = 0
+    @page = 1
     @traversal_methods = ["Depth-Limited", "Guided", "Random"]
     
     #TODO Put this in a config file
@@ -37,7 +37,7 @@ class SPLATSGUI < Shoes
   def confirm_selections
     continue = false
     
-    #TODO make this prettier!
+    #TODO make this more user friendly!
     if (@traversal_method == 0 && @depth.text.to_i == 0)
       # Complain about the depth, and reset the seed
       @depth_flow.clear do
@@ -96,64 +96,87 @@ class SPLATSGUI < Shoes
         @file_info = stack {}
       end
     elsif @page == 2
-#      @next_area = stack :width => '100%' do
-      @next_area.clear do
+      @next_area = stack :width => '100%' do
+#      @next_area.clear do
         para "Select which method you would like to use to run the tests"
         traversal_buttons
         button "Select the output directory for the tests" do
           @output_dir = ask_open_folder
-          confirm_selections
         end
         @next_button = next_button
       end
     elsif @page == 3
       if confirm_selections
-        @i = 1
-        display = f = nil
-        @selection = []
-        
-        # Cheeky Fiber stuff - create a dummy fiber to allow the
-        # transfer methods to work, but keep returning control to
-        # this main thread
-        display = Fiber.new do |input|
-          while input
-            @selection = f.transfer @choice
-            @choice = Fiber.yield @selection
-          end
-        end
-        
-        # Wrap the test controller in a fiber, passing the GUI fiber in
-        # This determines the value of selection
-        f = Fiber.new do |input|
-          controller = SPLATS::TestController.new(@file, @output_dir, @depth, @seed, @traversal_method, display)
-          controller.test_classes
-        end
-        
-        # Call display
-        display.transfer true
-        
-        # Handles the user's choices
-        @next_area.clear
-        @next_area = stack do
-          button "Click!" do
-            # Loop through the selection, and ask the user which they'd like
-            puts "pre"
-            #TODO if there's an error message returned, don't make the button do anything
-            @selection.each do |sel|
-              button sel.to_s do
-                
-              end
-            end
-            puts "post"
-            # This determines the value of 'choice'
-            @i += 1
-            display.transfer(@i)
-          end
-        end
+        start_tests
       else
         @page -= 1
       end
     end
+  end
+  
+  def start_tests
+        
+    @i = 1
+    f = nil
+    @selection = []
+    
+    # Cheeky Fiber stuff - create a dummy fiber to allow the
+    # transfer methods to work, but keep returning control to
+    # this main thread
+    @display = Fiber.new do |input|
+      while input
+        @selection = f.transfer @choice
+        @choice = Fiber.yield @selection
+      end
+    end
+    
+    # Wrap the test controller in a fiber, passing the GUI fiber in
+    # This determines the value of selection
+    f = Fiber.new do |input|
+      controller = SPLATS::TestController.new(@file, @output_dir, @depth, @seed, @traversal_method, @display)
+      controller.test_classes
+    end
+    
+    # Call display
+    @display.transfer true
+    
+    # Check we can continue
+    check_controller_error
+    
+    # Display the selections to user
+    draw_selections
+  end
+end
+
+def draw_selections
+  y_or_n = Hash["Yes" => true, "No" => false]
+  @next_area.clear do
+    # If the options are yes or no
+    if @selection["options"] == :y_or_n
+      y_n = true
+      para "Continue " + @selection["type"]
+      @selection["options"] = y_or_n.keys
+    else
+      para "Choose " + @selection["type"]
+    end
+    @selection["options"].each do |o|
+      button o.to_s do
+        if y_n
+          @display.transfer y_or_n[o]
+        else
+          @display.transfer o
+        end
+        draw_selections
+      end
+    end
+  end
+end
+
+def check_controller_error
+  if @selection[0] == :error
+    alert(@selection[1])
+    #TODO don't terminate
+    exit
   end
 end
 

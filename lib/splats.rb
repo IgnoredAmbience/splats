@@ -68,7 +68,7 @@ module SPLATS
     # into the test
     def test_classes
       if(@fiber && @input_classes.size == 0)
-        @fiber.transfer [false, "Could not find any classes"]
+        @fiber.transfer [:error, "Could not find any classes"]
       end
       @input_classes.each do |c|
         single_class_test c
