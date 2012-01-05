@@ -7,7 +7,6 @@ require_relative 'splats/Traversal/traversal'
 require_relative 'splats/Traversal/human_traversal'
 require_relative 'splats/Traversal/random_traversal'
 require_relative 'splats/Traversal/depth_limited_traversal'
-require 'green_shoes'
 
 module SPLATS
 
@@ -44,6 +43,9 @@ module SPLATS
     #
     # @note Directory created if necessary
     def initialize(input_file, output_dir, depth, seed, traversal, fiber=nil)
+      if fiber
+        require 'green_shoes'
+      end
       @fiber = fiber
       @input_classes = SPLATS.load_classes input_file
       @output_dir = output_dir || "tests"
