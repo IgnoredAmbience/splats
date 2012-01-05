@@ -1,15 +1,15 @@
 \chapter{Software Engineering}
 \section{Technical Challenges}
   \subsection{Duck Typing}
-    Duck typing is summed up by "if it looks like a duck and quacks like a duck, it must be a duck".
-    Instead of a function requiring parameters to be of specific types, or implementing specific interfaces, it will take any object and simply call a method on it.
-    Whether the method exists or not is up to the developer.
+    Duck typing is a method of dynamic typing, named after the phrase "if it looks like a duck and quacks like a duck, it must be a duck".
+    Instead of a function requiring parameters to be of specific types, or implementing specific interfaces, any object can have any method called on it. If the method is not defined for that object then a runtime error will occur.
     Because of this loose typing mechanism, it's very easy to make a Mock object that can take the place of any other class of object, by responding to all methods, returning another Mock object if output is required.
     It can subsequently collect all the required methods a given parameter is needed to respond to, building up information about what parameters for a particular code-flow need to be.
 
     However, this also makes it very difficult to output reusable tests.
-    Given duck typing doesn't lead to explicit types or interfaces, it's difficult to impossible to write an explicit `concrete' output that can be recreated from scratch without having to include the entire execution tree.
-    TODO: HOW THIS WAS RESOLVED
+    Given duck typing doesn't lead to explicit types or interfaces, it's difficult to impossible to write an explicit `concrete' output that can be recreated from scratch without having to include the entire execution tree.\\
+    TODO: HOW THIS WAS RESOLVED \\
+    TODO: RESOLVE IT
 
   \subsection{GUI}
     Shoes ain't made for walking, but it's still gonna walk right over you.
@@ -17,12 +17,13 @@
 \section{Collaboration and Coordination}
 
   \subsection{Meeting Styles}
-    We started with the aim of having regular, daily meetings, in the style of scrum.
-    However, conflicting timetables lead to these quickly falling apart, as, between us, we covered all but one lecture series, and thus finding times when we were all available was difficult.
+    The group first tried short, daily meetings, with longer meetings where possible or necessary. We quickly found that conflicting schedules made the short meetings impossible for all group members to attend and served little purpose, most days not enough progress was made to warrant discussion.  Daily meetings would be useful in a workplace scenario where considerable time is spent every day and team members will all be present, quite different to the timetable of our group who combined covered seven lecture series and two humanities options.
 
-    We eventually settled on a single weekly meet with our supervisors, and two group meetings a week, one before the supervisor one.
+    Instead, there were two hour long meetings per week, one directly followed by a meeting with our
+    supervisor.
 
-    We also found, later on, that a project IRC channel was helpful.
+    After trying several online communication methods we settled on an IRC channel as everything said 
+    can easily be recorded and it works well for group discussions.
 
 
 \section{Development Methods}
