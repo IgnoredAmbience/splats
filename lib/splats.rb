@@ -3,12 +3,44 @@ require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test'
 require_relative 'splats/test_file'
-require_relative 'splats/traversal'
-require_relative 'splats/human_traversal'
-require_relative 'splats/depth_limited_traversal'
-require_relative 'splats/random_traversal'
+require_relative 'splats/Traversal/traversal'
+require_relative 'splats/Traversal/human_traversal'
+require_relative 'splats/Traversal/random_traversal'
+require_relative 'splats/Traversal/depth_limited_traversal'
 
 module SPLATS
+
+  BASE_CLASSES = [
+    Integer,
+    String,
+    Fixnum,
+    Float,
+    Array,
+    TrueClass,
+    FalseClass,
+    NilClass,
+    Hash
+  ]
+
+  RETURN_TYPES = {
+    :! => :Bool,
+    :!= => :Bool,
+    :== => :Bool,
+    :=== => :Bool,
+    :to_a => :Array,
+    :to_ary => :Array,
+#    :to_c => :Complex,
+#    :to_d => :BigDecimal,
+    :to_f => :Float,
+    :to_hash => :Hash,
+    :to_i => :Integer,
+    :to_int => :Integer,
+#    :to_r => :Rational,
+    :to_s => :String,
+    :to_str => :String,
+    :to_sym => :Symbol,
+  }
+
 
   # Loads given file and returns classes defined within
   #

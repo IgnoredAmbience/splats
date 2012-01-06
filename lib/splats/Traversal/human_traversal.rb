@@ -20,9 +20,10 @@ module SPLATS
       arguments[index-1]
     end
 
-    def select_decision decisions
+    def generate_value type
       begin
-        puts "Choose decision (1-indexed): (decisions: #{decisions.inspect})"
+        decisions = generate_values type
+        puts "Choose decision (1-indexed): (decisions: #{decisions})"
         index = gets.to_i
       end while (index < 1 || index > decisions.length)
       decisions[index-1]
@@ -49,3 +50,4 @@ module SPLATS
     end
   end
 end
+

@@ -19,17 +19,24 @@ module SPLATS
       @item = @queue.shift
       @layers = @item.each
       @layer = @layers.next
+      @index = 0
     end
 
     def select_method methods
-      select methods, 0
+      select methods
     end
 
     def select_arguments arguments
-      select arguments, 1
+      select arguments
+    end
+
+    def generate_value type
+      values = generate_values type
+      select values
     end
 
     def continue_descent?
+      @index = 0
       begin
         @layer = @layers.next
       rescue StopIteration
@@ -47,7 +54,12 @@ module SPLATS
 
     private
 
-    def select options, index
+    def select options
+      # Count through current choice in layer
+      # 0=method, 1=argument set, 2..=mock decisions
+      index = @index
+      @index += 1
+
       if not @layer[index]
         # Add other options to queue
         (1...options.length).each do |idx|
