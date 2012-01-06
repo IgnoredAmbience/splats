@@ -7,6 +7,7 @@ module SPLATS
       @test_lines = []
       @result = nil
       @exception = nil
+      @mocks = []
     end
 
     def add_line (method, parameters)
@@ -39,9 +40,11 @@ module SPLATS
     #   execution of this line
     def execute_line test_line, &decision
       # Construct any arguments that are Mocks
-      arguments = test_line.arguments.map do |arg|
-        if arg == Mock
-          arg.new &decision
+      arguments = test_line.arguments.map! do |arg|
+        if arg == SPLATS::Mock
+          mock = arg.new &decision
+          @mocks << mock
+          mock
         else
           arg
         end
@@ -55,7 +58,6 @@ module SPLATS
         end
       rescue Exception => e
         @exception = e
-        puts "!> " + @exception.to_s
         return false
       end
       return true
@@ -69,9 +71,9 @@ module SPLATS
     # test::unit testing method
     def to_s
       if @exception
-        (header + assert_raises + footer).join("\n")
+        (header + mocks + assert_raises + footer).join("\n")
       else
-        (header + body + assert + footer).join("\n")
+        (header + mocks + body + assert + footer).join("\n")
       end
     end
 
@@ -82,6 +84,22 @@ module SPLATS
       ["def #{name}"]
     end
 
+    def mocks
+      calls = @mocks.flat_map {|m| m.__SPLATS_child_objects }
+
+      constructors = []
+
+      expects = calls.flat_map do |c|
+        recv = c[0]
+        constructors << (recv.__SPLATS_print + " = MiniTest::Mock.new")
+        c[1].map do |call|
+          recv.__SPLATS_print + ".expects" + self.class.args_to_s(call)
+        end
+      end
+
+      constructors + expects
+    end
+
     # The body of instructions
     def body
       # The -2 is because we drop the last line; The last line output by the assert method.
@@ -90,8 +108,11 @@ module SPLATS
 
     # The final assert statement
     def assert
-      ["assert_instance_of #{@result.class}, result",
-       "assert_equal #{result_to_s}, result"]
+      if is_base_class? @result or @result.__SPLATS_is_mock?
+        ["assert_equal #{result_to_s}, result"]
+      else
+        ["assert_instance_of #{@result.class}, result"]
+      end
     end
 
     def assert_raises
@@ -103,13 +124,19 @@ module SPLATS
       ["end"]
     end
 
+    def is_base_class? value
+      BASE_CLASSES.include? value.class
+    end
+
     # Turns the result from an abstract assert to a string
     def result_to_s
       self.class.construct_value @result
     end
 
     def self.construct_value value
-      if value.is_a? NilClass
+      if value.__SPLATS_is_mock?
+        value.__SPLATS_print
+      elsif value.is_a? NilClass
         "nil"
       elsif value.is_a? Exception
         value.class.name
@@ -117,6 +144,15 @@ module SPLATS
         value.inspect
       end
     end
+
+    def self.args_to_s args
+      if args.empty?
+        ""
+      else
+        "(" << args.map{|a| construct_value a }.join(', ') << ")"
+      end
+    end
+
 
     # Private inner class
     class TestLine
@@ -170,11 +206,7 @@ module SPLATS
 
       # Turns the array of arguments to a string
       def args_to_s
-        if @arguments.empty?
-          ""
-        else
-          "(" << @arguments.map{|a| Test.construct_value(a)}.join(', ') << ")"
-        end
+        Test.args_to_s @arguments
       end
     end
   end

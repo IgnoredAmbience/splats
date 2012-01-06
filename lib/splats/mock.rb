@@ -3,7 +3,7 @@ module SPLATS
   # Mock object to be passed into methods as an unknown parameter
   # Inherit from BasicObject so we can have as empty a class as possible <br>
   # Note: This means that the Kernel module is not included, so you need to
-  # explicity state Kernel for any builtin functions!
+  # explicitly state Kernel for any builtin functions!
   class Mock < BasicObject
     # Rebind all defaulted methods to run via method_missing
     (instance_methods - instance_methods(false) - [:__send__]).each do |method|
@@ -12,8 +12,13 @@ module SPLATS
       end
     end
 
+    @@id = 0
+
     def initialize &branch_block
       @object = MockImplementation.new self
+      @child_objects = []
+      @id = @@id
+      @@id += 1
 
       # This may turn out to be a horrific idea
       @branch_block = branch_block
@@ -21,8 +26,17 @@ module SPLATS
 
     # Prints information about the failed method call
     def method_missing(symbol, *args, &block)
-      result = @object.__send__(symbol, *args, &block)
-      ::Kernel.puts "Method '#{symbol}' called with arguments #{args} and #{block.nil? && 'no' || 'a'} block. Returns '#{result}'"
+      #::Kernel.puts "Method '#{symbol}' called with arguments #{args} on mock ##{@id}"
+      if RETURN_TYPES.include? symbol
+        result = @branch_block.call RETURN_TYPES[symbol]
+      elsif symbol[-1] == '?'
+        result = @branch_block.call :Bool
+      elsif @object.__SPLATS_orig_respond_to? symbol
+        result = @object.__SPLATS_orig_send(symbol, *args, &block)
+      else
+        result = Mock.new &@branch_block
+      end
+      @child_objects << ([symbol, result] + args)
       result
     end
 
@@ -42,19 +56,30 @@ module SPLATS
       true
     end
 
-    # Sets what mock is
-    def __SPLATS_proxy= obj
-      @object = obj
+    # Adds branches to the tree based on varying results of operations
+    def __SPLATS_branch type
+      @branch_block.call type
     end
 
-    # Adds branches to the tree based on varying results of operations
-    def __SPLATS_branch method, branches
-      @branch_block.call branches
+    def __SPLATS_id
+      @id
+    end
+
+    def __SPLATS_print
+      "mock#{@id}"
+    end
+
+    def __SPLATS_child_objects
+      [[self, @child_objects]] + @child_objects.select{|o| o[1].__SPLATS_is_mock?}
+                                      .flat_map{|m| m[1].__SPLATS_child_objects}
     end
   end
 
-  class MockImplementation < BasicObject
-    (instance_methods - instance_methods(false) - [:__send__]).each do |method|
+  # Used for any other non-trivial, but well-defined ruby 'interfaces' such as
+  # coerce
+  class MockImplementation < Object
+    (instance_methods - instance_methods(false)).each do |method|
+      alias_method ("__SPLATS_orig_" + method.to_s).to_sym, method
       private method
     end
 
@@ -62,44 +87,18 @@ module SPLATS
       @mock = mock
     end
 
-    def to_s
-      inspect
-    end
-
-    def inspect
-      "<Mock Object>"
-    end
-
-    def to_r
-      0
-    end
-
-    # This is called when a Ruby object tries to perform an arithemetical operation on a mock
+    # This is called when a Ruby object tries to perform an arithemetical
+    # operation on a mock
     def coerce x
       # Adding branches to the tree with different outcomes of the value of the operation
-      item = @mock.__SPLATS_branch :coerce, [0, 1, -1]
-      @mock.__SPLATS_proxy = item
+      item = @mock.__SPLATS_branch x.class.to_s.to_sym
       [x, item]
-    end
-
-    def to_str
-      ""
-    end
-
-    def to_ary
-      []
     end
   end
 end
 
 # These classes add to Object our own functions for dealing with mock objects
-class Object
-  def __SPLATS_is_mock?
-    false
-  end
-end
-
-class NilClass
+class BasicObject
   def __SPLATS_is_mock?
     false
   end

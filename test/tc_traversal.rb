@@ -18,10 +18,8 @@ class TraversalTest < Test::Unit::TestCase
     end
   end
 
-  def test_select_decision
-    assert_raises NotImplementedError do
-      Traversal.new.select_decision []
-    end
+  def test_generate_value
+    assert_equal nil, Traversal.new.generate_value(:Bool)
   end
 
   def test_continue_descent?

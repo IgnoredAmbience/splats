@@ -26,7 +26,8 @@ module SPLATS
       arguments[@rng.rand(arguments.length)]
     end
 
-    def select_decision decisions
+    def generate_value type
+      decisions = generate_values type
       decisions[@rng.rand(decisions.length)]
     end
 

@@ -35,10 +35,12 @@ module SPLATS
       end
     end
 
-    def select_decision decisions
+    def generate_value type
+      decisions = generate_values type
+
       if @gc.nil?
         begin
-          puts "Choose decision (1-indexed): (decisions: #{decisions.inspect})"
+          puts "Choose decision (1-indexed): (decisions: #{decisions})"
           index = gets.to_i
         end while (index < 1 || index > decisions.length)
         decisions[index-1]

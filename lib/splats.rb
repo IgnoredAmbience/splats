@@ -10,6 +10,38 @@ require_relative 'splats/Traversal/depth_limited_traversal'
 
 module SPLATS
 
+  BASE_CLASSES = [
+    Integer,
+    String,
+    Fixnum,
+    Float,
+    Array,
+    TrueClass,
+    FalseClass,
+    NilClass,
+    Hash
+  ]
+
+  RETURN_TYPES = {
+    :! => :Bool,
+    :!= => :Bool,
+    :== => :Bool,
+    :=== => :Bool,
+    :to_a => :Array,
+    :to_ary => :Array,
+#    :to_c => :Complex,
+#    :to_d => :BigDecimal,
+    :to_f => :Float,
+    :to_hash => :Hash,
+    :to_i => :Integer,
+    :to_int => :Integer,
+#    :to_r => :Rational,
+    :to_s => :String,
+    :to_str => :String,
+    :to_sym => :Symbol,
+  }
+
+
   # Loads given file and returns classes defined within
   #
   # This does *not* guarantee that any other code held within the file will not
@@ -48,7 +80,7 @@ module SPLATS
       end
       @fiber = fiber
       @input_classes = SPLATS.load_classes input_file
-      @output_dir = output_dir || "tests"
+      @output_dir = output_dir || "tests/"
       @depth = depth || 3
       case traversal
         when 1
@@ -84,10 +116,10 @@ module SPLATS
     # then generating the code from the abstract syntax
     #
     # @param [Class] testing_class The class to be tested
-    def single_class_test testing_class
-      generator = Generator.new(testing_class, @traversal)
+    def single_class_test(testing_class)
+      cur_testing_class = Generator.new(testing_class, @traversal)
       TestFile.open(testing_class,[],@output_dir) do |file|
-        generator.test_class do |test|
+        cur_testing_class.test_class do |test|
           file << test << "\n"
         end
       end

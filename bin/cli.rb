@@ -27,7 +27,7 @@ optparse = OptionParser.new do |opts|
   end
 
   options[:outdir] = nil
-  opts.on("--output-directory DIR", "-o", "Output directory (defaults to \"tests\")") do |dir|
+  opts.on("--output-directory DIR", "-o", "Output directory (defaults to \"tests/\")") do |dir|
     options[:outdir] = dir
   end
   
