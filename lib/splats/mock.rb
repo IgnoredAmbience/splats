@@ -26,7 +26,6 @@ module SPLATS
 
     # Prints information about the failed method call
     def method_missing(symbol, *args, &block)
-      #::Kernel.puts "Method '#{symbol}' called with arguments #{args} on mock ##{@id}"
       if RETURN_TYPES.include? symbol
         result = @branch_block.call RETURN_TYPES[symbol]
       elsif symbol[-1] == '?'
@@ -37,6 +36,7 @@ module SPLATS
         result = Mock.new &@branch_block
       end
       @child_objects << ([symbol, result] + args)
+      #::Kernel.puts "?> Method '#{symbol}' called with arguments #{args} on #{__SPLATS_print} returns #{result.__SPLATS_print}"
       result
     end
 
@@ -101,5 +101,9 @@ end
 class BasicObject
   def __SPLATS_is_mock?
     false
+  end
+
+  def __SPLATS_print
+    "some value"
   end
 end

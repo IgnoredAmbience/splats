@@ -30,7 +30,7 @@ module SPLATS
         break if not execute_line line, &decision
       end
       unless @exception
-        puts "=> " + @result.inspect
+        #puts "=> " + @result.inspect
       end
     end
 
@@ -39,6 +39,7 @@ module SPLATS
     # @return [boolean] Returns false if an exception was raised on the
     #   execution of this line
     def execute_line test_line, &decision
+      #puts "X> Executing #{test_line}"
       # Construct any arguments that are Mocks
       arguments = test_line.arguments.map! do |arg|
         if arg == SPLATS::Mock
