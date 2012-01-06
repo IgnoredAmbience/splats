@@ -35,7 +35,7 @@ module SPLATS
       else
         result = Mock.new &@branch_block
       end
-      @child_objects << ([symbol, result] + args)
+      @child_objects << ([symbol, result, args])
       #::Kernel.puts "?> Method '#{symbol}' called with arguments #{args} on #{__SPLATS_print} returns #{result.__SPLATS_print}"
       result
     end

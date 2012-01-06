@@ -94,7 +94,7 @@ module SPLATS
         recv = c[0]
         constructors << (recv.__SPLATS_print + " = MiniTest::Mock.new")
         c[1].map do |call|
-          recv.__SPLATS_print + ".expects" + self.class.args_to_s(call)
+          recv.__SPLATS_print + ".expect" + self.class.args_to_s(call)
         end
       end
 
@@ -141,6 +141,8 @@ module SPLATS
         "nil"
       elsif value.is_a? Exception
         value.class.name
+      elsif value.is_a? Array
+        "[" << value.map{|v| construct_value v}.join(', ') << "]"
       else
         value.inspect
       end
