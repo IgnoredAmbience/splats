@@ -2,7 +2,7 @@ pdf:
 	pdflatex Report.tex
 
 clean:
-	rm -f *.{aux,toc,log,out}
+	rm -f {*,*/*}.{aux,toc,log,out}
 
 clobber: clean
-	rm -f *.{pdf,ps,dvi}
+	rm -f {*,*/*}.{pdf,ps,dvi}
