@@ -1,32 +1,4 @@
-# Uses the traversal methods to generate the choices for what the user can select
-def traversal_buttons
-  default = 1
-  label_width = 150
-  
-  # Generate the radio buttons
-  @traversal_methods.each_with_index { |method, i|
-    flow do
-      @r = radio :traversal, width: 50  do
-        @traversal_method = i
-      end
-      para method, width: label_width
-    end
-=begin    
-        flow do  
-      if i == 0
-        @depth_flow = radio_flow("depth")
-      elsif i == 2
-        @seed_flow = radio_flow("seed")
-      end
-      if i == default
-        @r.checked = true 
-        @traversal_method = default
-      end
-    end
-=end
-  }
-end
-
+# Select the output directory
 def get_output_dir
   button "Select the output directory for the tests" do
     @output_dir = ask_open_folder
@@ -40,47 +12,57 @@ def get_output_dir
 end
 
 def display_traversal_buttons
-  label_width = 150
-  default = :human  
-  @traversal_methods.each do |name, method|
-    flow do
-      @r = radio :traversal do
-        @traversal_method = method
-      end
-      para name, width: label_width
-      if method == default
-        @r.checked = true
+  para "Choose a traversal method:"
+  @list_box = list_box items: @traversal_methods.values do |lb|
+    if @option_area
+      @option_area.clear do
+        case @traversal_methods.invert[lb.text]
+          when :depth
+            display_depth_box false
+          when :human
+            @option_area.clear
+          when :random
+            display_seed_box false
+        end
       end
     end
-    # If depth-limited, ask for a depth (defaults to 3)
-    if method == :depth
-      para "Which depth to traverse to?"
-      @depth_box = edit_line :text => @depth, :margin => 5 do
-        @depth = self.text
-      end
-    # If random, ask for a seed (defaults to 0 in box, but will be random)
-    elsif method == :random
-      para "Seed?"
-      @seed_box = edit_line :text => @seed, :margin => 5 do
-        @seed = self.text
-      end
+  end
+  
+  # Highlight the default choice in the list box
+  @list_box.choose(@traversal_methods[@traversal_method])
+  
+  # Set the default options thing
+  @option_area = stack :height => 100, :margin => 10 do
+    case @traversal_method
+      when :depth
+        display_depth_box false
+      when :random
+        display_seed_box false
+      else
+        para ""
     end
   end
 end
 
-# Define the 'radio' flows
-def radio_flow (element, bg=nil)
-  flow do
-    if bg
-      background bg
-    end
-    if element == "depth"
-      para "What depth?", width: 150
-      @depth = edit_line :text => 3, :margin => 5
-    elsif element == "seed"
-      para "Seed?", width: 150
-      @seed = edit_line :margin => 5
-    end
+# Define the depth box
+def display_depth_box error
+  para "Which depth to traverse to?"
+  if error
+    para "Must be integer", :stroke => red
+  end
+  depth_box = edit_line :text => @depth, :margin => 5 do
+    @depth = depth_box.text
+  end
+end
+
+# Display the seed box
+def display_seed_box error
+  para "Seed?"
+  if error
+    para "Must be integer", :stroke => red
+  end
+  seed_text = edit_line :text => @seed, :margin => 5 do
+    @seed = seed_box.text
   end
 end
 

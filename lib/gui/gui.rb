@@ -17,25 +17,26 @@ class SPLATSGUI < Shoes
   # Setup the main application window
   def setup
     # Setup the look
-    background red..darkred, angle: 120
+    background wheat..peru, angle: 45
     # header
     tagline "SpLATS Lazy Automated Test System", :align => "center"
       
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
     @page = 3
-    @traversal_methods = Hash["Depth-Limited" => :depth, "Manual" => :human, "Random" => :random]
+    @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
+    @selected_radio = nil
     
     #TODO Put this in a config file
     # Defaults
     @file = '../../samples/LinkedList.rb'
     @output_dir = 'tests'
-    @traversal_method = :human
-    @depth = 3
-    @seed = 0
+    @traversal_method = :depth
+    @depth = "asd"
+    @seed = "asd"
 
     # Put in a dummy depth and seed
-    @main = stack do
+    @main = stack :margin => 10 do
     end
     next_page
   end
@@ -49,13 +50,7 @@ class SPLATSGUI < Shoes
         when 2
           @version2 = ask_for_version "second"
         when 3
-          display_traversal_buttons
-          get_output_dir
-          @output_display = flow do
-            para "Current output directory:"
-            para strong @output_dir
-          end
-          next_button "validate_user_input"
+          page_3
         else
           para "Nothing left to do!"
       end
@@ -64,13 +59,31 @@ class SPLATSGUI < Shoes
     @page += 1
   end
   
+  def page_3
+    display_traversal_buttons
+    get_output_dir
+    @output_display = flow do
+      para "Current output directory:"
+      para strong @output_dir
+    end
+    next_button "validate_user_input"
+  end
+  
   # Checks that depth and seed are correct to continue
   def validate_user_input
-    case @traversal_method
+    case @traversal_methods[@list_box.text]
       when :depth
-        puts @depth_box.text
+        if @depth.to_i == 0
+          @depth_box.clear do
+            display_depth_box true
+          end
+        end
       when :random
-        puts @seed_box.text
+        if @seed.to_i == 0
+          @seed_box.clear do
+            display_seed_box true
+          end
+        end
     end
     false
   end
@@ -149,7 +162,6 @@ def draw_selections
 end
 
 def label_selection input
-puts input
   if input.length == 0
     "No arguments"
   else
