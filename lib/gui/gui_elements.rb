@@ -14,9 +14,10 @@ end
 def display_traversal_buttons
   para "Choose a traversal method:"
   @list_box = list_box items: @traversal_methods.values do |lb|
+    @traversal_method = @traversal_methods.invert[lb.text]
     if @option_area
       @option_area.clear do
-        case @traversal_methods.invert[lb.text]
+        case @traversal_method
           when :depth
             display_depth_box false
           when :human
@@ -71,10 +72,11 @@ def display_seed_box error
 end
 
 # Define the 'next' button
-def next_button function
+# @param start_test
+def next_button start
   button "Next", :width => 50 do
-    if function
-      if (send function)
+    if start
+      if validate_user_input
         start_tests
       end
     else

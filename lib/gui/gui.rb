@@ -6,7 +6,7 @@ require './gui_elements.rb'
 
 class NilClass
   def to_s
-    "Nil"
+    "nil"
   end
 end
 
@@ -23,7 +23,7 @@ class SPLATSGUI < Shoes
       
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 1
+    @page = 3
     @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
     @selected_radio = nil
     
@@ -32,8 +32,8 @@ class SPLATSGUI < Shoes
     @file = '../../samples/LinkedList.rb'
     @output_dir = 'tests'
     @traversal_method = :depth
-    @depth = "asd"
-    @seed = "asd"
+    @depth = 2
+    @seed = 0
 
     # Put in a dummy depth and seed
     @main = stack :margin => 10 do
@@ -66,7 +66,7 @@ class SPLATSGUI < Shoes
       para "Current output directory:"
       para strong @output_dir
     end
-    next_button "validate_user_input"
+    next_button true
   end
   
   # Checks that depth and seed are correct to continue
@@ -97,11 +97,15 @@ class SPLATSGUI < Shoes
         else
           true
         end
+      else
+        true
     end
   end
   
   def start_tests
+    puts @traversal_method
     if @traversal_method == :human
+      p "yay"
       f = nil
       # Cheeky Fiber stuff - create a dummy fiber to allow the
       # transfer methods to work, but keep returning control to
