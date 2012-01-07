@@ -32,7 +32,7 @@ def display_traversal_buttons
   @list_box.choose(@traversal_methods[@traversal_method])
   
   # Set the default options thing
-  @option_area = stack :height => 100, :margin => 10 do
+  @option_area = stack :height => 120, :margin => 10 do
     case @traversal_method
       when :depth
         display_depth_box false
@@ -45,24 +45,28 @@ def display_traversal_buttons
 end
 
 # Define the depth box
+# @param error Whether or not to display the error
 def display_depth_box error
   para "Which depth to traverse to?"
-  if error
+  if error == "zero"
+    para "Depth cannot be zero", :stroke => red
+  elsif error
     para "Must be integer", :stroke => red
   end
-  depth_box = edit_line :text => @depth, :margin => 5 do
-    @depth = depth_box.text
+  edit_line :text => @depth, :margin => 5 do |db|
+    @depth = db.text
   end
 end
 
 # Display the seed box
+# @param error Whether or not to display the error
 def display_seed_box error
   para "Seed?"
   if error
     para "Must be integer", :stroke => red
   end
-  seed_text = edit_line :text => @seed, :margin => 5 do
-    @seed = seed_box.text
+  seed_text = edit_line :text => @seed, :margin => 5 do |sb|
+    @seed = sb.text
   end
 end
 
@@ -70,7 +74,9 @@ end
 def next_button function
   button "Next", :width => 50 do
     if function
-      send function
+      if (send function)
+        start_tests
+      end
     else
       next_page
     end
@@ -83,8 +89,8 @@ def ask_for_version name
   button button_name do
     # Gets the version and displays file info
     get_ruby_file
-    @mainstack.append do
-      next_button
+    @main.append do
+      next_button nil
       para "You have selected: "; para @file, weight: "bold"
       edit_box :width => '100%', :height => 500, :text => File.read(@file)
     end

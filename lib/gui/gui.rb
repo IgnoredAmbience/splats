@@ -23,7 +23,7 @@ class SPLATSGUI < Shoes
       
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 3
+    @page = 1
     @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
     @selected_radio = nil
     
@@ -71,50 +71,67 @@ class SPLATSGUI < Shoes
   
   # Checks that depth and seed are correct to continue
   def validate_user_input
-    case @traversal_methods[@list_box.text]
+    case @traversal_methods.invert[@list_box.text]
       when :depth
-        if @depth.to_i == 0
-          @depth_box.clear do
+        if @depth == "0"
+          @option_area.clear do
+            display_depth_box "zero"
+          end
+          false
+        elsif @depth.to_i == 0
+          @option_area.clear do
             display_depth_box true
           end
+          false
+        else
+          @depth = @depth.to_i
+          true
         end
       when :random
-        if @seed.to_i == 0
-          @seed_box.clear do
+        # Seed as 0 is perfectly acceptable
+        if not @seed == "0" && @seed.to_i == 0
+          @option_area.clear do
             display_seed_box true
           end
+          false
+        else
+          true
         end
     end
-    false
   end
   
   def start_tests
-    f = nil    
-    # Cheeky Fiber stuff - create a dummy fiber to allow the
-    # transfer methods to work, but keep returning control to
-    # this main thread
-    @display = Fiber.new do |input|
-      while input
-        @selection = f.transfer @choice
-        @choice = Fiber.yield @selection
+    if @traversal_method == :human
+      f = nil
+      # Cheeky Fiber stuff - create a dummy fiber to allow the
+      # transfer methods to work, but keep returning control to
+      # this main thread
+      @display = Fiber.new do |input|
+        while input
+          @selection = f.transfer @choice
+          @choice = Fiber.yield @selection
+        end
       end
-    end
-    
-    # Wrap the test controller in a fiber, passing the GUI fiber in
-    # This determines the value of selection
-    f = Fiber.new do |input|
+      
+      # Wrap the test controller in a fiber, passing the GUI fiber in
+      # This determines the value of selection
+      f = Fiber.new do |input|
+        controller = SPLATS::TestController.new(@file, @output_dir, @depth, @seed, @traversal_method, @display)
+        controller.test_classes
+      end
+      
+      # Call display
+      @display.transfer true
+      
+      # Check we can continue
+      check_controller_error
+      
+      # Display the selections to user
+      draw_selections
+    else
       controller = SPLATS::TestController.new(@file, @output_dir, @depth, @seed, @traversal_method, @display)
       controller.test_classes
     end
-    
-    # Call display
-    @display.transfer true
-    
-    # Check we can continue
-    check_controller_error
-    
-    # Display the selections to user
-    draw_selections
   end
 end
 
@@ -136,7 +153,7 @@ def text_display selection
 end
 
 def draw_selections
-  @next_area.clear do
+  @main.clear do
     # Present the question/information to the user
     text_display @selection
     
@@ -170,10 +187,12 @@ def label_selection input
 end
 
 def check_controller_error
-  if @selection[0] == :error
-    alert(@selection[1])
-    #TODO don't terminate
-    exit
+  if @selection
+    if @selection[0] == :error
+      alert(@selection[1])
+      #TODO don't terminate
+      exit
+    end
   end
 end
 
