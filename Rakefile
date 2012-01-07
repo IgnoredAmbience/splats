@@ -3,7 +3,7 @@ require 'rake/testtask'
 # Installs required rubygems, probably requires root permissions
 # 'rake gems'
 task :gems do
-  %w{yard}.each do |gem|
+  %w{yard flexmock}.each do |gem|
     if not system "gem install #{gem}"
       system "gem install --user-install #{gem}"
     end

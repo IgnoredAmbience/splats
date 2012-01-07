@@ -32,7 +32,7 @@ module SPLATS
         break if not execute_line line, &decision
       end
       unless @exception
-        puts "=> " + @result.inspect
+        #puts "=> " + @result.inspect
       end
     end
 
@@ -41,6 +41,7 @@ module SPLATS
     # @return [boolean] Returns false if an exception was raised on the
     #   execution of this line
     def execute_line test_line, &decision
+      #puts "X> Executing #{test_line}"
       # Construct any arguments that are Mocks
       arguments = test_line.arguments.map! do |arg|
         if arg == SPLATS::Mock
@@ -107,9 +108,12 @@ module SPLATS
 
       expects = calls.flat_map do |c|
         recv = c[0]
-        constructors << (recv.__SPLATS_print + " = MiniTest::Mock.new")
+        constructors << (recv.__SPLATS_print + ' = flexmock("' + recv.__SPLATS_print + '")')
         c[1].map do |call|
-          recv.__SPLATS_print + ".expects" + self.class.args_to_s(call)
+          line  = recv.__SPLATS_print
+          line += ".should_receive(#{call[0].inspect})"
+          (line += ".with" + self.class.args_to_s(call[2])) unless call[2].empty?
+          line += '.and_return(' + self.class.construct_value(call[1]) + ').once'
         end
       end
 
@@ -124,8 +128,10 @@ module SPLATS
 
     # The final assert statement
     def assert
-      if is_base_class? @result or @result.__SPLATS_is_mock?
+      if is_base_class? @result
         ["assert_equal #{result_to_s}, result"]
+      elsif @result.__SPLATS_is_mock?
+        ["assert_operator #{result_to_s}, :===, result"]
       else
         ["assert_instance_of #{@result.class}, result"]
       end
@@ -156,6 +162,8 @@ module SPLATS
         "nil"
       elsif value.is_a? Exception
         value.class.name
+      elsif value.is_a? Array
+        "[" << value.map{|v| construct_value v}.join(', ') << "]"
       else
         value.inspect
       end
