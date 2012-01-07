@@ -1,0 +1,16 @@
+digraph {
+  a1[label="No arguments"];
+  a2[label="[An argument]"];
+  a3[label="[nil]"];
+  "initialise" -> a1
+  "initialise" -> a2
+  "initialise" -> a3
+  b1[label=push]
+  b2[label=pop]
+  b3[label="delete!"]
+  b4[label=each]
+  a2 -> b1
+  a2 -> b2
+  a2 -> b3
+  a2 -> b4
+}
