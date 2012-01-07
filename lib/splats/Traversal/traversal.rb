@@ -49,6 +49,7 @@ module SPLATS
 
     # Called to notify the traverser that an exception has arisen during
     # execution, and that no further progress can be made on this branch
+    # @param [Exception] exception The exception that was raised
     def notify_exception_raised exception
     end
 
