@@ -24,15 +24,17 @@ class SPLATSGUI < Shoes
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
     @page = 3
-    @traversal_methods = ["Depth-Limited", "Guided", "Random"]
+    @traversal_methods = Hash["Depth-Limited" => :depth, "Manual" => :human, "Random" => :random]
     
     #TODO Put this in a config file
     # Defaults
     @file = '../../samples/LinkedList.rb'
     @output_dir = 'tests'
-    @traversal_method = 1
+    @traversal_method = :human
+    @depth = 3
+    @seed = 0
 
-    # Need the dummy do end for some weird reason!
+    # Put in a dummy depth and seed
     @main = stack do
     end
     next_page
@@ -53,15 +55,7 @@ class SPLATSGUI < Shoes
             para "Current output directory:"
             para strong @output_dir
           end
-          next_button
-        when 4
-          # If the user entered correct information, start running the tests
-          if validate_user_input
-            start_tests
-          # Otherwise decrement the page
-          else
-            @page -= 1
-          end
+          next_button "validate_user_input"
         else
           para "Nothing left to do!"
       end
@@ -70,8 +64,14 @@ class SPLATSGUI < Shoes
     @page += 1
   end
   
+  # Checks that depth and seed are correct to continue
   def validate_user_input
-    puts @traversal_method
+    case @traversal_method
+      when :depth
+        puts @depth_box.text
+      when :random
+        puts @seed_box.text
+    end
     false
   end
   

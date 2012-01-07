@@ -41,10 +41,8 @@ end
 
 def display_traversal_buttons
   label_width = 150
-  default = :human
-  traversals = Hash["Depth-Limited" => :depth, "Manual" => :human, "Random" => :random]
-  
-  traversals.each do |name, method|
+  default = :human  
+  @traversal_methods.each do |name, method|
     flow do
       @r = radio :traversal do
         @traversal_method = method
@@ -57,11 +55,15 @@ def display_traversal_buttons
     # If depth-limited, ask for a depth (defaults to 3)
     if method == :depth
       para "Which depth to traverse to?"
-      @depth_box = edit_line :text => 3, :margin => 5
+      @depth_box = edit_line :text => @depth, :margin => 5 do
+        @depth = self.text
+      end
     # If random, ask for a seed (defaults to 0 in box, but will be random)
     elsif method == :random
       para "Seed?"
-      @seed_box = edit_line :text => 0, :margin => 5
+      @seed_box = edit_line :text => @seed, :margin => 5 do
+        @seed = self.text
+      end
     end
   end
 end
@@ -83,9 +85,13 @@ def radio_flow (element, bg=nil)
 end
 
 # Define the 'next' button
-def next_button
+def next_button function
   button "Next", :width => 50 do
-    next_page
+    if function
+      send function
+    else
+      next_page
+    end
   end
 end
 

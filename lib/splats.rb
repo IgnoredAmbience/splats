@@ -83,9 +83,9 @@ module SPLATS
       @output_dir = output_dir || "tests/"
       @depth = depth || 3
       case traversal
-        when 1
+        when :human
           @traversal = SPLATS::HumanTraversal.new(fiber)
-        when 2
+        when :random
           seed = seed || 0
           @traversal = SPLATS::RandomTraversal.new(seed, fiber)
         else
