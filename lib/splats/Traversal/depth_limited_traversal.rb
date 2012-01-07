@@ -49,7 +49,7 @@ module SPLATS
       end
     end
 
-    def notify_exception_raised
+    def notify_exception_raised exception
       # We simply do nothing, the item is not reinserted into the queue
     end
 
