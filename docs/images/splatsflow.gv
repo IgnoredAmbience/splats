@@ -7,5 +7,4 @@ digraph {
 	"Generator" -> "TestController" [label="Generator object"]
 	"TestController" -> "TestFile" [label="class, requirements, output directory"]
 
-
 }
