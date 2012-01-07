@@ -1,15 +1,40 @@
 \chapter{Architecture}
-  \subsection{Choices}
-    It would generate tests for test::unit, though should in theory be able to target other test frameworks with little modification.
 
-    It would generate the tests, rather than by randomly chaining methods together, as in Randoop, by executing the program with a `mock' object that would collect data about what it was needed to be at each stage.
+\section{High Level View}
+
+  At a high level, there is a test generator, an output module, a wrapper to control the two, and either a graphical or command-line interface to control that.
+\begin{center}
+\begin{figure}
+  \begin{tikzpicture}
+    \coordinate(origin);
+
+    \node(core) at (origin) [draw,align=center] {Generate tests};
+    \node(control) at ([left=3cm] core) [draw,align=center] {Load classes};
+    \node(output) at ([right=3cm] core) [draw,align=center] {Write tests};
+    \node(compare) at ([right=3cm] output) [draw,align=center] {Compare versions};
+    \node(gui) at ([left=2cm,above=1cm] control) [draw,align=center] {GUI};
+    \node(cli) at ([left=2cm,below=1cm] control) [draw,align=center] {CLI};
+
+    \draw[->] (control) -> (core);
+    \draw[->] (core) -> (output);
+    \draw[->] (output) -> (compare);
+    \draw[->] (compare) -> (output);
+    \draw[->] (gui) -> (control);
+    \draw[->] (cli) -> (control);
+  \end{tikzpicture}
+\caption{A short summary of the control flow of SpLATS}
+\end{figure}
+\end{center}
+
+  \subsection{Output}
 
   \subsection{Layout}
     There's an inner core that generates the tests, an outer layer that controls it and handles file input and output, and a wrapper to pass options to the outer layer.
 
 \begin{center}
 \begin{figure}
-\includegraphics[width=\textwidth]{control_flow}
-\caption{A short summary of the control flow of SpLATS}
+\input{images/splatsflow}
+\caption{A more in-depth summary of the control flow of SpLATS}
 \end{figure}
 \end{center}
+
