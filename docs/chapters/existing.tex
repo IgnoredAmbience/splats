@@ -5,8 +5,15 @@
 \section{Test Frameworks}
 
   \subsection{Test::Unit}
-    Ruby comes shipped with this module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}} which offers to programmers the ability to write test suites, tests and cases.
-    The tests are not automatically produced, and are not automatically run on later versions of the code.
+    The Ruby standard library includes this
+module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}}
+which offers to programmers the framework on which test suites can be written
+and executed.
+
+Many other competing testing frameworks exist, most providing little added
+benefit other than syntactical differences.
+
+SpLATS targets Test::Unit as its output format.
 
 \section{Static Analysis}
 
@@ -15,13 +22,25 @@
 \section{Dynamic Analysis} 
 
   \subsection{ZenTest}
-    ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}} uses Ruby's Test::Unit to automatically test code, both blackbox and whitebox.
-    As a file is saved, ZenTest automatically runs itself again.
-    ZenTest uses code coverage to highlight tests which need to be written by the developer, and generates stubs for these.
-    ZenTest also uses whitebox testing to check if a method has been implemented or not.
-    Whilst this tool is extremely useful, it still expects developers to write the tests themselves.
-    The aim of SpLATS is to focus the attention away from writing tests, and to allow a developer to just code.
-    The aim of ZenTest is to make test writing as easy as possible.
+    ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}}
+comprises of a suite of 4 tools designed to assist a software developer with
+writing tests for their Ruby code. The tool of particular interest within the suite is itself called ZenTest,
+it aims to speed the writing of tests by inspecting the class under test (CUT)
+and the test class (TC) for the CUT.
+
+    ZenTest compares the functions defined on the CUT with the methods defined
+on the TC. It then produces stub test methods on the TC for those methods on the
+CUT it believes are untested.
+
+    The deduction of which methods are being tested is performed by analysing
+the method names, ZenTest assumes that for every method, \emph{name}, on the
+CUT, then there should be a corresponding test method on the TC will be named
+with a prefix of \texttt{test\_\emph{name}}. This is a very superficial and
+basic method for determining whether a class is fully tested.
+
+    Whilst this tool is extremely useful, it still expects developers to write
+the tests themselves. The aim of SpLATS is to focus the attention away from
+writing tests, and to allow a developer to just code.
 
   \subsection{IRULAN}
     IRULAN\footnote{\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis.
