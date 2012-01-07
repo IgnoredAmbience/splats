@@ -16,34 +16,6 @@
   Because Ruby is dynamically typed, the types of whitebox testing which can be implemented are limited to generic conditions.
   [examples here]
 
-\section{Existing Products}
-
-  \subsection{Test::Unit}
-    Ruby comes shipped with this module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}} which offers to programmers the ability to write test suites, tests and cases.
-    The tests are not automatically produced, and are not automatically run on later versions of the code.
-
-  \subsection{ZenTest}
-    ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}} uses Ruby's Test::Unit to automatically test code, both blackbox and whitebox.
-    As a file is saved, ZenTest automatically runs itself again.
-    ZenTest uses code coverage to highlight tests which need to be written by the developer, and generates stubs for these.
-    ZenTest also uses whitebox testing to check if a method has been implemented or not.
-    Whilst this tool is extremely useful, it still expects developers to write the tests themselves.
-    The aim of SpLATS is to focus the attention away from writing tests, and to allow a developer to just code.
-    The aim of ZenTest is to make test writing as easy as possible.
-
-  \subsection{IRULAN}
-    IRULAN\footnote{\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis.
-    IRULAN performs directed random testing, which is a different method to how SpLATS performs (see below).
-
-  \subsection{Tickling Java with a Feather}
-    This\footnote{\url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}} is another of Dr Allwood's research papers, where he performs automated testing on a subset of the Java language.
-    Some of the methods outlined here are useful.
-
-  \subsection{Randoop}
-    Randoop\footnote{\url{http://code.google.com/p/randoop/}} is another directed random testing framework, like IRULAN, but for Java.
-    It generates a progressively growing sequence of method calls, before running standard tests (eg, \verb|o.equals(o)|).
-    It has been used to find errors in a number of commonly used libraries.
-
 \def \colwidth {0.35\textwidth}
 \section{Features}
   Below is an extract from the first report explaining what the requirements are.
@@ -110,15 +82,3 @@
     My program may respond better to different traversal methods \\
     \hline
     \end{tabular}
-
-\section{Architecture}
-
-  \subsection{Choices}
-    It would generate tests for test::unit, though should in theory be able to target other test frameworks with little modification.
-
-    It would generate the tests, rather than by randomly chaining methods together, as in Randoop, by executing the program with a `mock' object that would collect data about what it was needed to be at each stage.
-
-  \subsection{Layout}
-    There's an inner core that generates the tests, an outer layer that controls it and handles file input and output, and a wrapper to pass options to the outer layer.
-
-    % Maybe a program flow or class diagram goes here?
