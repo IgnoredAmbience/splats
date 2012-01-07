@@ -70,23 +70,15 @@ module SPLATS
     # @param [String] output_dir The directory for generated tests to be put
     #
     # @note Directory created if necessary
-    def initialize(input_file, output_dir, traversal, param)
+    def initialize(input_file, output_dir, traversal)
       @input_classes = SPLATS.load_classes input_file
       if output_dir == :notgiven
         @output_dir = "tests/"
       else 
         @output_dir = output_dir
       end
-      @depth = param || 3
-      case traversal
-        when :manual
-          @traversal = SPLATS::HumanTraversal.new()
-        when :random
-          seed = seed || 0
-          @traversal = SPLATS::RandomTraversal.new(param)
-        when :depth
-          @traversal = SPLATS::DepthLimitedTraversal.new(@depth)
-      end       
+      #@depth = param || 3
+      @traversal = traversal       
       if not File::directory?(@output_dir)
         Dir.mkdir(@output_dir)
       end

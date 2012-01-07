@@ -89,24 +89,27 @@ end
 
 begin
   if options[:manual][0]
-    traversal = :manual
-    param = nil
+    traversal_object = SPLATS::HumanTraversal.new()
   elsif options[:random][0] 
     traversal = :random
     if options[:random][1].nil?
-      param = nil
+      seed = 0
     else 
-      param = options[:random][1].to_i
-    end
+      seed = options[:random][1].to_i
+    end    
+    traversal_object = SPLATS::RandomTraversal.new(seed)
+    
   else #depth limited default
     traversal = :depth
     if options[:depth][1].nil?
-      param = nil
+      depth = 3
     else
-      param = options[:depth][1].to_i
-    end 
+      depth = options[:depth][1].to_i
+    end    
+    traversal_object = SPLATS::DepthLimitedTraversal.new(depth)
   end
-  controller = SPLATS::TestController.new(options[:file],options[:outdir][2], traversal, param)
+  
+  controller = SPLATS::TestController.new(options[:file],options[:outdir][2], traversal_object)
 rescue LoadError
   puts "File doesn't exist"
   exit
