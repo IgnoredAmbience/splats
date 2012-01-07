@@ -1,3 +1,5 @@
+require('graph')
+
 module SPLATS
   # This encapsulates a single test.
   # It is responsible pretty printing the test i.e. writing the code of the test.
@@ -70,6 +72,7 @@ module SPLATS
     # Returns a string of the translation of the abstract code into a
     # test::unit testing method
     def to_s
+      graph_gen
       if @exception
         (header + mocks + assert_raises + footer).join("\n")
       else
@@ -78,7 +81,20 @@ module SPLATS
     end
 
     private
-
+    
+    def graph_gen
+      child_map = @mocks.flat_map {|m| m.__SPLATS_child_objects }
+      digraph do
+        child_map.each do |node|
+          node[1].each do |childnode|
+            edge(node[0].__SPLATS_print, Test.construct_value(childnode[1]))
+            .label(childnode[0].to_s)
+          end 
+        end
+        save "single_mock_graph", "png"
+      end  
+    end
+    
     # The function header
     def header
       ["def #{name}"]
@@ -208,6 +224,7 @@ module SPLATS
       def args_to_s
         Test.args_to_s @arguments
       end
+           
     end
   end
 end
