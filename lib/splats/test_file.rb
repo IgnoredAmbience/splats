@@ -19,7 +19,7 @@ module SPLATS
 
     # The list of require statements
     def self.requirements reqs
-      (['test/unit', 'minitest/mock'] + reqs).map{ |r| "require '#{r}'" }
+      (['test/unit', 'flexmock/test_unit'] + reqs).map{ |r| "require '#{r}'" }
     end
 
     # The class header

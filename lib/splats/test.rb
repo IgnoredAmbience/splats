@@ -92,9 +92,12 @@ module SPLATS
 
       expects = calls.flat_map do |c|
         recv = c[0]
-        constructors << (recv.__SPLATS_print + " = MiniTest::Mock.new")
+        constructors << (recv.__SPLATS_print + ' = flexmock("' + recv.__SPLATS_print + '")')
         c[1].map do |call|
-          recv.__SPLATS_print + ".expect" + self.class.args_to_s(call)
+          line  = recv.__SPLATS_print
+          line += ".should_receive(#{call[0].inspect})"
+          (line += ".with" + self.class.args_to_s(call[2])) unless call[2].empty?
+          line += '.and_return(' + self.class.construct_value(call[1]) + ').once'
         end
       end
 
