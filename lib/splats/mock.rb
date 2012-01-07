@@ -66,12 +66,16 @@ module SPLATS
     end
 
     def __SPLATS_print
-      "mock#{@id}"
+      "mock#{@id}mo"
     end
 
     def __SPLATS_child_objects
       [[self, @child_objects]] + @child_objects.select{|o| o[1].__SPLATS_is_mock?}
                                       .flat_map{|m| m[1].__SPLATS_child_objects}
+    end
+    
+    def self.to_s
+      "An argument"
     end
   end
 

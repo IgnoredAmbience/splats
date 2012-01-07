@@ -4,6 +4,12 @@ require 'graph'
 require 'fiber'
 require './gui_elements.rb'
 
+class NilClass
+  def to_s
+    "Nil"
+  end
+end
+
 class SPLATSGUI < Shoes
 
   url '/', :setup
@@ -16,7 +22,7 @@ class SPLATSGUI < Shoes
     tagline "SpLATS Lazy Automated Test System", :align => "center"
       
     # Initialise variables
-    @page = 0
+    @page = 1
     @traversal_methods = ["Depth-Limited", "Guided", "Random"]
     
     #TODO Put this in a config file
@@ -157,18 +163,40 @@ def draw_selections
       para "Continue " + @selection["type"]
       @selection["options"] = y_or_n.keys
     else
+      if @selection["type"] != "method"
+        if(@method)
+          para "Current method: "
+          para strong @method
+        else
+          para "Current method: "
+          para strong "initialize"
+        end
+      end
       para "Choose " + @selection["type"]
     end
+    
     @selection["options"].each do |o|
-      button o.to_s do
+      button (label_selection o) do
         if y_n
           @display.transfer y_or_n[o]
         else
           @display.transfer o
         end
+        if @selection["type"] == "method"
+          @method = o
+        end
         draw_selections
       end
     end
+  end
+end
+
+def label_selection input
+  puts input
+  if input.length == 0
+    "No arguments"
+  else
+    input.to_s
   end
 end
 

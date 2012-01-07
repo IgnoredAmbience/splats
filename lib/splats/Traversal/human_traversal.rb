@@ -6,20 +6,27 @@ module SPLATS
     def initialize(fiber)
       # gc initially stood for gui_controller...
       @gc = fiber
+      @init = false
     end
 
     # There is code duplication because I believe these methods will all be slightly different
     def select_method methods
-      # If not being controlled through the GUI
-      if @gc.nil?
-        begin
-          puts "Choose method (1-indexed): (methods: #{methods.inspect})"
-          index = gets.to_i
-        end while (index < 1 || index > methods.length)
-        methods[index-1]
+      # If it's the initialiser just return
+      if not @init
+        @init = true
+        methods[0]
       else
-        # Send the GUI controller the options back
-        @gc.transfer Hash["type" => "method", "options" => methods]
+        # If not being controlled through the GUI
+        if @gc.nil?
+          begin
+            puts "Choose method (1-indexed): (methods: #{methods.inspect})"
+            index = gets.to_i
+          end while (index < 1 || index > methods.length)
+          methods[index-1]
+        else
+          # Send the GUI controller the options back
+          @gc.transfer Hash["type" => "method", "options" => methods]
+        end
       end
     end
 
@@ -31,7 +38,7 @@ module SPLATS
         end while (index < 1 || index > arguments.length)
         arguments[index-1]
       else
-        @gc.transfer Hash["type" => "argument", "options" => arguments]
+        @gc.transfer Hash["type" => "arguments", "options" => arguments]
       end
     end
 
