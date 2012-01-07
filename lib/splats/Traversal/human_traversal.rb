@@ -58,18 +58,19 @@ module SPLATS
 
     def continue_descent?
       if @gc.nil?
-        puts "continue descent"
         begin puts "Continue with descent? (Y or N)"
           # 'gets' includes the newline, so need chomp to prevent the include? from returning false
           decision = gets.chomp
         end while (not (["Y", "y", "N", "n"].include? decision))
         decision == 'Y' || decision == 'y'
       else
-          @gc.transfer Hash["type" => "descent", "options" => :y_or_n]
+          @gc.transfer Hash["type" => :y_or_n, "question" => "Continue with descent?"]
       end
     end
 
     def continue_generation?
+      # Put init back to false
+      @init = false
       unless @firstrun
         @firstrun = true
       else
@@ -80,7 +81,7 @@ module SPLATS
           end while (not (["Y", "y", "N", "n"].include? decision))
           decision == 'Y' || decision == 'y'
         else
-          @gc.transfer Hash["type" => "generation", "options" => :y_or_n]
+          @gc.transfer Hash["type" => :y_or_n, "question" => "Continue generation?"]
         end
       end
     end

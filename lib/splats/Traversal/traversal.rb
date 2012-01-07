@@ -49,7 +49,7 @@ module SPLATS
 
     # Called to notify the traverser that an exception has arisen during
     # execution, and that no further progress can be made on this branch
-    def notify_exception_raised
+    def notify_exception_raised exception
     end
 
     # Given a type (inclusive of :Bool), return a default list of values to try

@@ -1,6 +1,6 @@
 # Uses the traversal methods to generate the choices for what the user can select
 def traversal_buttons
-  default = 0
+  default = 1
   label_width = 150
   
   # Generate the radio buttons
@@ -13,13 +13,14 @@ def traversal_buttons
       # Display the label
       para method, width: label_width
       
-      # If default is changed, move the last line of the if statement elsewhere!
-      if i == default
-        @r.checked = true 
-        @traversal_method = default
+      if i == 0
         @depth_flow = radio_flow("depth")
       elsif i == 2
         @seed_flow = radio_flow("seed")
+      end
+      if i == default
+        @r.checked = true 
+        @traversal_method = default
       end
     end
   }

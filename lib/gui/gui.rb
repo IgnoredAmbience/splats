@@ -22,6 +22,7 @@ class SPLATSGUI < Shoes
     tagline "SpLATS Lazy Automated Test System", :align => "center"
       
     # Initialise variables
+    @y_or_n = Hash["Yes" => true, "No" => false]
     @page = 1
     @traversal_methods = ["Depth-Limited", "Guided", "Random"]
     
@@ -121,11 +122,7 @@ class SPLATSGUI < Shoes
   end
   
   def start_tests
-        
-    @i = 1
-    f = nil
-    @selection = []
-    
+    f = nil    
     # Cheeky Fiber stuff - create a dummy fiber to allow the
     # transfer methods to work, but keep returning control to
     # this main thread
@@ -154,45 +151,51 @@ class SPLATSGUI < Shoes
   end
 end
 
-def draw_selections
-  y_or_n = Hash["Yes" => true, "No" => false]
-  @next_area.clear do
-    # If the options are yes or no
-    if @selection["options"] == :y_or_n
-      y_n = true
-      para "Continue " + @selection["type"]
-      @selection["options"] = y_or_n.keys
-    else
-      if @selection["type"] != "method"
-        if(@method)
-          para "Current method: "
-          para strong @method
-        else
-          para "Current method: "
-          para strong "initialize"
-        end
-      end
-      para "Choose " + @selection["type"]
+def text_display selection
+  if @selection["type"] == :y_or_n
+    para @selection["question"]
+    @selection["options"] = @y_or_n.keys
+    # Make method 'nil' as we've moved on
+    @method = nil
+  else
+    if @selection["type"] == "arguments"
+      @method ||= "initialise"
+      para "Current method:"
+      para strong @method
+    elsif @selection["type"] == "method"
+      para "Select next method to test:"
     end
+  end
+end
+
+def draw_selections
+  @next_area.clear do
+    # Present the question/information to the user
+    text_display @selection
     
+    # Run through all the options to generate buttons for the user to click
     @selection["options"].each do |o|
-      button (label_selection o) do
-        if y_n
-          @display.transfer y_or_n[o]
-        else
-          @display.transfer o
+      if not o.nil?
+        # If the o is a 'new' method, don't display the button either and carry on
+        button (label_selection o) do
+          if @selection["type"] == "method"
+            @method = o            
+          end
+          if @y_or_n.keys.include? o
+            @display.transfer @y_or_n[o]
+          else
+            @display.transfer o
+          end
+          # Refresh the screen
+          draw_selections
         end
-        if @selection["type"] == "method"
-          @method = o
-        end
-        draw_selections
       end
     end
   end
 end
 
 def label_selection input
-  puts input
+puts input
   if input.length == 0
     "No arguments"
   else
