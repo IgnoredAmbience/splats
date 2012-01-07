@@ -17,108 +17,62 @@ class SPLATSGUI < Shoes
   # Setup the main application window
   def setup
     # Setup the look
-    background darkred..red, angle: 130
+    background red..darkred, angle: 120
     # header
     tagline "SpLATS Lazy Automated Test System", :align => "center"
       
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 1
+    @page = 3
     @traversal_methods = ["Depth-Limited", "Guided", "Random"]
     
     #TODO Put this in a config file
     # Defaults
     @file = '../../samples/LinkedList.rb'
-#    @file = '/home/caz/Uni/splats/lib/gui/gui.rb'
     @output_dir = 'tests'
-#    @depth = edit_line :text => 3
-#    @seed = edit_line :text => 0
     @traversal_method = 1
 
-    @mainstack = stack :width => '100%' do
-      @next_area = stack
-      next_page
+    # Need the dummy do end for some weird reason!
+    @main = stack do
     end
+    next_page
   end
   
-  def confirm_selections
-    continue = false
-    
-    #TODO make this more user friendly!
-    if (@traversal_method == 0 && @depth.text.to_i == 0)
-      # Complain about the depth, and reset the seed
-      @depth_flow.clear do
-        radio_flow("depth", red)
-      end
-      @seed_flow.clear do
-        radio_flow("seed")
-      end
-      continue = false
-    else
-      continue = true
-    end
-    
-    if (@traversal_method == 2 && @seed.text.to_i == 0)
-      # Complain about the seed, and reset the depth
-      @seed_flow.clear do
-        radio_flow("seed", red)
-      end
-      @depth_flow.clear do
-        radio_flow("depth")
-      end
-      continue = false
-    else
-      continue = true
-    end
-    continue
-  end
-  
-  # 'Next' page method
   def next_page
-    @page += 1
-    if @page == 1
-      # The next area is when there's a next button
-      @next_area = stack :width => '100%' do
-        button "Load first version of code", :width => 50, :align => "center" do
-          # Shoes doesn't offer file types with the dialog
-          # This repeatedly asks until a .rb is chosen
-          begin
-            @file = ask_open_file
-          end while @file[-2, 2] != "rb"
-          
-          # Because there's a cancel button, need to check the file again
-          if @file[-2, 2] == "rb"
-            # Tell the user what they have chosen
-            @file_info.clear do
-              para "You have selected: "; para @file, weight: "bold"
-            end
-            # Display the next button
-            @next_button.clear {next_button}
-            # Load the file into a text box
-            @file_info.append{file_box = edit_box :width => '100%', :height => 500, :text => File.read(@file)}
+    @main.clear
+    @main.append do
+      case @page
+        when 1
+          @version1 = ask_for_version "first"
+        when 2
+          @version2 = ask_for_version "second"
+        when 3
+          display_traversal_buttons
+          get_output_dir
+          @output_display = flow do
+            para "Current output directory:"
+            para strong @output_dir
           end
-        end
-        # Weird bug - seem to need the brackets to format everything correctly
-        @next_button = stack {}
-        @file_info = stack {}
-      end
-    elsif @page == 2
-#      @next_area = stack :width => '100%' do
-      @next_area.clear do
-        para "Select which method you would like to use to run the tests"
-        traversal_buttons
-        button "Select the output directory for the tests" do
-          @output_dir = ask_open_folder
-        end
-        @next_button = next_button
-      end
-    elsif @page == 3
-      if confirm_selections
-        start_tests
-      else
-        @page -= 1
+          next_button
+        when 4
+          # If the user entered correct information, start running the tests
+          if validate_user_input
+            start_tests
+          # Otherwise decrement the page
+          else
+            @page -= 1
+          end
+        else
+          para "Nothing left to do!"
       end
     end
+    # Increment the page
+    @page += 1
+  end
+  
+  def validate_user_input
+    puts @traversal_method
+    false
   end
   
   def start_tests
