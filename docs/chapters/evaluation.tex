@@ -1,9 +1,35 @@
 \chapter{Validation and Conclusions}
 \section{Performance of SpLATS}
   \subsection{Feature Matrix}
+    \begin{tabular}{p{0.3\textwidth} | p{0.5\textwidth}}
+    Aim & Success \\
+    \hline
+    Compare two versions of code &
+    We can generate tests, which can be easily adapted to be run against another version of the code.
+    No direct comparison from within the tool as yet, however. \\
+    Set configuration options & FIAL \\
+    Inspect code coverage of tests & FIAL \\
+    Reproduce tests & DUNNO \\
+    Have a CLI &
+    A simple wrapper for SpLATS was implemented \\
+    \hline
+    Have a GUI &
+    This works, and is especially useful for manual traversal \\
+    Be able to be run automatically & PROBABLE WINNAR \\
+    Test basic program semantics &
+    It does this to a very basic level implicitly, but it's not investigated much \\
+    Test code across multiple computers at once &
+    As it has a CLI suitable for writing scripts around, it is possible to run multiple instances across a distributed system, for example, with Condor, however the tool doesn't distribute a single instance. \\
+    \hline
+    Have a website &
+    This did not happen as it was less necessary than other things. \\
+    Have different traversal mechaisms &
+    There are 3 traversal mechanisms: depth-first, random and manual. \\
+    \end{tabular}
+
   \subsection{Code Coverage}
   \subsection{ZenTest}
-  \subsection{Feature 1}
+  \subsection{Test Generation and Comparison}
     \subsubsection{Analysis}
     \subsubsection{Design}
     \subsubsection{Implementation}
