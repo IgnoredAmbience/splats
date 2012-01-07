@@ -1,8 +1,11 @@
 \documentclass{report}
 \usepackage{hyperref}
+\usepackage{graphicx}
 \usepackage[parfill]{parskip}
 \usepackage[a4paper]{geometry}
 \newcommand{\mail}[1]{\href{mailto:#1@doc.ic.ac.uk}{#1@doc.ic.ac.uk}}
+
+\graphicspath{{images/}}
 
 \title{SpLATS Lazy Automated Test System}
 \author{Ethel Bardsley, Caroline Glassberg-Powell, Christopher Keeley,\\ Joseph Slade and Thomas Wood}
@@ -15,12 +18,11 @@
 \tableofcontents
 
 \include{chapters/introduction}
-
-\include{chapters/design}
-
-\include{chapters/engineering}
-
-\include{chapters/conclusions}
-
+\include{chapters/existing}
+\include{chapters/features}
+\include{chapters/architecture}
+\include{chapters/tools}
+\include{chapters/implementation}
+\include{chapters/evaluation}
 \include{chapters/appendix}
 \end{document}

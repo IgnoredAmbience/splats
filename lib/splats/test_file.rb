@@ -8,6 +8,7 @@ module SPLATS
     # @param[String] out_dir The output directory
     def self.open(klass, reqs, out_dir, &block)
       super("#{out_dir}/test_#{klass}.rb","w",nil) do |file|
+        reqs << klass
         file << ((requirements reqs) + (header klass)).join("\n") << "\n"
         yield file
         file << footer
@@ -18,12 +19,12 @@ module SPLATS
 
     # The list of require statements
     def self.requirements reqs
-      (['test/unit'] + reqs).map{ |r| "require '#{r}'" }
+      (['test/unit', 'flexmock/test_unit'] + reqs).map{ |r| "require '#{r}'" }
     end
 
     # The class header
     def self.header klass
-      ["class test_#{klass} < Test::Unit::TestCase"]
+      ["class Test#{klass} < Test::Unit::TestCase"]
     end
 
     # The class footer

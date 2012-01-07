@@ -1,0 +1,15 @@
+\chapter{Implementation}
+\section{Technical Challenges}
+  \subsection{Duck Typing}
+    Duck typing is a method of dynamic typing, named after the phrase "if it looks like a duck and quacks like a duck, it must be a duck".
+    Instead of a function requiring parameters to be of specific types, or implementing specific interfaces, any object can have any method called on it.
+    If the method is not defined for that object then a runtime error will occur.
+    Because of this loose typing mechanism, it's very easy to make a Mock object that can take the place of any other class of object, by responding to all methods, returning another Mock object if output is required.
+    It can subsequently collect all the required methods a given parameter is needed to respond to, building up information about what parameters for a particular code-flow need to be.
+
+    However, this also makes it very difficult to output reusable tests.
+    Given duck typing doesn't lead to explicit types or interfaces, it's difficult to impossible to write an explicit `concrete' output that can be recreated from scratch without having to include the entire execution tree.\\
+    TODO: HOW THIS WAS RESOLVED \\
+
+  \subsection{GUI}
+    Shoes ain't made for walking, but it's still gonna walk right over you.
