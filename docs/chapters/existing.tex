@@ -51,6 +51,31 @@ writing tests, and to allow a developer to just code.
     Some of the methods outlined here are useful.
 
   \subsection{Randoop}
-    Randoop\footnote{\url{http://code.google.com/p/randoop/}} is another directed random testing framework, like IRULAN, but for Java.
-    It generates a progressively growing sequence of method calls, before running standard tests (eg, \verb|o.equals(o)|).
+    Randoop\footnote{\url{http://code.google.com/p/randoop/}} is another
+feedback-directed random testing framework for Java.
+
+    It generates a progressively growing sequence of method calls, which are
+then executed and checked to see if the result is useful, redundant, illegal or
+contract-violating. The test is then reused as a seed if determined to be
+useful.
+
+    Contract-violating test cases are also output as a means of highlighting
+that the CUT violates a semantic rule. The standard contracts are derived from
+the Java Language Specification. Further contracts can be added to the system by
+the user.
+
     It has been used to find errors in a number of commonly used libraries.
+
+  \subsection{RuTeG}
+    RuTeG\footnote{S. Mairhofer, R. Feldt, R. Torkar, Search-based software
+testing and Test Data Generation for a Dynamic Programming Language} (Ruby Test
+case Generator) is a project with similar aims to SpLATS, but approaches the
+problem from a slightly different angle.
+
+RuTeG attempts to find the appropriate type of variable to pass into the CUT
+methods by using a selecting data generator for each argument. This selection
+forms a part of the search space of the test generation, which is directed using
+a genetic algorithm.
+
+RuTeG was successful in its aims to achieve higher-level coverage at a faster
+rate than a random search method.
