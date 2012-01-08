@@ -84,8 +84,8 @@
   \hline
   \end{tabular}
   
-These languages are all duck typed\footnote{If quacks like a duck then it can be treated as a duck}, meaning that an object's current set of variables and methods determines its semantics. When writing tests, the finished code must be 'concrete', which is a difficult challenge to overcome when an object is determined at run-time.
-All three allow object-oriented approaches, but Ruby is the only one which is purely object-oriented, the other two having `raw' types, such as integers. Python and JavaScript would therefore need further processing to determine a variable's type than Ruby, making Ruby the easier language to work with.
+These languages are all duck typed\footnote{If quacks like a duck then it can be treated as a duck}, meaning that an object's current set of variables and methods determines its semantics. When writing tests, the finished code must be "concrete", which is a difficult challenge to overcome when an object is determined at run-time.
+All three allow object-oriented approaches, but Ruby is the only one which is purely object-oriented, the other two having "raw" types, such as integers. Python and JavaScript would therefore need further processing to determine a variable's type than Ruby, making Ruby the easier language to work with.
 
 The main disadvantage of Ruby is that none of the group had used it previously, whereas some members had considerable experience with the other languages. This turned out to not be a disadvantage, as we all started off on the same level and helped each other learn along the way. Ruby is also a good language to learn, as it is similar to other languages which all members knew.
 
@@ -94,12 +94,6 @@ The main disadvantage of Ruby is that none of the group had used it previously, 
   The two main methods of testing are whitebox (where testing is performed
   with a knowledge of how the code works) and blackbox (treating the
   application as a black box, and testing without regard to how it is, or
-  appears to be, implemented ).
+  appears to be, implemented).
 
-  We chose blackbox testing over whitebox testing because we didn't want to
-  have to lex and parse Ruby, and then inspect the abstract syntax in order
-  to infer anything. This is more akin to doing static code analysis, and
-  because of the nature of Ruby, specifically with regard to metaprogramming
-  and the possibility of the behaviour of the code being changed dramatically
-  at runtime, it would be difficult to make accurate interpretations without
-  running the code. Hence, we chose blackbox testing over whitebox.
+  We chose blackbox testing over whitebox testing because we didn't want to lex and parse Ruby, and then inspect that to infer anything. Whitebox testing Ruby would end up more as static code analysis, and because of Ruby's metaprogramming and the possibility of the code being changed at runtime, it would be difficult to make accurate interpretations without running the code.
