@@ -44,21 +44,6 @@ class Tools
     end
   end
   
-  # Clear all useless characters from an ISBN number and upcase the 'X' sign when
-  # present.  Also does the basic check that 'X' must be the last sign of the number,
-  # if present.  Returns nil if provided string is nil or X is not at the last position.
-  #
-  # No length check is done: no matter what string is passed in, all characters that
-  # not in the range [0-9xX] are removed.
-  def cleanup(isbn_)
-    isbn_.gsub(/[^0-9xX]/,'').gsub(/x/,'X') unless isbn_.nil? or isbn_.scan(/([xX])/).length > 1
-  end
-  
-  # Same as cleanup but alters the argument.
-  def cleanup!(isbn_)
-    isbn_.replace(cleanup(isbn_))
-  end
-  
   # Check that the value is a valid ISBN-10 number. Returns true if it is, false otherwise.
   # The method will check that the number is exactly 10 digits long and that the tenth digit is
   # the correct checksum for the number.
@@ -79,6 +64,23 @@ class Tools
     sum = 0
     0.upto(12) { |ndx| sum += isbn[ndx].chr.to_i * (ndx % 2 == 0 ? 1 : 3) }
     sum.remainder(10) == 0
+  end
+
+  private
+  
+  # Clear all useless characters from an ISBN number and upcase the 'X' sign when
+  # present.  Also does the basic check that 'X' must be the last sign of the number,
+  # if present.  Returns nil if provided string is nil or X is not at the last position.
+  #
+  # No length check is done: no matter what string is passed in, all characters that
+  # not in the range [0-9xX] are removed.
+  def cleanup(isbn_)
+    isbn_.gsub(/[^0-9xX]/,'').gsub(/x/,'X') unless isbn_.nil? or isbn_.scan(/([xX])/).length > 1
+  end
+  
+  # Same as cleanup but alters the argument.
+  def cleanup!(isbn_)
+    isbn_.replace(cleanup(isbn_))
   end
   
   # Check that an ISBN is valid or not. Returns true if is, false otherwise.  This method will
