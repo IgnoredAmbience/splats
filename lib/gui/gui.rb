@@ -20,10 +20,10 @@ class SPLATSGUI < Shoes
     background wheat..peru, angle: 45
     # header
     tagline "SpLATS Lazy Automated Test System", :align => "center"
-    image("fly.png").move 400, 400
+    
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 1
+    @page = 3
     @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
     @selected_radio = nil
     
@@ -35,17 +35,28 @@ class SPLATSGUI < Shoes
     @traversal_method = :depth
     @depth = 2
     @seed = 0
+    
+    # Shoes height and width initialise - to keep an eye on them
+    @height = height
+    @width = width
 
     # Put in a dummy depth and seed
     @main = stack :margin => 10 do
     end
-    
     next_page
   end
   
   def next_page
     @main.clear
     @main.append do
+      # Keeps ticking to ensure the logo stays in the bottom right corner
+      @logo = image("fly.png").move (width - 100), (height - 100)
+      every(1) do
+        unless height == @height
+          @logo.clear
+          @logo = image("fly.png").move (width - 100), (height - 100)
+        end
+      end
       case @page
         when 1
           # Loads the version 1 variable with the file info
@@ -185,7 +196,14 @@ def draw_selections
         draw_selections
       end
     end
+    display_graph
   end
+end
+
+def display_graph
+  para "Current depth:"
+  para strong 2
+  image("graph.png")
 end
 
 def label_selection input
@@ -212,4 +230,4 @@ def check_controller_error
   end
 end
 
-Shoes.app :title => "SpLATS", :width => 500
+@app = Shoes.app :title => "SpLATS", :width => 500
