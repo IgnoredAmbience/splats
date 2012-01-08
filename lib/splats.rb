@@ -27,6 +27,10 @@ module SPLATS
     :!= => :Bool,
     :== => :Bool,
     :=== => :Bool,
+    :< => :Bool,
+    :> => :Bool,
+    :>= => :Bool,
+    :<= => :Bool,
     :to_a => :Array,
     :to_ary => :Array,
 #    :to_c => :Complex,
@@ -38,6 +42,7 @@ module SPLATS
 #    :to_r => :Rational,
     :to_s => :String,
     :to_str => :String,
+    :inspect => :String,
     :to_sym => :Symbol,
   }
 

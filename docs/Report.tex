@@ -1,7 +1,5 @@
 \documentclass{report}
-\usepackage{hyperref}
-\usepackage{graphicx}
-\usepackage{tikz}
+\usepackage{graphicx, hyperref, subfig, tikz, verbatim, wrapfig}
 \usetikzlibrary{shapes,arrows}
 \usepackage[parfill]{parskip}
 \usepackage[a4paper]{geometry}
@@ -9,7 +7,7 @@
 
 \graphicspath{{images/}}
 
-\newcommand{\graphic}[3]{\begin{figure}\includegraphics[#1]{#2}\caption{#3}\end{figure}}
+\newcommand{\graphic}[4]{\begin{figure}\includegraphics[#1]{#2}\caption{#3}\label{#4}\end{figure}}
 
 \title{SpLATS Lazy Automated Test System}
 \author{Ethel Bardsley, Caroline Glassberg-Powell, Christopher Keeley,\\ Joseph Slade and Thomas Wood}
