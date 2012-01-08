@@ -74,6 +74,8 @@ module SPLATS
         values += [[]]
       when :Hash
         values += [{}]
+      when :Unknown
+        values += [Mock]
       end
       values
     end

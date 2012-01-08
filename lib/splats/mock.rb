@@ -33,7 +33,11 @@ module SPLATS
       elsif @object.__SPLATS_orig_respond_to? symbol
         result = @object.__SPLATS_orig_send(symbol, *args, &block)
       else
-        result = Mock.new &@branch_block
+        result = @branch_block.call :Unknown
+        if result == Mock
+          result = Mock.new &@branch_block
+        end
+        result
       end
       @child_objects << ([symbol, result, args])
       #::Kernel.puts "?> Method '#{symbol}' called with arguments #{args} on #{__SPLATS_print} returns #{result.__SPLATS_print}"
