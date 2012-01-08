@@ -7,8 +7,6 @@
 \begin{figure}
   \begin{tikzpicture}
     \coordinate(origin);
-\begin{comment}
-
     \node(core) at (origin) [draw,align=center] {Generate tests};
     \node(control) at ([left=3cm] core) [draw,align=center] {Load classes};
     \node(output) at ([right=3cm] core) [draw,align=center] {Write tests};
@@ -21,7 +19,6 @@
     \draw[->] (output) -> (compare);
     \draw[->] (gui) -> (control);
     \draw[->] (cli) -> (control);
-\end{comment}
   \end{tikzpicture}
 \caption{A short summary of the control flow of SpLATS}
 \end{figure}
@@ -33,7 +30,7 @@
 
   \begin{center}
   \begin{figure}
-%  \input{images/splatsflow}
+  \input{images/splatsflow}
   \caption{A more in-depth summary of the control flow of SpLATS}
   \end{figure}
   \end{center}
