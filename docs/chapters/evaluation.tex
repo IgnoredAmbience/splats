@@ -7,9 +7,10 @@
     Compare two versions of code &
     We can generate tests, which can be easily adapted to be run against another version of the code.
     No direct comparison from within the tool as yet, however. \\
-    Set configuration options & FIAL \\
+    Set configuration options & The user interfaces can be used ot control how the search space is traversed, as well as the input and output options \\
     Inspect code coverage of tests & FIAL \\
-    Reproduce tests & DUNNO \\
+    Reproduce tests & Tests are reproducible, given the same input SpLATS will behave in a deterministic way. For the random traversal a seed is provided as input, so although SpLATS will behave
+    in a pseudorandom way, the tests will be recreatable if the same seed is given.\\
     Have a CLI &
     A simple wrapper for SpLATS was implemented \\
     \hline
@@ -22,7 +23,8 @@
     As it has a CLI suitable for writing scripts around, it is possible to run multiple instances across a distributed system, for example, with Condor, however the tool doesn't distribute a single instance. \\
     \hline
     Have a website &
-    This did not happen as it was less necessary than other things. \\
+    While it would have been useful for any future users it was deemed more important to improve the tool itself. It would be relatively simple to create some online documentation using a tool such as 
+    RDoc\footnote{\url{http://rdoc.sourceforge.net/}} or YARD\footnote{\url{http://yardoc.org/}} \\
     Have different traversal mechaisms &
     There are 3 traversal mechanisms: depth-first, random and manual. \\
     \end{tabular}

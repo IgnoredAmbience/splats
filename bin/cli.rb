@@ -73,11 +73,14 @@ begin
     puts "Error: Use -o OR -O, not both"
     puts
     puts optparse
+    exit
   end 
-  if options[:outdir][0] and File::directory?(options[:outdir][2])
+  if options[:outdir][0] and (File::directory?(options[:outdir][2]) or # If directory exists
+    (options[:outdir][2] == :notgiven and File::directory?("tests/")) ) # If default directory exists
     puts "Error: Directory already exists, use -O to risk overwriting"
     puts 
     puts optparse
+    exit
   end
   
 rescue OptionParser::InvalidOption,OptionParser::MissingArgument => e
