@@ -88,9 +88,22 @@ begin
     puts
     puts optparse
   end 
+
   if options[:outdir][0] and File::directory?(options[:outdir][2])
     puts "Error: Directory already exists, use -O to risk overwriting"
     puts 
+    puts optparse
+  end
+
+  if options[:generate] == options[:compare]
+    puts "Error: You must either be comparing two outputs, or generating an output. You cannot do both"
+    puts
+    puts optparse
+  end
+
+  if options[:compare] and options[:comparee].nil?
+    puts "Error: You have requested that a comparison be done without specifying two files"
+    puts
     puts optparse
   end
 
