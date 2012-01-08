@@ -70,13 +70,18 @@
 \section{Choice of Language}
   Initially the project offered a choice of three languages to target: JavaScript, Python or Ruby. The table below is a comparison of their various features.
 
-  \begin{tabular}{l | c | c | c}
-  & Javascript & Python & Ruby \\
+  \begin{tabular}{| l | c | c | c |}
   \hline
-  Group experience & 4 & 3 & 0 \\
+  \textbf{Feature} & \textbf{Javascript} & \textbf{Python} & \textbf{Ruby} \\
+  \hline
+  Group experience (number of group members) & 4 & 3 & 0 \\
+  \hline
   Typing & Weak, Duck & Strong, Duck & Duck \\
+  \hline
   Purely Object Oriented & No & No & Yes \\
+  \hline
   Functional & No & Yes & Yes \\
+  \hline
   \end{tabular}
   
 These language are all duck typed\footnote{If it walks like a duck and quacks like a duck then it must be a duck}, meaning that an object's current set of variables and functions determines its semantics. When writing tests, the finished code must be 'concrete', which is a difficult challenge to overcome when an object is determined at run-time.

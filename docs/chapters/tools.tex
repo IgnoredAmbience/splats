@@ -10,26 +10,25 @@
     Instead, there were two hour long meetings per week, one directly followed by a meeting with our supervisor.
 
     After trying several online communication methods, we found a project IRC channel was helpful, hosted on EsperNet\footnote{\url{http://esper.net}}.
-    Commit messages to the were posted there, and it was especially useful for discussions during the winter vacation, when we couldn't be in the same physical location.
-    It's also easy to log everything said for reference or filling in members not present.
+    Commit messages from Git were posted there, and it was especially useful for discussions during the winter holidays, when we couldn't be in the same physical location. The conversations are also automatically logged, so members who were not present in the chat room at the time could catch up.
 
-    Commit messages were also posted to a twitter account, which was useful for the members of the group that use the service.
-
+    Commit messages were also posted to a twitter account and mobile phones, useful for the members of the group who use the services.
 
 \section{Development Methods}
 
   \subsection{Working Styles}
-    We tried a number of styles, including individual and pair work, and a long group hack session.
-
-    The hack session worked best.
-    Should have done more of them.
-    Damnit.
+  The majority of the time, the big group meetings would highlight areas of the code or reports which needed working on, ways to resolve the issues would be discussed, and it would be decided to be either a single, pair or group programming session. The group members tend to think about problems in lots of different ways, which was helpful at the early stages of the project, but became more difficult as concrete code needed to be written. Paired programming quickly proved to not work very well, as every member of the group was used to working individually. Paired programming was useful in ten minute chunks, where someone was very stuck and a fresh look helped.
+  A few long sessions were had, where the group members met and sat in a room programming for 12 hours. This helped to keep people focussed, and also to ensure that enough breaks were taken. Unfortunately, due to the conflicting timetables, we were unable to have as many of these sessions as we would have liked, as they worked extremely well and were definitely the most productive.
 
   \subsection{Tools Used}
-    \subsubsection{Code Control}
-      We decided at the outset to use the git\footnote{\url{http://git-scm.com}} revision control system.
-      We had all used it in the past, and were comfortable with it.
-      It is a distributed revision control system, which grants additional flexibility compared to centralized systems, as it allows for such things as offline working and private branches.
+    \subsubsection{Version Control}
+      We decided at the outset to use the git\footnote{\url{http://git-scm.com}} revision control system for various reasons:
+      \begin{itemize}
+      \item We had all used it in the past and were comfortable with it.
+      \item It is a distributed revision control system, which grants additional flexibility compared to centralized systems, as it allows for such things as offline working and private branches.
+      \item It works very well with Unix systems, and all but one of the group runs Unix.
+      \item Git handles complex merging extremely well, and when there is a merge conflict, it is very easy to sort manually.
+      \end{itemize}
 
       For where to host the central repository, we had 3 main options: github\footnote{\url{http://github.com}}, bitbucket\footnote{\url{http://bitbucket.org}} and the department's own servers.
       Some of us already had github accounts and workflows set up for it, however private repositories are a paid-only feature.
@@ -47,8 +46,7 @@
       In addition to a simple WSYWIG interface, it allows for real-time simultaneous editing and collaboration, as well as rudimentary revision control, and as such is well suited to rapid prototyping of a document.
 
       Final drafts were done in \LaTeX\footnote{\url{http://latex-project.org}}, a document markup language and typesetter.
-      \LaTeX is more complex to use than Google Docs, being a programming language in its own right, however it produces `prettier' output.
-      Being written as plain text, it is easiest to track changes using our existing git setup.
+      \LaTeX is more complex to use than Google Docs however it produces `prettier' output. As Latex is written in plain text, this also means that it's easy to track changes using the existing git setup.
 
   \subsection{Code Style Guidelines}
     \begin{itemize}
