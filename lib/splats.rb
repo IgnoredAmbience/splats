@@ -70,8 +70,9 @@ module SPLATS
     # @param [String] output_dir The directory for generated tests to be put
     #
     # @note Directory created if necessary
-    def initialize(input_file, output_dir, traversal)
+    def initialize(input_file, regression_file, output_dir, traversal)
       @input_classes = SPLATS.load_classes input_file
+      @regression_file = regression_file
       if output_dir == :notgiven
         @output_dir = "tests/"
       else 
@@ -87,7 +88,11 @@ module SPLATS
     # Creates tests for every class in the given file
     def test_classes
       @input_classes.each do |c|
-        double_class_test(c)
+        if @regression_file.nil?
+          single_class_test(c)
+        else
+          double_class_test(c,@regression_file)
+        end
       end
     end
 
@@ -124,7 +129,7 @@ module SPLATS
       t.errors
       t.failures
       
-      Object.send(:remove_const, test_first_class.name.to_sym)
+      Object.send(:remove_const, first_test_class.name.to_sym)
 
       load second_test_class
 

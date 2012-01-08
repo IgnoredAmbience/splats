@@ -136,7 +136,7 @@ begin
     traversal_object = SPLATS::DepthLimitedTraversal.new(depth)
   end
   
-  controller = SPLATS::TestController.new(options[:file],options[:outdir][2], traversal_object)
+  controller = SPLATS::TestController.new(options[:file], options[:comparee],options[:outdir][2], traversal_object)
 rescue LoadError
   puts "#{$!} doesn't exist"
   exit
