@@ -26,6 +26,11 @@ SpLATS targets Test::Unit as its output format.
   code such as assignment instead of comparison for equality, type mismatches,
   or dereferencing of null pointers.
 
+  Ultimately, static analysis is hard in Ruby. The nature of the language is that
+  almost all behaviour can be modified at run time; without running the program,
+  it is difficult to infer anything about its behaviour. Furthermore, it was beyond
+  the scope of the project.
+
   \subsection{KLEE}
   KLEE is a KLEE is a symbolic virtual machine that runs on LLVM compiler
   infrastructure. By annotating the inputs as being symbolic, KLEE traces
