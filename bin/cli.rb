@@ -138,7 +138,7 @@ begin
   
   controller = SPLATS::TestController.new(options[:file],options[:outdir][2], traversal_object)
 rescue LoadError
-  puts "File doesn't exist"
+  puts "#{$!} doesn't exist"
   exit
 end
 
