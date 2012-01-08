@@ -33,7 +33,7 @@ optparse = OptionParser.new do |opts|
   end
   
   options[:depth] = [false, nil]
-  opts.on("--depth [DIR]", "-d", "Use depth limited traversal with search space provided depth DEP (default 3)") do |depth|
+  opts.on("--depth [DEP]", "-d", "Use depth limited traversal with search space provided depth DEP (default 3)") do |depth|
     options[:depth] = [true, depth]
   end 
   
@@ -80,8 +80,8 @@ begin
     puts optparse
   end
   
-rescue OptionParser::InvalidOption,OptionParser::MissingArgument
-  puts "Error: Missing argument"
+rescue OptionParser::InvalidOption,OptionParser::MissingArgument => e
+  puts "Error: #{e}"
   puts 
   puts optparse
   exit
