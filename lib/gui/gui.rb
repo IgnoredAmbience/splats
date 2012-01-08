@@ -105,7 +105,6 @@ class SPLATSGUI < Shoes
   def start_tests
     puts @traversal_method
     if @traversal_method == :human
-      p "yay"
       f = nil
       # Cheeky Fiber stuff - create a dummy fiber to allow the
       # transfer methods to work, but keep returning control to
@@ -152,6 +151,10 @@ def text_display selection
       para strong @method
     elsif @selection["type"] == "method"
       para "Select next method to test:"
+    elsif @selection["type"] == "decision"
+      para "Choose decision for type on line number"
+      para strong @selection["line_number"]
+      read_with_line_numbers
     end
   end
 end
@@ -163,28 +166,34 @@ def draw_selections
     
     # Run through all the options to generate buttons for the user to click
     @selection["options"].each do |o|
-      if not o.nil?
-        # If the o is a 'new' method, don't display the button either and carry on
-        button (label_selection o) do
-          if @selection["type"] == "method"
-            @method = o            
-          end
-          if @y_or_n.keys.include? o
-            @display.transfer @y_or_n[o]
-          else
-            @display.transfer o
-          end
-          # Refresh the screen
-          draw_selections
+      l = label_selection o
+      
+      # If the o is a 'new' method, don't display the button either and carry on
+      button l do
+        if @selection["type"] == "method"
+          @method = o            
         end
+        if @y_or_n.keys.include? o
+          @display.transfer @y_or_n[o]
+        else
+          @display.transfer o
+        end
+        # Refresh the screen
+        draw_selections
       end
     end
   end
 end
 
 def label_selection input
-  if input.length == 0
-    "No arguments"
+  if input.nil?
+    return "nil"
+  elsif input.is_a? Array
+    if input.length == 0
+      "No arguments"
+    else
+      input.inspect
+    end
   else
     input.to_s
   end

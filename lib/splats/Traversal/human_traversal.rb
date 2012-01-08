@@ -52,7 +52,7 @@ module SPLATS
         end while (index < 1 || index > decisions.length)
         decisions[index-1]
       else
-        @gc.transfer Hash["type" => "decision", "options" => decisions]
+        @gc.transfer Hash["type" => "decision", "options" => decisions, "line_number" => caller[2].split(':')[1]]
       end
     end
 

@@ -107,3 +107,16 @@ def get_ruby_file
     @file = ask_open_file
   end while @file.nil? || @file[-2, 2] != "rb"
 end
+
+def read_with_line_numbers
+  stack do
+    line_number = 1
+    file = File.new(@file, 'r')
+    lines = ""
+    while (line = file.gets)
+      lines += "#{line_number}: #{line}"
+      line_number += 1
+    end
+    edit_box :width => '100%', :height => 500, :text => lines
+  end
+end
