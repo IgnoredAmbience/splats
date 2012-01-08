@@ -87,7 +87,7 @@ module SPLATS
     # Creates tests for every class in the given file
     def test_classes
       @input_classes.each do |c|
-        single_class_test(c)
+        double_class_test(c)
       end
     end
 
@@ -106,6 +106,35 @@ module SPLATS
         end
       end
     end
-  end
 
+    def double_class_test(first_test_class, second_test_class)
+      cur_testing_class = Generator.new(first_test_class, @traversal)
+
+      require "test/unit"
+      require "flexmock/test_unit"
+      
+      cur_testing_class.test_class do |test|
+        eval("class TestClass < ::Test::Unit::TestCase\ninclude FlexMock::TestCase\n" + test.to_s + "\n" + 'end')
+      end
+      
+      ::Test::Unit::Runner.class_variable_set :@@stop_auto_run, true
+
+      t = MiniTest::Unit.new
+      t.run
+      t.errors
+      t.failures
+      
+      Object.send(:remove_const, test_first_class.name.to_sym)
+
+      load second_test_class
+
+      t = MiniTest::Unit.new
+      t.run
+      t.errors
+      t.failures
+
+    end
+
+    
+  end
 end
