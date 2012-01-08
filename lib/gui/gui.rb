@@ -23,7 +23,7 @@ class SPLATSGUI < Shoes
       
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 3
+    @page = 1
     @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
     @selected_radio = nil
     
