@@ -1,4 +1,4 @@
-\chapter{Toolage}
+\chapter{Software Engineering Methods}
 
 \section{Collaboration and Coordination}
 
@@ -37,9 +37,8 @@
 
       As such, we decided to use bitbucket.
       For the vast majority of the project, it seemed a good choice, stable and available, with the wiki being useful.
-      However, shortly before the deadline for this report, it went down, and we had to switch to a backup repo on the Department of Computing servers.
-
-    \subsection{Documentation Control}
+      However, shortly before the deadline for this report, it went down, and we had to switch to a backup repo on the Department of Computing servers for the purposes of collaboration.  
+    \subsubsection{Documentation Control}
       For writing reports, we primarily used two systems for both writing and revision control.
 
       Initial drafts were done in Google Docs\footnote{\url{http://docs.google.com}}.
@@ -48,12 +47,21 @@
       Final drafts were done in \LaTeX\footnote{\url{http://latex-project.org}}, a document markup language and typesetter.
       \LaTeX is more complex to use than Google Docs, but produces `prettier' output. As Latex is written in plain text, this also means that it's easy to track changes using the existing git setup.
 
+      Code documentation is produced automatically from specially-formatted
+comments in the code using the YARD\footnote{\url{http://yardoc.org}} documentation tool. This parses the source
+code for defined classes, methods and variables and presents them with the
+associated comments. YARD can output documentation in many formats, including
+HTML and in a database format suitable for command-line \texttt{man}-like tools.
+
   \subsection{Code Style Guidelines}
   We followed the standard Ruby naming conventions
     \begin{itemize}
       \item All method, symbol and variable names are wholly lowercase with words seperated by underscores e.g. 'this\_is\_a\_variable'
       \item All class names are capitalised camel case e.g 'ArbitraryClass'
       \item All constants are wholly uppercase with words seperated by underscores e.g 'MAX\_SIZE'
+      \item All project code is placed within the 'SPLATS' module, so not to
+pollute the global namespace. Any methods defined on global
+objects are prefixed with '\_\_SPLATS'.
     \end{itemize}
 
 
@@ -86,7 +94,11 @@
     \end{description}
 
   \subsection{Chris}
-    Stuff on core, outer core
+    Some additions to the mock object
+    Controller
+    CLI features and refactoring, in order to make it more modular once the GUI was added.
+    Created mock object graph
+    
     \begin{description}
       \item[Commits] 21
       \item[Lines]
