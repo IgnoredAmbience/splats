@@ -1,18 +1,16 @@
 \chapter{Architecture}
 
 \section{High Level View}
-
-  At a high level, there is a test generator, an output module, a wrapper to control the two, and either a graphical or command-line interface to control that.
 \begin{center}
 \begin{figure}
   \begin{tikzpicture}
     \coordinate(origin);
-    \node(core) at (origin) [draw,align=center] {Generate tests};
-    \node(control) at ([left=3cm] core) [draw,align=center] {Load classes};
-    \node(output) at ([right=3cm] core) [draw,align=center] {Write tests};
-    \node(compare) at ([right=3cm] output) [draw,align=center] {Compare versions};
-    \node(gui) at ([left=2cm,above=1cm] control) [draw,align=center] {GUI};
-    \node(cli) at ([left=2cm,below=1cm] control) [draw,align=center] {CLI};
+    \node(core) at (origin) [draw] {Generate tests};
+    \node(control) at ([left=3cm] core) [draw] {Load classes};
+    \node(output) at ([right=3cm] core) [draw] {Write tests};
+    \node(compare) at ([right=3cm] output) [draw] {Compare versions};
+    \node(gui) at ([left=2cm,above=1cm] control) [draw] {GUI};
+    \node(cli) at ([left=2cm,below=1cm] control) [draw] {CLI};
 
     \draw[->] (control) -> (core);
     \draw[->] (core) -> (output);
@@ -21,10 +19,13 @@
     \draw[->] (cli) -> (control);
   \end{tikzpicture}
 \caption{A short summary of the control flow of SpLATS}
+\label{fig:Architecture_HighLevel}
 \end{figure}
 \end{center}
 
-    There's an inner core that generates the tests, an outer layer that controls it and handles file input and output, and a wrapper to pass options to the outer layer.
+  Figure \ref{fig:Architecture_HighLevel} shows the overall view of the system. There is a test generator, an output module, a wrapper to control the two, and either a graphical or command-line interface to control that.
+
+    There's an inner core that generates the tests, an outer layer that controls it and handles file input and output, and a wrapper to pass options to the outer layer. These sections are explained in more detail in the following section.
     
 \section{Lower Level Architecture}
 
@@ -32,9 +33,10 @@
   \begin{figure}
   \input{images/splatsflow}
   \caption{A more in-depth summary of the control flow of SpLATS}
+  \label{fig:Architecture_LowLevel}
   \end{figure}
   \end{center}
-  
+  Figure ~\ref{fig:Architecture_LowLevel} shows the workflow at a more in-depth level.
   \begin{enumerate}
   \small
   \item The user starts a UI of their choice, and passes in the file or files to be tested, a directory to put the finished tests, a traversal method and any parameters for that method.
@@ -48,13 +50,14 @@
   
   \subsection{User Interface}
   \subsubsection{Command Line Interface}
-  \subsubsection{Graphical User Interface}
+  \subsubsection{Graphical User Interface (GUI)}
+  The GUI was designed to be as minimalist as possible, with as view button presses as possible. As no one in the group would proclaim to be a designer, the look of the GUI is minimalist as well. The images below are used to illustrate the workflow the user goes through when first loading the GUI.
   \begin{center}
-    \graphic{width=0.8\textwidth}{page_1}{}
-    \graphic{width=0.8\textwidth}{page_2}{}
-    \graphic{width=0.8\textwidth}{page_3}{}
-    \graphic{width=0.8\textwidth}{page_3a}{}
-    \graphic{width=0.8\textwidth}{page_3b}{OMG}
+    \graphic{width=0.8\textwidth}{page_1}{First page - the user must load version 1}{fig:GUI_Page1}
+    \graphic{width=0.8\textwidth}{page_2}{Second page - the user must load version 2}{fig:GUI_Page2}
+    \graphic{width=0.8\textwidth}{page_3}{Third page default selection - Depth-Limited}{fig:GUI_Page3a}
+    \graphic{width=0.8\textwidth}{page_3a}{Third page options}{fig:GUI_Page3b}
+    \graphic{width=0.8\textwidth}{page_3b}{Third page random with seed}{fig:GUI_Page3c}
   \end{center}
 
   \subsection{Output}
