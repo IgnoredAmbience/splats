@@ -85,6 +85,10 @@ module SPLATS
         end
       end
     end
+    
+    def notify_exception_raised exception_raised
+      puts exception_raised
+    end
   end
 end
 

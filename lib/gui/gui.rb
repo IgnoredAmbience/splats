@@ -20,7 +20,7 @@ class SPLATSGUI < Shoes
     background wheat..peru, angle: 45
     # header
     tagline "SpLATS Lazy Automated Test System", :align => "center"
-      
+    image("fly.png").move 400, 400
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
     @page = 1
@@ -29,7 +29,8 @@ class SPLATSGUI < Shoes
     
     #TODO Put this in a config file
     # Defaults
-    @file = '../../samples/LinkedList.rb'
+    @version1 = '../../samples/LinkedList.rb'
+    @version2 = '../../samples/version2/LinkedList.rb'
     @output_dir = 'tests'
     @traversal_method = :depth
     @depth = 2
@@ -38,6 +39,7 @@ class SPLATSGUI < Shoes
     # Put in a dummy depth and seed
     @main = stack :margin => 10 do
     end
+    
     next_page
   end
   
@@ -103,7 +105,6 @@ class SPLATSGUI < Shoes
   end
   
   def start_tests
-    puts @traversal_method
     if @traversal_method == :human
       f = nil
       # Cheeky Fiber stuff - create a dummy fiber to allow the
@@ -119,7 +120,7 @@ class SPLATSGUI < Shoes
       # Wrap the test controller in a fiber, passing the GUI fiber in
       # This determines the value of selection
       f = Fiber.new do |input|
-        controller = SPLATS::TestController.new(@file, @output_dir, @depth, @seed, @traversal_method, @display)
+        controller = SPLATS::TestController.new(@version1, @output_dir, @depth, @seed, @traversal_method, @display)
         controller.test_classes
       end
       
@@ -132,7 +133,7 @@ class SPLATSGUI < Shoes
       # Display the selections to user
       draw_selections
     else
-      controller = SPLATS::TestController.new(@file, @output_dir, @depth, @seed, @traversal_method, @display)
+      controller = SPLATS::TestController.new(@version1, @output_dir, @depth, @seed, @traversal_method, @display)
       controller.test_classes
     end
   end
@@ -209,4 +210,4 @@ def check_controller_error
   end
 end
 
-Shoes.app :title => "SpLATS", :width => 500, :height => 500
+Shoes.app :title => "SpLATS", :width => 500
