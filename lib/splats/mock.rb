@@ -39,16 +39,6 @@ module SPLATS
       #::Kernel.puts "?> Method '#{symbol}' called with arguments #{args} on #{__SPLATS_print} returns #{result.__SPLATS_print}"
       result
     end
-
-    # def __graph_gen
-      # digraph do
-        # @child_objects.each  do |child|
-          # edge @id, child[1].id #[label= @child[0].to_s]
-          # # Call again on child[1]
-        # end
-        # save "mock_graph", "png"
-      # end  
-    # end
     
     # Predicate to test if an object is mock 
     # @return true
@@ -104,6 +94,6 @@ class BasicObject
   end
 
   def __SPLATS_print
-    "some value"
+    inspect
   end
 end

@@ -38,6 +38,7 @@ module SPLATS
 #    :to_r => :Rational,
     :to_s => :String,
     :to_str => :String,
+    :inspect => :String,
     :to_sym => :Symbol,
   }
 
