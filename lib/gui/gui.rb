@@ -48,9 +48,11 @@ class SPLATSGUI < Shoes
     @main.append do
       case @page
         when 1
-          @version1 = ask_for_version "first"
+          # Loads the version 1 variable with the file info
+          ask_for_version "first"
         when 2
-          @version2 = ask_for_version "second"
+          # Loads the version 2 variable with the file info
+          ask_for_version "second"
         when 3
           page_3
         else

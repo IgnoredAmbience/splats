@@ -90,13 +90,18 @@ def ask_for_version name
   button_name = "Load " + name + " version of the code"
   button button_name do
     # Gets the version and displays file info
-    get_ruby_file
+    if name == "first"
+      @version1 = get_ruby_file
+      @file = @version1
+    elsif name == "second"
+      @version2 = get_ruby_file
+      @file = @version2
+    end
     @main.append do
       next_button nil
       para "You have selected: "; para @file, weight: "bold"
       edit_box :width => '100%', :height => 500, :text => File.read(@file)
     end
-    @file
   end
 end
 
@@ -104,8 +109,9 @@ end
 # Doesn't allow the user to cancel!
 def get_ruby_file
   begin
-    @file = ask_open_file
-  end while @file.nil? || @file[-2, 2] != "rb"
+    file = ask_open_file
+  end while file.nil? || file[-2, 2] != "rb"
+  file
 end
 
 def read_with_line_numbers
