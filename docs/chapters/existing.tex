@@ -16,7 +16,15 @@ SpLATS targets Test::Unit as its output format.
 
 \section{Static Analysis}
 
-  Static analysis is a form of code analysis performed without actually executing the code itself.
+  Static analysis is a form of code analysis performed without actually
+  executing the code itself. Generally the code is inspected, possibly
+  transformed into a simpler or more abstract state, and then inferrences
+  are made about the behaviour of the program.
+
+  For example, lint \footnote{\url{http://en.wikipedia.org/wiki/Lint_(software)}}
+  is a tool which was originally designed to detect potential errors in
+  code such as assignment instead of comparison for equality, type mismatches,
+  or dereferencing of null pointers.
 
   \subsection{KLEE}
   KLEE is a KLEE is a symbolic virtual machine that runs on LLVM compiler
