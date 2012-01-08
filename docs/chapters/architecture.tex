@@ -50,7 +50,14 @@
   
   \subsection{User Interface}
   \setcounter{secnumdepth}{4}
-  \subsubsection{Command Line Interface}
+  \subsubsection{Command Line Interface (CLI)}
+  
+  The CLI is a simple wrapper used to interact with SpLATS. 
+  It uses the built-in Ruby OptionParser class, which allowed us to simply specify and analyse the options that the user enters. 
+  The CLI's purpose is to interpret the entered arguments and use them to create the correct traversal object, and to pass the relevant file and output directory to the controller.
+  As it only uses text commands for input, it would be easy for a user to automate the process of testing using a script, so that many tests can be automatically performed without the user needing to manually invoke them every time.
+  If the user enters an invalid command then the CLI will show an error messsage along with an explanation of the commands.
+  
   \subsubsection{Graphical User Interface (GUI)}
   \paragraph{Choice of framework}
   The GUI was initially implemented with a stand-alone Ruby program by \_why called Shoes\footnote{\url{http://shoesrb.com/}}. This came shipped with its own version of Ruby. After some discussion, it was decided that we should try to use as many Gems\footnote{Ruby's equivalent of libraries} as possible, rather than stand-alone programs which the user must install. For this reason, the GUI was ported over to Green Shoes\footnote{\url{https://github.com/ashbb/green_shoes}} which can be installed by the standard "gem install" command, loaded in SpLATS by "require green\_shoes" and run as a normal Ruby file.
