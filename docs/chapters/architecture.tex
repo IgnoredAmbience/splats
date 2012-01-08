@@ -49,15 +49,26 @@
   \end{enumerate}
   
   \subsection{User Interface}
+  \setcounter{secnumdepth}{4}
   \subsubsection{Command Line Interface}
   \subsubsection{Graphical User Interface (GUI)}
-  The GUI was designed to be as minimalist as possible, with as view button presses as possible. As no one in the group would proclaim to be a designer, the look of the GUI is minimalist as well. The images below are used to illustrate the workflow the user goes through when first loading the GUI.
+  \paragraph{Choice of framework}
+  The GUI was initially implemented with a stand-alone Ruby program by \_why called Shoes\footnote{\url{http://shoesrb.com/}}. This came shipped with its own version of Ruby. After some discussion, it was decided that we should try to use as many Gems\footnote{Ruby's equivalent of libraries} as possible, rather than stand-alone programs which the user must install. For this reason, the GUI was ported over to Green Shoes\footnote{\url{https://github.com/ashbb/green_shoes}} which can be installed by the standard "gem install" command, loaded in SpLATS by "require green\_shoes" and run as a normal Ruby file.
+  
+  \paragraph{Design}
+  The GUI was designed to be minimalist with as few buttons as possible. As no one in the group would proclaim to be a designer, the look of the GUI is minimalist as well. The images are used to illustrate the workflow the user goes through when first loading the GUI.
+  
+  Figure \ref{fig:GUI_Page1} shows the page the user sees when they first load a file. Before the file is loaded, the button saying "Load first version of the code" is all they see. There is no other information on the first page, because it is assumed that the user wants to just begin testing and they already know what the program does. The "file open" dialog will not allow the user to cancel, nor allow the user to select a file which isn't '.rb'. Once a valid file is loaded, the "next" button and the text box appear. The text box is there to show the user what the inside of the file looks like, just so they are certain that they have loaded the correct version to test. In future implementations of SpLATS, it would be possible to make this file box editable and saveable, but that does not appear high on the list of priorities.
+  
+  Figure \ref{fig:GUI_Page2} is the same as the first page, only for the second version of the code.
+  Figure \ref{fig:GUI_Page3a} show the options the user then has to traverse the code. As discussed in the traversal methods, SpLATS currently only implements three traversal methods, but more can be added easily into the GUI. As the user changes their selection in the drop-down box, the options in the space below change to update inputs. Figures \ref{fig:GUI_Page3b} and \ref{fig:GUI_Page3c} illustrate this. The "next" button on third page doesn't work unless the extra parameters for "Random" and "Depth-Limited" are correct. Figure \ref{fig:GUI_Page3d} shows what the user sees when they've entered an invalid seed.
   \begin{center}
-    \graphic{width=0.8\textwidth}{page_1}{First page - the user must load version 1}{fig:GUI_Page1}
-    \graphic{width=0.8\textwidth}{page_2}{Second page - the user must load version 2}{fig:GUI_Page2}
-    \graphic{width=0.8\textwidth}{page_3}{Third page default selection - Depth-Limited}{fig:GUI_Page3a}
-    \graphic{width=0.8\textwidth}{page_3a}{Third page options}{fig:GUI_Page3b}
-    \graphic{width=0.8\textwidth}{page_3b}{Third page random with seed}{fig:GUI_Page3c}
+    \graphic{width=0.5\textwidth}{page_1}{First page - the user must load version 1}{fig:GUI_Page1}
+    \graphic{width=0.5\textwidth}{page_2}{Second page - the user must load version 2}{fig:GUI_Page2}
+    \graphic{width=0.5\textwidth}{page_3a}{Third page default selection - Depth-Limited}{fig:GUI_Page3a}
+    \graphic{width=0.5\textwidth}{page_3b}{Third page options}{fig:GUI_Page3b}
+    \graphic{width=0.5\textwidth}{page_3c}{Third page random with seed}{fig:GUI_Page3c}
+    \graphic{width=0.5\textwidth}{page_3d}{Third page seed input error}{fig:GUI_Page3d}
   \end{center}
 
   \subsection{Output}
