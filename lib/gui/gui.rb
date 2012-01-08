@@ -120,6 +120,7 @@ class SPLATSGUI < Shoes
   def start_tests
     if @traversal_method == :human
       f = nil
+      @depth = 1
       # Cheeky Fiber stuff - create a dummy fiber to allow the
       # transfer methods to work, but keep returning control to
       # this main thread
@@ -156,19 +157,21 @@ def text_display selection
   if @selection["type"] == :y_or_n
     para @selection["question"]
     @selection["options"] = @y_or_n.keys
-    # Make method 'nil' as we've moved on
+    # Make method 'nil' as we've moved on, and depth 1 again
     @method = nil
+    @depth = 1
   else
     if @selection["type"] == "arguments"
       @method ||= "initialise"
-      para "Current method:"
-      para strong @method
+      flow do
+        para "Current method:", :width => 300
+        para strong @method
+      end
     elsif @selection["type"] == "method"
-      para "Select next method to test:"
+      @depth += 1
+      para "Select next method to test (current depth)"
     elsif @selection["type"] == "decision"
-      para "Choose decision for type on line number"
-      para strong @selection["line_number"]
-      read_with_line_numbers
+      para "Choose decision for type on line number " + @selection["line_number"]
     end
   end
 end
@@ -179,30 +182,33 @@ def draw_selections
     text_display @selection
     
     # Run through all the options to generate buttons for the user to click
-    @selection["options"].each do |o|
-      l = label_selection o
-      
-      # If the o is a 'new' method, don't display the button either and carry on
-      button l do
-        if @selection["type"] == "method"
-          @method = o            
+    flow do
+      @selection["options"].each do |o|
+        l = label_selection o
+        
+        # If the o is a 'new' method, don't display the button either and carry on
+        button l do
+          if @selection["type"] == "method"
+            @method = o            
+          end
+          if @y_or_n.keys.include? o
+            @display.transfer @y_or_n[o]
+          else
+            @display.transfer o
+          end
+          # Refresh the screen
+          draw_selections
         end
-        if @y_or_n.keys.include? o
-          @display.transfer @y_or_n[o]
-        else
-          @display.transfer o
-        end
-        # Refresh the screen
-        draw_selections
       end
+    end
+    if @selection["type"] == "decision"
+      read_with_line_numbers
     end
     display_graph
   end
 end
 
 def display_graph
-  para "Current depth:"
-  para strong 2
   image("graph.png")
 end
 

@@ -117,7 +117,7 @@ end
 def read_with_line_numbers
   stack do
     line_number = 1
-    file = File.new(@file, 'r')
+    file = File.new(@version1, 'r')
     lines = ""
     while (line = file.gets)
       lines += "#{line_number}: #{line}"
