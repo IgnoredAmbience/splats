@@ -5,7 +5,7 @@ digraph {
   "initialise" -> a1
   "initialise" -> a2
   "initialise" -> a3
-  b1[label=push]
+  b1[label=push, style=filled, fillcolor=green]
   b2[label=pop]
   b3[label="delete!"]
   b4[label=each]
