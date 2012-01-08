@@ -1,0 +1,8 @@
+digraph {
+  a1[label="No arguments"];
+  a2[label="[An argument]"];
+  a3[label="[nil]"];
+  "initialise" -> a1
+  "initialise" -> a2
+  "initialise" -> a3
+}

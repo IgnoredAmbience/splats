@@ -5,23 +5,47 @@
 \section{Test Frameworks}
 
   \subsection{Test::Unit}
-    Ruby comes shipped with this module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}} which offers to programmers the ability to write test suites, tests and cases.
-    The tests are not automatically produced, and are not automatically run on later versions of the code.
+    The Ruby standard library includes this
+module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}}
+which offers to programmers the framework on which test suites can be written
+and executed.
+
+Many other competing testing frameworks exist, most providing little added
+benefit other than syntactical differences.
+
+SpLATS targets Test::Unit as its output format.
 
 \section{Static Analysis}
 
+  Static analysis is a form of code analysis performed without actually executing the code itself.
+
   \subsection{KLEE}
+    KLEE\footnote{\url{http://klee.llvm.org}}
 
 \section{Dynamic Analysis} 
 
+  Dynamic analysis is where the code is analyzed as it is executed in some way.
+
   \subsection{ZenTest}
-    ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}} uses Ruby's Test::Unit to automatically test code, both blackbox and whitebox.
-    As a file is saved, ZenTest automatically runs itself again.
-    ZenTest uses code coverage to highlight tests which need to be written by the developer, and generates stubs for these.
-    ZenTest also uses whitebox testing to check if a method has been implemented or not.
-    Whilst this tool is extremely useful, it still expects developers to write the tests themselves.
-    The aim of SpLATS is to focus the attention away from writing tests, and to allow a developer to just code.
-    The aim of ZenTest is to make test writing as easy as possible.
+    ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}}
+comprises of a suite of 4 tools designed to assist a software developer with
+writing tests for their Ruby code. The tool of particular interest within the suite is itself called ZenTest,
+it aims to speed the writing of tests by inspecting the class under test (CUT)
+and the test class (TC) for the CUT.
+
+    ZenTest compares the functions defined on the CUT with the methods defined
+on the TC. It then produces stub test methods on the TC for those methods on the
+CUT it believes are untested.
+
+    The deduction of which methods are being tested is performed by analysing
+the method names, ZenTest assumes that for every method, \emph{name}, on the
+CUT, then there should be a corresponding test method on the TC will be named
+with a prefix of \texttt{test\_\emph{name}}. This is a very superficial and
+basic method for determining whether a class is fully tested.
+
+    Whilst this tool is extremely useful, it still expects developers to write
+the tests themselves. The aim of SpLATS is to focus the attention away from
+writing tests, and to allow a developer to just code.
 
   \subsection{IRULAN}
     IRULAN\footnote{\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis.
@@ -32,6 +56,31 @@
     Some of the methods outlined here are useful.
 
   \subsection{Randoop}
-    Randoop\footnote{\url{http://code.google.com/p/randoop/}} is another directed random testing framework, like IRULAN, but for Java.
-    It generates a progressively growing sequence of method calls, before running standard tests (eg, \verb|o.equals(o)|).
+    Randoop\footnote{\url{http://code.google.com/p/randoop/}} is another
+feedback-directed random testing framework for Java.
+
+    It generates a progressively growing sequence of method calls, which are
+then executed and checked to see if the result is useful, redundant, illegal or
+contract-violating. The test is then reused as a seed if determined to be
+useful.
+
+    Contract-violating test cases are also output as a means of highlighting
+that the CUT violates a semantic rule. The standard contracts are derived from
+the Java Language Specification. Further contracts can be added to the system by
+the user.
+
     It has been used to find errors in a number of commonly used libraries.
+
+  \subsection{RuTeG}
+    RuTeG\footnote{S. Mairhofer, R. Feldt, R. Torkar, Search-based software
+testing and Test Data Generation for a Dynamic Programming Language} (Ruby Test
+case Generator) is a project with similar aims to SpLATS, but approaches the
+problem from a slightly different angle.
+
+RuTeG attempts to find the appropriate type of variable to pass into the CUT
+methods by using a selecting data generator for each argument. This selection
+forms a part of the search space of the test generation, which is directed using
+a genetic algorithm.
+
+RuTeG was successful in its aims to achieve higher-level coverage at a faster
+rate than a random search method.
