@@ -1,14 +1,13 @@
-\chapter{The State of the Art}
+\chapter{Existing Products}
 
-  There are a number of existing products that perform similar tasks, using a variety of approaches, for a variety of areas.
+There are a number of existing products which perform sub-tasks of what SpLATS offers, but none of them offer a complete solution for automatic testing of Ruby code. Some of the existing products have become integral to SpLATS and others have offered ides.
 
 \section{Test Frameworks}
 
   \subsection{Test::Unit}
     The Ruby standard library includes this
 module\footnote{\url{http://www.ruby-doc.org/stdlib-1.9.2/libdoc/test/unit/rdoc/Test/Unit.html}}
-which offers to programmers the framework on which test suites can be written
-and executed.
+which is a testing framework.
 
 Many other competing testing frameworks exist, most providing little added
 benefit other than syntactical differences.
@@ -30,22 +29,18 @@ SpLATS targets Test::Unit as its output format.
     ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}}
 comprises of a suite of 4 tools designed to assist a software developer with
 writing tests for their Ruby code. The tool of particular interest within the suite is itself called ZenTest,
-it aims to speed the writing of tests by inspecting the class under test (CUT)
+which aims to speed the writing of tests by inspecting the class under test (CUT)
 and the test class (TC) for the CUT.
 
     ZenTest compares the functions defined on the CUT with the methods defined
 on the TC. It then produces stub test methods on the TC for those methods on the
 CUT it believes are untested.
 
-    The deduction of which methods are being tested is performed by analysing
-the method names, ZenTest assumes that for every method, \emph{name}, on the
-CUT, then there should be a corresponding test method on the TC will be named
-with a prefix of \texttt{test\_\emph{name}}. This is a very superficial and
-basic method for determining whether a class is fully tested.
+ZenTest deduces which methods are being tested by analysing the method names; assuming that for every method, \emph{name}, on the CUT there should be a corresponding method on the TC named \texttt{test\_\emph{name}}. This is a very superficial and basic method for determining whether or not a class is completely tested.
 
     Whilst this tool is extremely useful, it still expects developers to write
 the tests themselves. The aim of SpLATS is to focus the attention away from
-writing tests, and to allow a developer to just code.
+writing tests, and to allow a developer to just write code.
 
   \subsection{IRULAN}
     IRULAN\footnote{\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis.
@@ -78,7 +73,7 @@ case Generator) is a project with similar aims to SpLATS, but approaches the
 problem from a slightly different angle.
 
 RuTeG attempts to find the appropriate type of variable to pass into the CUT
-methods by using a selecting data generator for each argument. This selection
+methods by using a "selecting data generator" for each argument. This selection
 forms a part of the search space of the test generation, which is directed using
 a genetic algorithm.
 
