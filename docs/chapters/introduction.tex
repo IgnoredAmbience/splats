@@ -1,10 +1,12 @@
 \chapter{Introduction}
 
-This report is the presentation of our third year group project, SpLATS Lazy Automated Test System (SpLATS).
+This report is the presentation of our third year group project, SpLATS Lazy Automated Test System (SpLATS). SpLATS is intended for Ruby developers.
 
-The aim of this project is to automatically generate regression tests\footnote{Testing to confirm two versions of a piece of code are functionally the same} for Ruby programs.
-It is intended for Ruby developers, to aid development by removing the need to such tests by hand.
-This would save them time, and could find edge cases they may not immediately recognize.
+The aim of this project is to automatically perform regression testing\footnote{Testing to confirm two versions of a piece of code are functionally the same} for Ruby programs. In agile development, a piece of code may be refactored multiple times. Therefore it is important to ensure the latest version of the code has the same functionality as the previous versions; provided the programmer wants the versions to do the same thing. SpLATS aims to automate the testing of this process by automatically generating tests for one version of code, and running those same tests against the revised version. The differences between the two versions are made apparent by how many tests are passed. A graph of the process can be displayed to the user, and an HTML page of the percentage of code tested by SpLATS is also available to the user at the end.
+
+As SpLATS produces test files, it may also be used as a basis for writing tests. Although this goes against the concept of test-driven development, it could be useful for pre-existing products which need a better test base. It is hoped that SpLATS will save time and find edge cases in code that may not immediately have been apparent.
+
+There are two ways of interacting with the system: a Command Line Interface (CLI) and a Graphical User Interface (GUI).
 
 The original proposal for the project can be found on CATE\footnote{\url{https://cate.doc.ic.ac.uk/projects/proposals.cgi?key=2011:1:show-2147}}.
 
