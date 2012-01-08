@@ -19,6 +19,16 @@ SpLATS targets Test::Unit as its output format.
   Static analysis is a form of code analysis performed without actually executing the code itself.
 
   \subsection{KLEE}
+  KLEE is a KLEE is a symbolic virtual machine that runs on LLVM compiler
+  infrastructure. By annotating the inputs as being symbolic, KLEE traces
+  different paths of execution through the code dependent on the value of
+  these annoted variables.
+
+  The idea of SpLATS was not to have to annotate parts of the code; we
+  wished to liberate the programmer from having to write their own tests,
+  and having to annotate code is sufficiently close to this that it was
+  deemed to be unsuitable.
+
     KLEE\footnote{\url{http://klee.llvm.org}}
 
 \section{Dynamic Analysis} 
