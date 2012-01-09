@@ -41,7 +41,7 @@
       For writing reports, we primarily used two systems for both writing and revision control.
 
       Initial drafts were done in Google Docs\footnote{\url{http://docs.google.com}}.
-      In addition to a simple WSYWIG interface, it allows for real-time simultaneous editing and collaboration, as well as rudimentary revision control, and as such is well suited to rapid prototyping of a document.
+      In addition to a simple WSYWIG\footnote{``What You See Is What You Get''} interface, it allows for real-time simultaneous editing and collaboration, as well as rudimentary revision control, and as such is well suited to rapid prototyping of a document.
 
       Final drafts were done in \LaTeX\footnote{\url{http://latex-project.org}}, a document markup language and typesetter.
       \LaTeX is more complex to use than Google Docs, but produces `prettier' output. As \LaTeX is written in plain text, this also means that it's easy to track changes using the existing git setup.
@@ -55,12 +55,12 @@ HTML and in a database format suitable for command-line \texttt{man}-like tools.
   \subsection{Code Style Guidelines}
   We followed the standard Ruby naming conventions
     \begin{itemize}
-      \item All method, symbol and variable names are wholly lowercase with words seperated by underscores e.g. 'this\_is\_a\_variable'
-      \item All class names are capitalised camel case e.g 'ArbitraryClass'
-      \item All constants are wholly uppercase with words seperated by underscores e.g 'MAX\_SIZE'
-      \item All project code is placed within the 'SPLATS' module, so not to
+      \item All method, symbol and variable names are wholly lowercase with words seperated by underscores e.g. \texttt{this\_is\_a\_variable}
+      \item All class names are capitalised camel case e.g \texttt{ArbitraryClass}
+      \item All constants are wholly uppercase with words seperated by underscores e.g \texttt{MAX\_SIZE}
+      \item All project code is placed within the \texttt{SPLATS} module, so not to
 pollute the global namespace. Any methods defined on global
-objects are prefixed with '\_\_SPLATS'.
+objects are prefixed with \texttt{\_\_SPLATS}.
     \end{itemize}
 
 
