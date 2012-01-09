@@ -64,22 +64,23 @@ reach full coverage to the random traversal strategy.
 
     The test classes used were:
     \begin{itemize}
-      \item Addition - 1 plus the argument, used to test Ruby's arithmetic
+      \item \textbf{Addition}: 1 plus the argument, used to test Ruby's arithmetic
 internals
-      \item SimpleTest - Tests arbitrary methods called upon arguments to the
+      \item \textbf{SimpleTest}: Tests arbitrary methods called upon arguments to the
 function, branches based upon the result of the method call
-      \item LinkedList - A standard LinkedList implementation, uses both
+      \item \textbf{LinkedList}: A standard LinkedList implementation, uses both
 iterative and recursive algorithms
-      \item QuickSort - A recursive quick sort implementation
-      \item ISBN-Tools - An open-source library to check the validity of ISBN
+      \item \textbf{QuickSort}: A recursive quick sort implementation
+      \item \textbf{ISBN-Tools}: An open-source library to check the validity of ISBN
 numbers, makes heavy use of regular expressions and string methods
     \end{itemize}
 
   \subsubsection{Result}
 
-    \begin{tabular}{|l|cccc|}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{CUT} & \textbf{Search Depth (Mock Depth)} & \textbf{Generation Time/m:s} & \textbf{Tests} & \textbf{Coverage} \\
+\textbf{CUT} & \textbf{Search Depth} & \textbf{Generation Time/m:s} & \textbf{Tests} & \textbf{Coverage} \\
+& \textbf{(Mock Depth)} & & & \\
 \hline
 Addition & 2 & 0:0.051 & 6 & 3/3 (100\%) \\
 \hline
@@ -100,14 +101,15 @@ ISBN-Tools & 2 (1) & 0:0.056 & 13 & 10/16 (63\%) \\
 \end{tabular}
 
 \subsubsection{Analysis}
-  The simplest classes (Addition and SimpleTest) easily achieved 100\% coverage at the minimum reasonable depth (2).
-This is because their output values are not dependent upon the object's internal state, thus every execution path can be reached from the first instance method calls.
+  The simplest classes (Addition and SimpleTest) easily achieved 100\% coverage at the minimum reasonable depth of 2.
+This is because their output values are not dependent upon the object's internal state so every execution path can be reached from the first method called after the constructor.
 
   LinkedList is a more interesting example as its internal state determines the output.
-It can be seen that at a depth of 2, only three-quarters of the lines can be reached, this is because the majority of the execution paths depend upon a list containing more than one element, which is only just possible at a depth of 2.
+It can be seen that at a depth of 2, only three-quarters of the lines can be reached as the majority of the execution paths depend on a list containing more than one element, which is only just possible at a depth of 2.
 
-  At a depth of 3 almost all of the lines are accessable to the tests, except for two.
-The first of these is only reachable in a list of more than two elements, again not possible at this traversal depth. It is seen to be reached at a depth of 4.
+  At a depth of 3 almost all of the lines are accessible to the tests, except for two.
+The first of these is only reachable in a list of more than two elements, again not possible at this traversal depth.
+This is possible at a depth of 4.
 
   The remaining uncovered line is never reached because it is immediately preceded by a line that is outside of our Lightweight Ruby specification.
 This line always raises an Exception, (due to trying to yield to a non-existant block) meaning that the uncovered line is unreachable by our test generator.
@@ -129,3 +131,9 @@ As both of these classes call many methods upon the mock objects, QuickSort thro
     \subsubsection{Design}
     \subsubsection{Implementation}
     \subsubsection{Testing}
+    
+\subsection{Testing of GUI}
+The underlying code of SpLATS has been tested, and so it is assumed that the GUI will work provided all the buttons do what they say they will.
+A thorough run-through of the GUI was performed with complicated and simple execution paths. Some errors were found, and these were easily uncovered and easily fixed.
+There are a few libraries which exist that can be used to automatically test Ruby GUIs.
+With so few buttons and a very limited range of behaviours, these were deemed too complicated to learn for very little benefit.
