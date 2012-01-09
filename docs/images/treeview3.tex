@@ -53,7 +53,9 @@
 \begin{scope}
   \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
   \pgfsetstrokecolor{strokecol}
-  \draw (117bp,90bp) ellipse (27bp and 18bp);
+  \definecolor{fillcol}{rgb}{0.0,1.0,0.0};
+  \pgfsetfillcolor{fillcol}
+  \filldraw [opacity=1.0] (117bp,90bp) ellipse (27bp and 18bp);
   \draw (117bp,90bp) node {push};
 \end{scope}
   % Node: b2
