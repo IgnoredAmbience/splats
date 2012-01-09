@@ -4,69 +4,85 @@
 %%
 \pgfsetcolor{black}
   % Edge: Generator -> TestController
-  \draw [->] (78.932bp,104.75bp) .. controls (90.216bp,110.24bp) and (102bp,117.86bp)  .. (110bp,128bp) .. controls (121.99bp,143.21bp) and (127.46bp,164.45bp)  .. (131.19bp,191.75bp);
+  \draw [->] (130.91bp,180.28bp) .. controls (131.71bp,188.03bp) and (131.94bp,197.36bp)  .. (130.88bp,216.05bp);
   \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
   \pgfsetstrokecolor{strokecol}
-  \draw (144bp,145bp) node {Tests};
-  \draw (89bp,99bp) node {5};
-  % Edge: CLI/GUI -> TestController
-  \draw [->] (132bp,323.74bp) .. controls (132bp,301.98bp) and (132bp,264.32bp)  .. (132bp,228.33bp);
-  \draw (190bp,292bp) node {Input file};
-  \draw (190bp,277bp) node {Test output directory};
-  \draw (190bp,262bp) node {Traversal method};
-  \draw (190bp,247bp) node {Traversal parameters};
-  \draw (128bp,308bp) node {1};
-  % Edge: Traversal -> Generator
-  \draw [->] (51.827bp,35.941bp) .. controls (52.718bp,44.261bp) and (52.964bp,54.49bp)  .. (51.84bp,73.937bp);
-  \draw (57bp,38bp) node {4};
-  % Edge: TestController -> Generator
-  \draw [->] (72.018bp,205.98bp) .. controls (49.858bp,201.59bp) and (26.805bp,192.45bp)  .. (13bp,174bp) .. controls (0.7518bp,157.63bp) and (5.4548bp,147bp)  .. (13bp,128bp) .. controls (14.675bp,123.78bp) and (17.126bp,119.78bp)  .. (26.561bp,108.54bp);
-  \draw (62bp,152bp) node {Class};
-  \draw (62bp,137bp) node {Traversal method};
-  \draw (62bp,202bp) node {2};
+  \draw (136bp,182bp) node {7};
   % Edge: TestController -> TestFile
-  \draw [->] (148.92bp,192.32bp) .. controls (153.71bp,186.86bp) and (158.55bp,180.51bp)  .. (162bp,174bp) .. controls (170.89bp,157.2bp) and (176.44bp,136.5bp)  .. (181.59bp,110.26bp);
-  \draw (224bp,160bp) node {Tests};
-  \draw (224bp,145bp) node {Requirements};
-  \draw (224bp,130bp) node {Output directory};
-  \draw (152bp,176bp) node {6};
+  \draw [->] (148.34bp,217.29bp) .. controls (163.4bp,207.16bp) and (183.12bp,193.88bp)  .. (207.86bp,177.23bp);
+  \draw (153bp,202bp) node {8};
+  % Edge: Class Under Test -> Mock
+  \draw [->] (173.26bp,35.789bp) .. controls (178.15bp,43.848bp) and (183.31bp,53.694bp)  .. (191.41bp,72.055bp);
+  \draw (182bp,35bp) node {5};
+  % Edge: Mock -> Class Under Test
+  \draw [->] (180.51bp,73.465bp) .. controls (175.48bp,65.334bp) and (170.1bp,55.147bp)  .. (161.8bp,36.461bp);
+  % Edge: Class Under Test -> Generator
+  \draw [->] (159.46bp,36.268bp) .. controls (156.18bp,60.714bp) and (145.69bp,105.63bp)  .. (133.59bp,144.15bp);
+  % Edge: CLI/GUI -> TestController
+  \draw [->] (125bp,287.7bp) .. controls (125bp,279.98bp) and (125bp,270.71bp)  .. (125bp,252.1bp);
+  \draw (121bp,272bp) node {1};
+  % Edge: TestController -> Generator
+  \draw [->] (119.12bp,216.05bp) .. controls (118.3bp,208.35bp) and (118.06bp,199.03bp)  .. (119.09bp,180.28bp);
+  \draw (114bp,201bp) node {2};
+  % Edge: Generator -> Mock
+  \draw [->] (135.51bp,144.41bp) .. controls (144.15bp,134.56bp) and (156.43bp,121.98bp)  .. (175.07bp,104.65bp);
+  % Edge: Mock -> Generator
+  \draw [->] (183.89bp,107.13bp) .. controls (175.63bp,116.59bp) and (163.9bp,128.68bp)  .. (145.65bp,145.81bp);
+  \draw (181bp,110bp) node {6};
   % Edge: Generator -> Traversal
-  \draw [->] (40.16bp,73.937bp) .. controls (39.275bp,65.598bp) and (39.036bp,55.364bp)  .. (40.173bp,35.941bp);
-  \draw (35bp,59bp) node {3};
+  \draw [<->] (106.62bp,145.12bp) .. controls (89.697bp,130.49bp) and (79.177bp,121.4bp)  .. (62.028bp,106.58bp);
+  \draw (97bp,136bp) node {3};
+  % Edge: Generator -> Class Under Test
+  \draw [->] (124.52bp,143.87bp) .. controls (127.77bp,119.56bp) and (138.2bp,74.819bp)  .. (150.29bp,36.189bp);
+  \draw (122bp,128bp) node {4};
   % Node: CLI/GUI
 \begin{scope}
   \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
   \pgfsetstrokecolor{strokecol}
-  \draw (132bp,342bp) ellipse (42bp and 18bp);
-  \draw (132bp,342bp) node {CLI/GUI};
-\end{scope}
-  % Node: TestController
-\begin{scope}
-  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
-  \pgfsetstrokecolor{strokecol}
-  \draw (132bp,210bp) ellipse (62bp and 18bp);
-  \draw (132bp,210bp) node {TestController};
-\end{scope}
-  % Node: TestFile
-\begin{scope}
-  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
-  \pgfsetstrokecolor{strokecol}
-  \draw (184bp,92bp) ellipse (39bp and 18bp);
-  \draw (184bp,92bp) node {TestFile};
+  \draw (125bp,306bp) ellipse (42bp and 18bp);
+  \draw (125bp,306bp) node {CLI/GUI};
 \end{scope}
   % Node: Generator
 \begin{scope}
   \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
   \pgfsetstrokecolor{strokecol}
-  \draw (46bp,92bp) ellipse (46bp and 18bp);
-  \draw (46bp,92bp) node {Generator};
+  \draw (125bp,162bp) ellipse (46bp and 18bp);
+  \draw (125bp,162bp) node {Generator};
+\end{scope}
+  % Node: Class Under Test
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (159bp,18bp) ellipse (71bp and 18bp);
+  \draw (159bp,18bp) node {Class Under Test};
 \end{scope}
   % Node: Traversal
 \begin{scope}
   \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
   \pgfsetstrokecolor{strokecol}
-  \draw (46bp,18bp) ellipse (44bp and 18bp);
-  \draw (46bp,18bp) node {Traversal};
+  \draw (44bp,90bp) ellipse (44bp and 18bp);
+  \draw (44bp,90bp) node {Traversal};
+\end{scope}
+  % Node: TestController
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (125bp,234bp) ellipse (62bp and 18bp);
+  \draw (125bp,234bp) node {TestController};
+\end{scope}
+  % Node: TestFile
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (229bp,162bp) ellipse (39bp and 18bp);
+  \draw (229bp,162bp) node {TestFile};
+\end{scope}
+  % Node: Mock
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (194bp,90bp) ellipse (31bp and 18bp);
+  \draw (194bp,90bp) node {Mock};
 \end{scope}
 %
 \end{tikzpicture}
