@@ -46,7 +46,21 @@ optparse = OptionParser.new do |opts|
   opts.on("--manual", "-m", "Use manual traversal") do |seed|
     options[:manual] = [true]
   end
+
+  options[:generate] = false
+  opts.on("--generate", "-G", "Generate a set of tests for the given file") do |gen|
+    options[:generate] = true
+  end
   
+  options[:compare] = false
+  opts.on("--compare", "-C", "Generate a set of tests based on the first file, and then run those tests on the second file") do |comp|
+    options[:compare] = true
+  end
+
+  options[:comparee] = nil
+  opts.on("--comparee-object-from-file FILE", "-g", "Second test classes from file. File & class must share names") do |file|
+    options[:comparee] = file
+  end
 end
 
 
@@ -82,7 +96,19 @@ begin
     puts optparse
     exit
   end
-  
+
+  if options[:generate] == options[:compare]
+    puts "Error: You must either be comparing two outputs, or generating an output. You cannot do both"
+    puts
+    puts optparse
+  end
+
+  if options[:compare] and options[:comparee].nil?
+    puts "Error: You have requested that a comparison be done without specifying two files"
+    puts
+    puts optparse
+  end
+
 rescue OptionParser::InvalidOption,OptionParser::MissingArgument => e
   puts "Error: #{e}"
   puts 
@@ -110,9 +136,9 @@ begin
     traversal_object = SPLATS::DepthLimitedTraversal.new(depth)
   end
   
-  controller = SPLATS::TestController.new(options[:file],options[:outdir][2], traversal_object)
+  controller = SPLATS::TestController.new(options[:file], options[:comparee],options[:outdir][2], traversal_object)
 rescue LoadError
-  puts "File doesn't exist"
+  puts "#{$!} doesn't exist"
   exit
 end
 
