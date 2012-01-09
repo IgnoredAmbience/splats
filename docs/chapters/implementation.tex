@@ -22,6 +22,12 @@ the \texttt{chr}
 function, each of which have the same functionality, but would not appear the same
 to the execution structure on the Mock objects.
 
+    Implementing the output of the execution structure was also challenging,
+Mock libraries exist for test suites, but vary in terms of features and
+flexibility. The default Mock library bundled with Ruby, MiniTest::Mock does not
+support returning multiple values in succession for the same call. An
+alternative, FlexMock was chosen as it can support this use-case.
+
   \subsection{Search Space Size}
     The search space of the program grows considerably, if using a complete
 approach to traversing the tree then many repetitive and redundant tests are

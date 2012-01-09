@@ -189,4 +189,8 @@ easy to write and use new traversal mechanisms and data generators.
     Initially, the Tests were stored until the Generator had finished, before being wrapped and output to a regular File.
     However, Tests store all the Mock objects associated with them, and thus this was changed so they could be garbage collected as soon as possible to reduce memory footprint.
     
-    
+     The tests are output in the Test::Unit framework style. The FlexMock library
+is used for the ability to assert that calls should be made upon the inputs to
+functions and to track the source of the outputs. The FlexMock invocations are a
+representation of the calls made on the SpLATS Mock objects during the test
+generation stage.
