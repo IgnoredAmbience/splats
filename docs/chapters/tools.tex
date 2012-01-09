@@ -4,21 +4,20 @@
 
   \subsection{Meeting Styles}
     The group first tried short, daily meetings, with longer meetings where possible or necessary.
-    We quickly found that conflicting schedules made the short meetings impossible for all group members to attend and served little purpose, most days not enough progress was made to warrant discussion.
-    Daily meetings would be useful in a workplace scenario where considerable time is spent every day and team members will all be present, quite different to the timetable of our group who combined covered seven lecture series and two humanities options.
-
-    Instead, there were two hour long meetings per week, one directly followed by a meeting with our supervisor.
+    We quickly found that conflicting schedules made the short meetings impossible for all group members to attend and served little purpose: most days not enough progress was made to warrant discussion.
+    Daily meetings are useful in the workplace where team members can meet everyday for considerable periods of time. They are not so possible when the group members between them do seven modules and two humanities options. Therefore, there were two hour-long meetings per week, where one was directly followed by a meeting with the project supervisor.
 
     After trying several online communication methods, we found a project IRC channel was helpful, hosted on EsperNet\footnote{\url{http://esper.net}}.
     Commit messages from Git were posted there, and it was especially useful for discussions during the winter holidays, when we couldn't be in the same physical location. The conversations are also automatically logged, so members who were not present in the chat room at the time could catch up.
 
-    Commit messages were also posted to a twitter account and mobile phones, useful for the members of the group who use the services.
+    Commit messages were also posted to a twitter account and mobile phones.
 
 \section{Development Methods}
 
   \subsection{Working Styles}
-  The majority of the time, the big group meetings would highlight areas of the code or reports which needed working on, ways to resolve the issues would be discussed, and it would be decided to be either a single, pair or group programming session. The group members tend to think about problems in lots of different ways, which was helpful at the early stages of the project, but became more difficult as concrete code needed to be written. Paired programming quickly proved to not work very well, as every member of the group was used to working individually. Paired programming was useful in ten minute chunks, where someone was very stuck and a fresh look helped.
-  A few long sessions were had, where the group members met and sat in a room programming for 12 hours. This helped to keep people focussed, and also to ensure that enough breaks were taken. Unfortunately, due to the conflicting timetables, we were unable to have as many of these sessions as we would have liked, as they worked extremely well and were definitely the most productive.
+  The big group meetings would highlight areas where group members were having problems. Possible ways to resolve the issues were discussed, and it would be decided how to proceed with the problem. The big meetings would also establish what each team member would be doing for the week. When one member of the group had an issue, another member of the group would sit down with them to help solve the problem. The paired programming would not last for too long, as it was discovered early on that we make more progress when working individually. This is because all five of us think about problems in different ways, which was helpful in the early stages of the project when deciding how to continue, but became a bit more problematic towards the end. This is because there would be many ideas of how to solve the problem, and time constraints started to press and concrete code needed writing.
+  
+  Big programming sessions happened occassionally, and these proved to be the most productive. The group would sit in the same room, working on their individual sections. This ensured that everyone continued to work throughout the day, but it also ensured that breaks were had when needed. Towards the end of the project, these sessions happened more frequently, and it's a shame that timetable constraints during the term meant that we were unable to do this as often as we would have liked.
 
   \subsection{Tools Used}
     \subsubsection{Version Control}
@@ -35,7 +34,7 @@
       The department's own servers have good uptime, but have been known to become inaccessable at short notice, and they don't offer as many options or extra features as the others.
       Bitbucket allow private repositories for unpaid accounts, and have other additional extras, such as a project wiki and bug tracking system.
 
-      As such, we decided to use bitbucket.
+      As such, we decided to use Bitbucket.
       For the vast majority of the project, it seemed a good choice, stable and available, with the wiki being useful.
       However, shortly before the deadline for this report, it went down, and we had to switch to a backup repo on the Department of Computing servers for the purposes of collaboration.  
     \subsubsection{Documentation Control}
@@ -45,7 +44,7 @@
       In addition to a simple WSYWIG interface, it allows for real-time simultaneous editing and collaboration, as well as rudimentary revision control, and as such is well suited to rapid prototyping of a document.
 
       Final drafts were done in \LaTeX\footnote{\url{http://latex-project.org}}, a document markup language and typesetter.
-      \LaTeX is more complex to use than Google Docs, but produces `prettier' output. As Latex is written in plain text, this also means that it's easy to track changes using the existing git setup.
+      \LaTeX is more complex to use than Google Docs, but produces `prettier' output. As \LaTeX is written in plain text, this also means that it's easy to track changes using the existing git setup.
 
       Code documentation is produced automatically from specially-formatted
 comments in the code using the YARD\footnote{\url{http://yardoc.org}} documentation tool. This parses the source
@@ -69,51 +68,71 @@ objects are prefixed with '\_\_SPLATS'.
 % http://www.doc.ic.ac.uk/~tw1509/splatstats/
   A brief summary of each member's contributions to the project, complete with the number of commits and lines changed.
 
-  Disclaimer: not all commits are created equal
+  The number of commits is not a particularly useful measure of contribution as some commits added considerable features, whereas many were simple one line additions. 
+  Due to the research-oriented nature of the project, a large amount of time was spent resolving problems without making any commits
 
   \subsection{Ethel}
-    Mostly forwent work on the core, instead working on fiddly bits around the edges.
-
-    First started with writing the output module in its various stages.
-
-    Wrote a revision of the command-line interface.
-
-    Also tweaked and documented various other bits of code.
-
-    Toward the end, lots on the report.
+    \begin{itemize}
+      \item Wrote the code which generates the test files.
+      \item Wrote a revision of the command-line interface.
+      \item Tweaked and documented various other bits of code.
+      \item Wrote large portions of the final report.
+      \item Wrote large portions of Report One.
+      \item Researched how to test side effects.
+    \end{itemize}
+   
     \begin{description}
-      \item[Commits] 70
-      \item[Lines]
+      \item[Commits] 131
     \end{description}
 
   \subsection{Caz}
-    Secretary, report writing, core work
+    \begin{itemize}
+    \item Secretary
+    \item Wrote large portions of all reports.
+    \item Designed and implemented the GUI.
+    \item Some implementation the abstract traversal class.
+    \item Wrote the manual traversal class.
+    \item Wrote some tests.
+    \end{itemize}
     \begin{description}
-      \item[Commits] 20
-      \item[Lines]
+      \item[Commits] 86
     \end{description}
 
   \subsection{Chris}
-    Some additions to the mock object
-    Controller
-    CLI features and refactoring, in order to make it more modular once the GUI was added.
-    Created mock object graph
-    
+    \begin{itemize}
+     \item Created TestController class.
+     \item Additions to the mock object.
+     \item CLI features and refactoring, in order to make it more modular once the GUI was added.
+     \item Implemented mock object graph generator.
+     \item Various code tweaks and documentation.
+     \item Wrote the graph generation code.
+     \item Worked on Report Two.
+    \end{itemize}
     \begin{description}
-      \item[Commits] 21
+      \item[Commits] 44
       \item[Lines]
     \end{description}
 
   \subsection{Joe}
-    Freeloader in chief
+    \begin{itemize}
+      \item Initial CLI design.
+      \item Wrote the code which runs the tests against the second version of the code.
+      \item Helped with the reports.
+    \end{itemize}
     \begin{description}
-      \item[Commits] 13
+      \item[Commits] 27
       \item[Lines]
     \end{description}
 
   \subsection{Tom}
-    Lead developer, lots on the core
+    \begin{itemize}
+      \item Lead developer.
+      \item Wrote much of the mock object.
+      \item Implemented and extended the traversal methods.
+      \item Large portions of Report Two (and helped with other reports).
+      \item Wrote the generator.
+      \item Oversaw the version control and fixed issues as they happened.
+    \end{itemize}
     \begin{description}
-      \item[Commits] 74
-      \item[Lines]
+      \item[Commits] 142
     \end{description}

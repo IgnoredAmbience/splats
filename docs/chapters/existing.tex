@@ -30,27 +30,7 @@ SpLATS targets Test::Unit as its output format.
   almost all behaviour can be modified at run time; without running the program,
   it is difficult to infer anything about its behaviour. Furthermore, it was beyond
   the scope of the project.
-
-  \subsection{KLEE}
-  KLEE is a KLEE is a symbolic virtual machine that runs on LLVM compiler
-  infrastructure. By annotating the inputs as being symbolic, KLEE traces
-  different paths of execution through the code dependent on the value of
-  these annoted variables.
-
-  The idea of SpLATS was not to have to annotate parts of the code; we
-  wished to liberate the programmer from having to write their own tests,
-  and having to annotate code is sufficiently close to this that it was
-  deemed to be unsuitable.
-
-    KLEE\footnote{\url{http://klee.llvm.org}}
-
-\section{Dynamic Analysis} 
-
-  Dynamic analysis analyses code by running it, potentially with modifications
-  to the runtime environment. Code profiling is an example of dynamic analysis;
-  the speed and space requirements of a program are analysed by running the
-  program.
-
+  
   \subsection{ZenTest}
     ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}}
 comprises of a suite of 4 tools designed to assist a software developer with
@@ -67,6 +47,18 @@ ZenTest deduces which methods are being tested by analysing the method names; as
     Whilst this tool is extremely useful, it still expects developers to write
 the tests themselves. The aim of SpLATS is to focus the attention away from
 writing tests, and to allow a developer to just write code.
+  
+\section{Dynamic Analysis} 
+
+  Dynamic analysis analyses code by running it, potentially with modifications
+  to the runtime environment. Code profiling is an example of dynamic analysis;
+  the speed and space requirements of a program are analysed by running the
+  program.
+  
+  \subsection{KLEE}
+  KLEE\footnote{\url{http://klee.llvm.org/}} is a symbolic virtual machine which can run on most compiled languages. It can automatically generate tests which achieve high code coverage on complex and memory-intensive programs. KLEE constructs symbolic command line strings and calls the main function with these symbols. When these arguments are called, KLEE constructs a constraint solver, forks on the options and follows all possible paths of execution. When an error can possibly occur, KLEE checks if any possible value for the symbol will cause that error. It then prunes the tree, generates concrete values, and continues following the execution path.\footnote{\url{http://www.usenix.org/event/osdi08/tech/full_papers/cadar/cadar_html/}}
+
+  The execution path of KLEE is defined by the programmer as annotations, but the idea of SpLATS is to liberate the programmer from doing anything other than programming. Having to annotate code shifts the paradigm that the programmer is free, therefore using similar architecture or methods to KLEE was deemed unsuitable.
 
   \subsection{IRULAN}
     IRULAN\footnote{\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis.

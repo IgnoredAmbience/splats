@@ -1,4 +1,4 @@
-\chapter{Implementation}
+\chapter{Challenges}
 \section{Technical Challenges}
   \subsection{Duck Typing}
     Duck typing is a method of dynamic typing, named after the phrase "if it looks like a duck and quacks like a duck, it must be a duck".
@@ -12,4 +12,8 @@
     TODO: HOW THIS WAS RESOLVED \\
 
   \subsection{GUI}
-    Shoes ain't made for walking, but it's still gonna walk right over you.
+    Shoes was originally chosen because of its shallow learning curve and simple one-liners which enable rapid GUI development. Due to its standalone nature, it was decided to switch to the gem "Green Shoes", which has proven to be rather problematic. Green Shoes does not yet implement all the features on offer in Shoes, but the functions are still in the documentation, and only some are labelled as not being implemented. Green Shoes offers what it calls slots, and these are implemented in a very buggy way. For example, assigning a slot to a variable can often cause nil access errors. Adding an empty "do end" statement to the end of the slot initialisation can fix this. 
+    
+    Shoes uses GTK to present most of its features, but it does not utilise GTK to its full advantage. There is a part of the GUI where the user is presented with a file and asked to make a decision about a certain line in that file. The preferred design was to highlight the line in some way, either by a different colour or background colour. This proved not to be possible without writing extensions to Shoes, and since none of the group know GTK, there was not enough time to fix this issue.
+    
+    In the stand-alone version of Shoes, there is a slot called a flow, in which elements are placed as tightly together as possible. When displaying text, the command is called "para", and this displays text to the screen. When Shoes shows the "para"s in the flow, they are next to each other, which is useful to change colours and fonts in a sentence. When Green Shoes shows the "para", they are placed on separate lines which means the text looks funny, and part of the design was changed to incorporate this bug.
