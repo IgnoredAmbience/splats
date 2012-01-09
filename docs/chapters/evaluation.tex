@@ -56,12 +56,57 @@
     \hline
     \end{tabular}
 
-  \subsection{Testing by Inspection}
-  - Code coverage showed Tom that it wasn't doing 1 + 1 coerce error.
-  \subsection{Code Coverage}
-  \subsection{ZenTest}
+  \subsection{Evaluation of Quality of Generated Tests}
+    Several sample CUTs are used to evaluate and test the quality of SpLATS'
+test generation. We will also compare the ability of the depth-limited search to
+reach full coverage to the random traversal strategy.
+
+    The test classes used were:
+    \begin{itemize}
+      \item Addition - 1 plus the argument, used to test Ruby's arithmetic
+internals
+      \item SimpleTest - Tests arbitrary methods called upon arguments to the
+function, branches based upon the result of the method call
+      \item LinkedList - A standard LinkedList implementation, uses both
+iterative and recursive algorithms
+      \item QuickSort - A recursive quick sort implementation
+      \item ISBN-Tools - An open-source library to check the validity of ISBN
+numbers, makes heavy use of regular expressions and string methods
+    \end{itemize}
+
+  \subsubsection{Result}
+
+    \begin{tabular}{|l|cccc|}
+\hline
+\textbf{CUT} & \textbf{Search Depth (Mock Depth)} & \textbf{Generation Time/m:s} & \textbf{Tests} & \textbf{Coverage} \\
+\hline
+Addition & 2 & 0:0.051 & 6 & 3/3 (100\%) \\
+\hline
+SimpleTest & 2 & 0:0.064 & 32 & 12/12 (100\%) \\
+\hline
+LinkedList & 2 & 0:0.056 & 31 & 35/47 (74\%) \\
+& 3 & 0:0.147 & 306 & 45/47 (96\%) \\
+& 4 & 0:2.118 & 3859 & 46/47 (98\%)\\
+\hline
+QuickSort & 2 (1) & 0:0.344 & 87 & 8/8 (100\%) \\
+& 2 (2) & 0:3.356 & 4272 & 8/8 (100\%) \\
+& 2 (3) & 5:57.2 & 351927 & Not testable\\
+\hline
+ISBN-Tools & 2 (1) & 0:0.056 & 13 & 10/16 (63\%) \\
+& 2 (2) & 0:0.072 & 57 & 10/16 (63\%) \\
+& 2 (3) & Stopped after 30:00 & 341472 & Not testable \\
+\hline
+\end{tabular}
+
+\subsubsection{Analysis}
+  The more successful test cases in the sample set were the ones which did not create large chains of calls on Mock objects.
+
   \subsection{Test Generation and Comparison}
     \subsubsection{Analysis}
     \subsubsection{Design}
     \subsubsection{Implementation}
     \subsubsection{Testing}
+  \subsection{Code Coverage}
+  \subsection{ZenTest}
+  \subsection{Testing by Inspection}
+  - Code coverage showed Tom that it wasn't doing 1 + 1 coerce error.
