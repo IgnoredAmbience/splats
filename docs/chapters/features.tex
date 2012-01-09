@@ -97,3 +97,24 @@ The main disadvantage of Ruby is that none of the group had used it previously, 
   appears to be, implemented).
 
   We chose blackbox testing over whitebox testing because we didn't want to lex and parse Ruby, and then inspect that to infer anything. Whitebox testing Ruby would end up more as static code analysis, and because of Ruby's metaprogramming and the possibility of the code being changed at runtime, it would be difficult to make accurate interpretations without running the code.
+
+\section{Choice of Language Subset}
+ We initially planned a subset of the Ruby language which we will call lightweight
+Ruby which SpLATS will target. The choice will directly impact upon what
+assumptions we can make about the code we are to be testing as an effort to
+produce a simple proof-of-concept tool without needing to examine all of the
+language's wide range of features.
+\begin{itemize}
+\item Assume that all code to be tested will be defined in public instance
+methods on a class in the top-level namespace and that the class shall be
+constructed using the standard \texttt{new}/\texttt{initialize} methods
+\item Assume that all methods being tested will not be side-affecting - that
+they do not change global state, i.e. modify the core Ruby run-time system, terminate
+execution, modify global variables, write to any system resources, and similar
+limitations
+\item Do not require interaction with a \texttt{SPLATS} module in the global namespace
+and any methods prefixed with \texttt{\_\_SPLATS}
+\item Methods do not require blocks to be passed into them (i.e. they do not
+\texttt{yield})
+\item Inheritance and mixins will not be tested
+\end{itemize}
