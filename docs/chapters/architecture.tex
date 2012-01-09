@@ -1,6 +1,5 @@
 \chapter{Architecture}
 
-\section{High Level View}
 \begin{center}
 \begin{figure}
   \begin{tikzpicture}
@@ -23,48 +22,44 @@
 \end{figure}
 \end{center}
 
-  Figure \ref{fig:Architecture_HighLevel} shows the overall view of the system. There is a test generator, an output module, a wrapper to control the two, and either a graphical or command-line interface to control that.
-
-    There's an inner core that generates the tests, an outer layer that controls it and handles file input and output, and a wrapper to pass options to the outer layer. These sections are explained in more detail in the following section.
-    
-\section{Lower Level Architecture}
+  Figure \ref{fig:Architecture_HighLevel} shows the overall view of the system and figure \ref{fig:Architecture_LowLevel} shows SpLATS at a more lower level view.
 
   \begin{center}
   \begin{figure}
   \input{images/splatsflow}
-  \caption{A more in-depth summary of the control flow of SpLATS}
+  \captionsetup{singlelinecheck=off}
+  \caption[poo]{A more in-depth summary of the control flow of SpLATS
+    \begin{enumerate}
+      \item The user starts a UI of their choice, and passes in the file or files to be tested, a directory to put the finished tests, a traversal method and any parameters for that method. The interface then starts the TestController, which creates the output directory if one is needed, and loads the input files and their relevant classes.
+      \item The TestController initialises a Generator for each class, with the traversal method and parameters.
+      \item The Generator and Traversal methods determine how tests should be generated.
+      \item Once the tests are produced, the Generator executes the test for the class.
+      \item The Class Under Test calls methods on MockObjects that it is passed by the Generator.
+      \item The MockObject asks the Generator for primitive values, or for a new MockObject to return to the CUT.
+      \item The Generator yields the Test to the TestController.
+      \item The tests are written to disk using the TestFile class.
+    \end{enumerate}
+  }
   \label{fig:Architecture_LowLevel}
   \end{figure}
   \end{center}
   Figure ~\ref{fig:Architecture_LowLevel} shows the workflow at a more in-depth level.
-  \begin{enumerate}
-  \small
-  \item The user starts a UI of their choice, and passes in the file or files to be tested, a directory to put the finished tests, a traversal method and any parameters for that method.
-    The interface then starts the TestController, which creates the output directory if one is needed, and loads the input files and their relevant classes.
-  \item The TestController then initialises a Generator for each class, with the traversal method and parameters.
-  \item The Generator talks to the traversal method.
-  \item The traversal method responds to the Generator.
-  \item Every Test produced by the Generator is sent to the TestController.
-  \item If the tests are being generated for a single file, the tests are sent to TestFile, which wraps the tests with the necessary code to be run by Ruby's Test::Unit framework. 
-  \item If the tests are being generated to compare two files, the tests are generated and run in memory without being saved to disk.
-  \end{enumerate}
   
-  \subsection{User Interface}
-  \setcounter{secnumdepth}{4}
-  \subsubsection{Command Line Interface (CLI)}
+  \section{User Interface}
+  \subsection{Command Line Interface (CLI)}
   
   The CLI is a simple wrapper used to interact with SpLATS. 
-  It uses the built-in Ruby OptionParser class, which allowed us to simply specify and analyse the options that the user enters. 
-  The CLI's purpose is to interpret the entered arguments and use them to create the correct traversal object, and to pass the relevant file and output directory to the controller.
-  As it only uses text commands for input, it would be easy for a user to automate the process of testing using a script, so that many tests can be automatically performed without the user needing to manually invoke them every time.
+  It uses the built-in Ruby OptionParser class, which allowed us to specify and analyse the options that the user enters. 
+  The CLI's purpose is to read the entered arguments, create a traversal object, and pass the relevant file and output directory to the TestController.
+  As only text commands are used as input, a user can easily automate the testing process with a script, so that many test can be executed at once.
   If the user enters an invalid command then the CLI will show an error messsage along with an explanation of the commands.
   
-  \subsubsection{Graphical User Interface (GUI)}
-  \paragraph{Choice of framework}
+  \subsection{Graphical User Interface (GUI)}
+  \subsubsection{Choice of framework}
   When researching which GUI to use, the vast majority of those for Ruby are either no longer supported, have a non-native look about them, or work only with Mac or Windows. Since the majority of the group are Unix users, the latter constraint meant that there were only a few to choose from. There is a page on wikipedia comparing the various frameworks on offer\footnote{\url{http://en.wikibooks.org/wiki/Ruby_Programming/GUI_Toolkit_Modules}}, and from this page (and other forums) Ruby Shoes unanimously stood out as it is extremely quick to load elements and has a shallow learning curve.
   Shoes is a stand-alone Ruby program Shoes\footnote{\url{http://shoesrb.com/}}. This came shipped with its own version of Ruby. After some discussion, it was decided that we should try to use as many Gems\footnote{Ruby's equivalent of libraries} as possible, rather than stand-alone programs which the user must install. For this reason, the GUI was ported over to Green Shoes\footnote{\url{https://github.com/ashbb/green_shoes}} which can be installed by the standard "gem install" command, loaded in SpLATS by "require green\_shoes" and run as a normal Ruby file.
   
-  \paragraph{Design}
+  \subsubsection{Design}
   The GUI was designed to be minimalist with as few buttons as possible. As no one in the group proclaimed to be a designer, the look of the GUI is minimalist as well. The images are used to illustrate the workflow the user goes through when first loading the GUI.
   
   Figure \ref{fig:GUI_Page1} shows the page the user sees when they first open the GUI. This gives them the option to load the version of the code to generate tests for. Before the file is loaded, the button saying \verb+Load first version of the code+ is all they see. There is no other information on the first page, because it is assumed that the user wants to just begin testing and they already know what the program does. The \verb+file open+ dialog will not allow the user to cancel, nor allow the user to select a file which isn't '.rb'. Once a valid file is loaded, the \verb+next+ button and the text box appear. The text box is there to show the user what the inside of the file looks like, just so they are certain that they have loaded the correct version to test. There is a bug in Green Shoes, where the scroll bar doesn't appear on these text boxes, however they are scrollable with the mouse. The issues encountered with Green Shoes will be discussed in the "Problems" section. In future implementations of SpLATS, it would be possible to make this file box editable and writeable, but that is not high on the list of priorities.
@@ -116,7 +111,7 @@ Figure \ref{fig:GUI_Page2} is the same as the first page, only for the second ve
   
   As the user steps down the traversal tree, they are presented a graph at each choice they have the option to make. A new window pops up, displaying a graph generated from information stored in SpLATS as the user makes their selections. The graph was designed to be a maximum of three levels deep, because otherwise displaying the user the information becomes too cumbersome. Figure \ref{fig:GUI_Page4b} shows what the user sees when they have already made decisions, and they are being asked to select the next method to generate tests for. This way the user can keep track of the methods they have selected and at what depth they are currently at.
 
-  \subsection{Test Generator}
+  \section{Test Generator}
     The purpose of the test generator is to produce tests for a given Class
 Under Test (CUT), the generator is also passed a traversal object that is used
 to direct the generator's search.
