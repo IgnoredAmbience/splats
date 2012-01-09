@@ -53,24 +53,26 @@ numbers, makes heavy use of regular expressions and string methods
 
   \subsubsection{Result}
 
-    \begin{tabular}{l|cccc}
-CUT & Search Depth (Mock Depth) & Generation Time/m:s & Tests & Coverage \\
+    \begin{tabular}{|l|cccc|}
 \hline
-Addition & 2 & 0.051 & 6 & 3/3 (100\%) \\
+\textbf{CUT} & \textbf{Search Depth (Mock Depth)} & \textbf{Generation Time/m:s} & \textbf{Tests} & \textbf{Coverage} \\
 \hline
-SimpleTest & 2 & 0.064 & 32 & 12/12 (100\%) \\
+Addition & 2 & 0:0.051 & 6 & 3/3 (100\%) \\
 \hline
-LinkedList & 2 & 0.056 & 31 & 35/47 (74\%) \\
-& 3 & 0.147 & 306 & 45/47 (96\%) \\
-& 4 & 2.118 & 3859 & 46/47 (98\%)\\
+SimpleTest & 2 & 0:0.064 & 32 & 12/12 (100\%) \\
 \hline
-QuickSort & 2 (3) & 5:57.2 & 351927 & Not testable\\
-& 2 (2) & 3.356 & 4272 & 8/8 (100\%) \\
-& 2 (1) & 0.344 & 87 & 8/8 (100\%) \\
+LinkedList & 2 & 0:0.056 & 31 & 35/47 (74\%) \\
+& 3 & 0:0.147 & 306 & 45/47 (96\%) \\
+& 4 & 0:2.118 & 3859 & 46/47 (98\%)\\
 \hline
-ISBN-Tools & 2 (1) & 0.056 & 13 & 10/16 (63\%) \\
-& 2 (2) & 0.072 & 57 & 10/16 (63\%) \\
-& 2 (3) & & & \\
+QuickSort & 2 (1) & 0:0.344 & 87 & 8/8 (100\%) \\
+& 2 (2) & 0:3.356 & 4272 & 8/8 (100\%) \\
+& 2 (3) & 5:57.2 & 351927 & Not testable\\
+\hline
+ISBN-Tools & 2 (1) & 0:0.056 & 13 & 10/16 (63\%) \\
+& 2 (2) & 0:0.072 & 57 & 10/16 (63\%) \\
+& 2 (3) & Stopped after 30:00 & 341472 & Not testable \\
+\hline
 \end{tabular}
 
 \subsubsection{Analysis}
