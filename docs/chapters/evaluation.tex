@@ -76,7 +76,15 @@ ISBN-Tools & 2 (1) & 0:0.056 & 13 & 10/16 (63\%) \\
 \end{tabular}
 
 \subsubsection{Analysis}
-  The more successful test cases in the sample set were the ones which did not create large chains of calls on Mock objects.
+  The simplest classes (Addition and SimpleTest) easily achieved 100\% coverage at the minimum reasonable depth (2). This is because their output values are not dependent upon the object's internal state, thus every execution path can be reached from the first instance method calls.
+
+  LinkedList is a more interesting example as its internal state determines the output. It can be seen that at a depth of 2, only three-quarters of the lines can be reached, this is because the majority of the execution paths depend upon a list containing more than one element, which is only just possible at a depth of 2.
+
+  At a depth of 3 almost all of the lines are accessable to the tests, except for two. The first of these is only reachable in a list of more than two elements, again not possible at this traversal depth. It is seen to be reached at a depth of 4.
+
+  The remaining uncovered line is never reached because it is immediately preceded by a line that is outside of our Lightweight Ruby specification. This line always raises an Exception, (due to trying to yield to a non-existant block) meaning that the uncovered line is unreachable by our test generator.
+
+  It is quite noticable that QuickSort and ISBN-Tools are less suited to a complete traversal method 
 
   \subsection{Test Generation and Comparison}
     \subsubsection{Analysis}
