@@ -14,8 +14,9 @@ module SPLATS
 
     @@id = 0
 
-    def initialize &branch_block
+    def initialize depth=5, &branch_block
       @object = MockImplementation.new self
+      @depth = depth
       @child_objects = []
       @id = @@id
       @@id += 1
@@ -33,11 +34,14 @@ module SPLATS
       elsif @object.__SPLATS_orig_respond_to? symbol
         result = @object.__SPLATS_orig_send(symbol, *args, &block)
       else
-        result = @branch_block.call :Unknown
-        if result == Mock
-          result = Mock.new &@branch_block
+        if @depth > 0
+          result = @branch_block.call :Unknown
+          if result == Mock
+            result = Mock.new(@depth-1, &@branch_block)
+          end
+        else
+          result = nil
         end
-        result
       end
       @child_objects << ([symbol, result, args])
       #::Kernel.puts "?> Method '#{symbol}' called with arguments #{args} on #{__SPLATS_print} returns #{result.__SPLATS_print}"
