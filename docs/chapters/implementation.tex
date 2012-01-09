@@ -17,7 +17,8 @@ produce tests that are too strong and assert about the internal state of the
 program under test rather than merely the input to output mapping.
 
 An example of this is if the implementation of a function that retrieves the
-first character of a string changes from using the index operator [] to the chr
+first character of a string changes from using the index operator \texttt{[]} to
+the \texttt{chr}
 function, each of which have the same functionality, but would not appear the same
 to the execution structure on the Mock objects.
 
