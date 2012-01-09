@@ -17,21 +17,21 @@
   \subsection{Working Styles}
   The big group meetings would highlight areas where group members were having problems. Possible ways to resolve the issues were discussed, and it would be decided how to proceed with the problem. The big meetings would also establish what each team member would be doing for the week. When one member of the group had an issue, another member of the group would sit down with them to help solve the problem. The paired programming would not last for too long, as it was discovered early on that we make more progress when working individually. This is because all five of us think about problems in different ways, which was helpful in the early stages of the project when deciding how to continue, but became a bit more problematic towards the end. This is because there would be many ideas of how to solve the problem, and time constraints started to press and concrete code needed writing.
   
-  Big programming sessions happened occassionally, and these proved to be the most productive. The group would sit in the same room, working on their individual sections. This ensured that everyone continued to work throughout the day, but it also ensured that breaks were had when needed. Towards the end of the project, these sessions happened more frequently, and it's a shame that timetable constraints during the term meant that we were unable to do this as often as we would have liked.
+  Big programming sessions happened occasionally, and these proved to be the most productive. The group would sit in the same room, working on their individual sections. This ensured that everyone continued to work throughout the day, but it also ensured that breaks were had when needed. Towards the end of the project, these sessions happened more frequently, and it's a shame that timetable constraints during the term meant that we were unable to do this as often as we would have liked.
 
   \subsection{Tools Used}
     \subsubsection{Version Control}
       We decided at the outset to use the git\footnote{\url{http://git-scm.com}} revision control system for various reasons:
       \begin{itemize}
       \item We had all used it in the past and were comfortable with it.
-      \item It is a distributed revision control system, which grants additional flexibility compared to centralized systems, as it allows for such things as offline working and private branches.
+      \item It is a distributed revision control system, which grants additional flexibility compared to centralised systems, as it allows for such things as offline working and private branches.
       \item It works very well with Unix-like systems, such as Linux, which all but one of the group uses.
       \item Git handles complex merging extremely well, and when there is a merge conflict, it is very easy to sort manually.
       \end{itemize}
 
       For where to host the central repository, we had 3 main options: github\footnote{\url{http://github.com}}, bitbucket\footnote{\url{http://bitbucket.org}} and the department's own servers.
       Some of us already had github accounts and workflows set up for it, however private repositories are a paid-only feature.
-      The department's own servers have good uptime, but have been known to become inaccessable at short notice, and they don't offer as many options or extra features as the others.
+      The department's own servers have good uptime, but have been known to become inaccessible at short notice, and they don't offer as many options or extra features as the others.
       Bitbucket allow private repositories for unpaid accounts, and have other additional extras, such as a project wiki and bug tracking system.
 
       As such, we decided to use Bitbucket.
@@ -55,9 +55,9 @@ HTML and in a database format suitable for command-line \texttt{man}-like tools.
   \subsection{Code Style Guidelines}
   We followed the standard Ruby naming conventions
     \begin{itemize}
-      \item All method, symbol and variable names are wholly lowercase with words seperated by underscores e.g. \texttt{this\_is\_a\_variable}
+      \item All method, symbol and variable names are wholly lowercase with words separated by underscores e.g. \texttt{this\_is\_a\_variable}
       \item All class names are capitalised camel case e.g \texttt{ArbitraryClass}
-      \item All constants are wholly uppercase with words seperated by underscores e.g \texttt{MAX\_SIZE}
+      \item All constants are wholly uppercase with words separated by underscores e.g \texttt{MAX\_SIZE}
       \item All project code is placed within the \texttt{SPLATS} module, so not to
 pollute the global namespace. Any methods defined on global
 objects are prefixed with \texttt{\_\_SPLATS}.

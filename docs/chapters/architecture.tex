@@ -59,7 +59,7 @@
   It uses the built-in Ruby OptionParser class, which allowed us to specify and analyse the options that the user enters. 
   The CLI's purpose is to read the entered arguments, create a traversal object, and pass the relevant file and output directory to the TestController.
   As only text commands are used as input, a user can easily automate the testing process with a script, so that many test can be executed at once.
-  If the user enters an invalid command then the CLI will show an error messsage along with an explanation of the commands.
+  If the user enters an invalid command then the CLI will show an error message along with an explanation of the commands.
   The commands below are taken from the message displayed to the user when running without arguments.
   \begin{figure}
   \scriptsize
@@ -83,7 +83,7 @@ Usage: splats [options]
   \end{figure}
   \subsection{Graphical User Interface (GUI)}
   \subsubsection{Choice of framework}
-  When researching which GUI to use, the vast majority of those for Ruby are either no longer supported, have a non-native look about them, or work only with Mac or Windows. Since the majority of the group are Unix users, the latter constraint meant that there were only a few to choose from. There is a page on wikipedia comparing the various frameworks on offer\footnote{\url{http://en.wikibooks.org/wiki/Ruby_Programming/GUI_Toolkit_Modules}}, and from this page (and other forums) Ruby Shoes unanimously stood out as it is extremely quick to load elements and has a shallow learning curve.
+  When researching which GUI to use, the vast majority of those for Ruby are either no longer supported, have a non-native look about them, or work only with Mac or Windows. Since the majority of the group are Unix users, the latter constraint meant that there were only a few to choose from. There is a page on Wikipedia comparing the various frameworks on offer\footnote{\url{http://en.wikibooks.org/wiki/Ruby_Programming/GUI_Toolkit_Modules}}, and from this page (and other forums) Ruby Shoes unanimously stood out as it is extremely quick to load elements and has a shallow learning curve.
   Shoes\footnote{\url{http://shoesrb.com/}} is a stand-alone program which comes shipped with its own version of Ruby. After it was decided to use Gems for bundling, the GUI was ported to Green Shoes.
   
   \subsubsection{Design}
@@ -159,7 +159,7 @@ method, one set of arguments, and multiple mock decisions.
     
     \paragraph{TestLine} TestLine is executed and the result is recorded. Any Mock objects which were passed into the method record any methods called upon them. They are thus able to trace the execution path from input to output. This solution aims to solve the problems associated with determining acceptable input types under Ruby's duck-typing. After each TestLine or Test is generated, the Traversal object is queried to see if another line should be generated.
     
-    \paragraph{MockDecision} Under most circumstances, a methoc call made on a Mock object will return either a new Mock object or nil. Some method calls on a Mock object are defined as returning primitive types, as this is what Ruby expects in situations such as numerical operations or type casts. This return of a primitive type also helps to prevent an infinite chain of Mocks being created. Each time one of these primitive values is returned, other options available at that branch point are added to the Traversal search space.    
+    \paragraph{MockDecision} Under most circumstances, a method call made on a Mock object will return either a new Mock object or nil. Some method calls on a Mock object are defined as returning primitive types, as this is what Ruby expects in situations such as numerical operations or type casts. This return of a primitive type also helps to prevent an infinite chain of Mocks being created. Each time one of these primitive values is returned, other options available at that branch point are added to the Traversal search space.    
     
     \paragraph{Pruning} If the execution of a line raises an error, further descent of the tree will be halted, and the Traversal object is notified of the Exception. This is the only form of pruning SpLATS currently implements. Further improvements of SpLATS could prune by checking that isomorphic test cases, or similar cases are not being created. 
 

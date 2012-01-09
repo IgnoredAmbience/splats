@@ -112,9 +112,9 @@ The first of these is only reachable in a list of more than two elements, again 
 This is possible at a depth of 4.
 
   The remaining uncovered line is never reached because it is immediately preceded by a line that is outside of our Lightweight Ruby specification.
-This line always raises an Exception, (due to trying to yield to a non-existant block) meaning that the uncovered line is unreachable by our test generator.
+This line always raises an Exception, (due to trying to yield to a non-existent block) meaning that the uncovered line is unreachable by our test generator.
 
-  It is quite noticable that QuickSort and ISBN-Tools are less suited to a complete traversal method.
+  It is quite noticeable that QuickSort and ISBN-Tools are less suited to a complete traversal method.
 Similarly to the Addition and SimpleTest classes, the methods on these classes do not depend on the internal state of the object to produce their output.
 The traversal depth (the number of TestLines produced) does not impact upon the usefulness of the tests produced.
 
@@ -135,9 +135,11 @@ subset of tests, for example in the Addition/Subtraction pair $1 + 1 \neq 1 -
 
 It is generally expected that we will not see a 100\% failure rate on the second version since the most basic tests, such as asserting the constructor of a class will return and object of that class, will hold between versions.
 
+As such, it conforms to our expectations.
+
 \section{Testing SpLATS}
 \subsection{Testing the Core}
-  As this project was heavily research-based, it was unfeasable to write tests before implementing the code as the code underwent frequent and radical refactorings or change of scope.
+  As this project was heavily research-based, it was unfeasible to write tests before implementing the code as the code underwent frequent and radical refactorings or change of scope.
   Tests were therefore written for a section of code once it reached a stable point and was considered ready to reach the final product.
   Code that was in the master branch of the repository before this rule was enforced has since had unit tests written to cover it.
     
@@ -145,3 +147,11 @@ It is generally expected that we will not see a 100\% failure rate on the second
 The underlying code of SpLATS has been tested, and so it is assumed that the GUI will work provided all the buttons do what they say they will.
 A thorough run-through of the GUI was performed with complicated and simple execution paths. Some errors were found, and these were easily uncovered and easily fixed.
 There are a few libraries which exist that can be used to automatically test Ruby GUIs, however, with so few buttons and a very limited range of behaviours, these were deemed too complicated to learn for very little benefit.
+
+\section{Conclusions On The Project}
+This project has introduced us to the field of search-based automated software testing.
+It has been interesting, and some of our members wish to pursue this in the future.
+
+It also taught us about larger scale collaboration than we were used to, such as the need for regular check-ins, meetings, and direct supervision by a senior.
+
+SpLATS has scope for future improvement, by implementing smarter feedback-driven traversal methods, and supporting more language features.
