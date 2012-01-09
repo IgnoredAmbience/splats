@@ -122,6 +122,19 @@ The traversal depth (the number of TestLines produced) does not impact upon the 
 This is because each call on a mock object is treated as splitting the search space.
 As both of these classes call many methods upon the mock objects, QuickSort through recursion, and ISBN-Tools by repeatedly calling a long chain of methods.
 
+\subsubsection{Validation}
+  Further validation of these results was performed by modifying the CUTs to
+change their functionality.
+For example, changing the Addition class to function as a Subtraction class, or
+introducing bugs into the LinkedList class.
+
+When running the two versions of the code and comparing the test runs, the first
+version passed all the tests, as expected. The second version would fail a
+subset of tests, for example in the Addition/Subtraction pair $1 + 1 \neq 1 -
+1$, but $1 + 0 = 1 - 0$.
+
+It is generally expected that we will not see a 100\% failure rate on the second version since the most basic tests, such as asserting the constructor of a class will return and object of that class, will hold between versions.
+
 \section{Testing SpLATS}
 \subsection{Testing the Core}
   As this project was heavily research-based, it was unfeasable to write tests before implementing the code as the code underwent frequent and radical refactorings or change of scope.
