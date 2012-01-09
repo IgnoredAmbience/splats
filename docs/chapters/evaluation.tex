@@ -116,11 +116,11 @@ This line always raises an Exception, (due to trying to yield to a non-existent 
 
   It is quite noticeable that QuickSort and ISBN-Tools are less suited to a complete traversal method.
 Similarly to the Addition and SimpleTest classes, the methods on these classes do not depend on the internal state of the object to produce their output.
-The traversal depth (the number of TestLines produced) does not impact upon the usefulness of the tests produced.
+The traversal depth (the number of TestLines produced) does not impact on the usefulness of the tests produced.
 
   However, it can be seen that the permitted upper bound on the length of chains of Mock objects directly impacts upon the number and complexity of tests that are generated.
-This is because each call on a mock object is treated as splitting the search space.
-As both of these classes call many methods upon the mock objects, QuickSort through recursion, and ISBN-Tools by repeatedly calling a long chain of methods.
+This is because each call on a mock object is treated as splitting the search space, i.e. a new branching node is added to the tree.
+As both of these classes call many methods on the mock objects, QuickSort through recursion, and ISBN-Tools by repeatedly calling a long chain of methods, the upper bound has an effect.
 
 \subsubsection{Validation}
   Further validation of these results was performed by modifying the CUTs to
@@ -133,9 +133,9 @@ version passed all the tests, as expected. The second version would fail a
 subset of tests, for example in the Addition/Subtraction pair $1 + 1 \neq 1 -
 1$, but $1 + 0 = 1 - 0$.
 
-It is generally expected that we will not see a 100\% failure rate on the second version since the most basic tests, such as asserting the constructor of a class will return and object of that class, will hold between versions.
+It can generally be assumed that there will not be a 100\% failure rate between versions, since the most basic of tests (i.e. asserting the constructor of a class will return an object of that class) will generally pass in all versions.
 
-As such, it conforms to our expectations.
+As such, SpLATS conforms to our expectations.
 
 \section{Testing SpLATS}
 \subsection{Testing the Core}
@@ -146,9 +146,16 @@ As such, it conforms to our expectations.
 \subsection{Testing of GUI}
 The underlying code of SpLATS has been tested, and so it is assumed that the GUI will work provided all the buttons do what they say they will.
 A thorough run-through of the GUI was performed with complicated and simple execution paths. Some errors were found, and these were easily uncovered and easily fixed.
-There are a few libraries which exist that can be used to automatically test Ruby GUIs, however, with so few buttons and a very limited range of behaviours, these were deemed too complicated to learn for very little benefit.
+There are a few libraries which exist that can be used to automatically test Ruby GUIs; however, with so few buttons and a very limited range of behaviours, these were deemed too complicated to learn for very little benefit.
 
-\section{Conclusions On The Project}
+\subsection{What we Learned}
+\begin{itemize}
+  \item A project leader is needed. We did not have one because we could not decide who to place in charge. This caused many issues, such as team members not necessarily knowing what they had to do, and not able to find the initiative to find tasks for themselves.
+  \item In loosely specified projects, it is important to ensure that each group member receives an even distribution of work, even if it means performing a task that might not necessarily be vital to the end result. For example, the GUI was not necessary for the completion of SpLATS, but it ensured that the team members all had work to do.
+  \item Assigning a group member a task should be done based upon their abilities to perform the task. When the group members lack familiarity with each other, a long discussion should be held at the beginning of the project where team members highlight what they perceive to be their strengths and weaknesses. This should be kept in mind by the project leader at all times, and by other team members when criticising other members of the team.
+\end{itemize}
+
+\section{Conclusions on the Project}
 This project has introduced us to the field of search-based automated software testing.
 It has been interesting, and some of our members wish to pursue this in the future.
 
