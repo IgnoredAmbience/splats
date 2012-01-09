@@ -16,31 +16,21 @@ SpLATS targets Test::Unit and Minitest::Unit as its output format.
 
 \section{Static Analysis}
 
-  Static analysis is a form of code analysis performed without actually
-  executing the code itself. Generally the code is inspected, possibly
-  transformed into a simpler or more abstract state, and then inferrences
-  are made about the behaviour of the program.
+  Static analysis is a form of code analysis performed without executing the code itself. Generally the code is inspected, possibly
+  transformed into a simpler or more abstract state, and then inferences are made about the behaviour of the program.
 
   For example, lint\footnote{\url{http://www.manpages.unixforum.co.uk/man-pages/unix/freebsd-6.2/1/lint-man-page.html}}
   is a tool which was originally designed to detect potential errors in
-  code such as assignment instead of comparison for equality, type mismatches,
-  or dereferencing of null pointers.
+  code. Examples of this include checking for assignment instead of equality in "if" statements; type mismatches; and dereferencing null pointers.
 
   Ultimately, static analysis is hard in Ruby. The nature of the language is that
-  almost all behaviour can be modified at run time; without running the program,
-  it is difficult to infer anything about its behaviour. Furthermore, it was beyond
+  almost all behaviour can be modified at run time. Without running the program,
+  it is difficult to infer anything about its behaviour; furthermore, it was beyond
   the scope of the project.
-
-\section{Dynamic Analysis} 
-
-  Dynamic analysis analyses code by running it, potentially with modifications
-  to the runtime environment. Code profiling is an example of dynamic analysis;
-  the speed and space requirements of a program are analysed by running the
-  program.
-
+  
   \subsection{ZenTest}
     ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}}
-comprises of a suite of 4 tools designed to assist a software developer with
+comprises a suite of 4 tools designed to assist a software developer with
 writing tests for their Ruby code. The tool of particular interest within the suite is itself called ZenTest,
 which aims to speed the writing of tests by inspecting the class under test (CUT)
 and the test class (TC) for the CUT.
@@ -54,6 +44,13 @@ ZenTest deduces which methods are being tested by analysing the method names; as
     Whilst this tool is extremely useful, it still expects developers to write
 the tests themselves. The aim of SpLATS is to focus the attention away from
 writing tests, and to allow a developer to just write code.
+
+\section{Dynamic Analysis} 
+
+  Dynamic analysis analyses code by running it, potentially with modifications
+  to the runtime environment. Code profiling is an example of dynamic analysis;
+  the speed and space requirements of a program are analysed by running the
+  program.
   
   \subsection{KLEE}
   KLEE\footnote{\url{http://klee.llvm.org/}} is a symbolic virtual machine which can run on most compiled languages. It can automatically generate tests which achieve high code coverage on complex and memory-intensive programs. KLEE constructs symbolic command line strings and calls the main function with these symbols. When these arguments are called, KLEE constructs a constraint solver, forks on the options and follows all possible paths of execution. When an error can possibly occur, KLEE checks if any possible value for the symbol will cause that error. It then prunes the tree, generates concrete values, and continues following the execution path.\footnote{\url{http://www.usenix.org/event/osdi08/tech/full_papers/cadar/cadar_html/}}
@@ -90,9 +87,7 @@ useful.
     Contract-violating test cases are also output as a means of highlighting
 that the CUT violates a semantic rule. The standard contracts are derived from
 the Java Language Specification. Further contracts can be added to the system by
-the user.
-
-    It has been used to find errors in a number of commonly used libraries.
+the user. Randoop has been used to find errors in a number of commonly used libraries.
 
   \subsection{RuTeG}
     RuTeG\footnote{S. Mairhofer, R. Feldt, R. Torkar, Search-based software
