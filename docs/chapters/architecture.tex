@@ -22,13 +22,15 @@
 \end{figure}
 \end{center}
 
-  Figure \ref{fig:Architecture_HighLevel} shows the overall view of the system and figure \ref{fig:Architecture_LowLevel} shows SpLATS at a more lower level view.
+  Ruby calls user-written libraries Gems, and there are many of these available. Once a program is finished, it can be bundled with all the Gems it used into one file which can be executed from any computer. The Gems used and the code that we wrote are discussed in this section.
+  
+  Figure \ref{fig:Architecture_HighLevel} shows the overall view of the system and figure \ref{fig:Architecture_LowLevel} shows SpLATS at a more in-depth level.
 
   \begin{center}
   \begin{figure}
   \input{images/splatsflow}
   \captionsetup{singlelinecheck=off}
-  \caption[poo]{A more in-depth summary of the control flow of SpLATS
+  \caption[mock]{A more in-depth summary of the control flow of SpLATS
     \begin{enumerate}
       \item The user starts a UI of their choice, and passes in the file or files to be tested, a directory to put the finished tests, a traversal method and any parameters for that method. The interface then starts the TestController, which creates the output directory if one is needed, and loads the input files and their relevant classes.
       \item The TestController initialises a Generator for each class, with the traversal method and parameters.
@@ -43,7 +45,13 @@
   \label{fig:Architecture_LowLevel}
   \end{figure}
   \end{center}
-  Figure ~\ref{fig:Architecture_LowLevel} shows the workflow at a more in-depth level.
+  
+  \section{Gems used}
+  \paragraph{Green Shoes} The GUI framework.
+  \paragraph{Graph} Used to draw graphs.
+  \paragraph{SimpleCov} Used in conjunction with Test::Unit to determine how much of the code the tests test. It produces an HTML file of the percentage of code covered, and displays it in a nice format.
+  \paragraph{FlexMock} Used in the generated tests to test the execution path through the methods being tested.
+  \paragraph{Yard} Used to automatically generate documentation.
   
   \section{User Interface}
   \subsection{Command Line Interface (CLI)}
@@ -53,16 +61,36 @@
   The CLI's purpose is to read the entered arguments, create a traversal object, and pass the relevant file and output directory to the TestController.
   As only text commands are used as input, a user can easily automate the testing process with a script, so that many test can be executed at once.
   If the user enters an invalid command then the CLI will show an error messsage along with an explanation of the commands.
-  
+  The commands below are taken from the message displayed to the user when running without arguments.
+  \begin{figure}
+  \scriptsize
+  \begin{verbatim}
+Usage: splats [options]
+  -h, --help                       Display help screen
+  -G, --generate                   Generate a set of tests for the given file
+  -C, --compare                    Generate a set of tests based on the first file, and then run those tests
+                                    on the second file
+  -f, --object-from-file FILE      Test classes from file. File & class must share names
+  -g FILE,                         Second test classes from file. File & class must share names
+      --comparee-object-from-file
+  -o, --output-directory DIR       Output directory (defaults to "tests/") Fails if directory already exists
+  -O, --output-directory-force DIR Output directory (defaults to "tests/") May overwrite if directory already
+                                    exists
+  -d, --depth [DEP]                Use depth limited traversal with search space provided depth DEP (default 3)
+  -r, --random [SEED]              Use random traversal with provided SEED (default random)
+  -m, --manual                     Use manual traversal
+  \end{verbatim}
+  \caption{CLI commands}
+  \end{figure}
   \subsection{Graphical User Interface (GUI)}
   \subsubsection{Choice of framework}
   When researching which GUI to use, the vast majority of those for Ruby are either no longer supported, have a non-native look about them, or work only with Mac or Windows. Since the majority of the group are Unix users, the latter constraint meant that there were only a few to choose from. There is a page on wikipedia comparing the various frameworks on offer\footnote{\url{http://en.wikibooks.org/wiki/Ruby_Programming/GUI_Toolkit_Modules}}, and from this page (and other forums) Ruby Shoes unanimously stood out as it is extremely quick to load elements and has a shallow learning curve.
-  Shoes is a stand-alone Ruby program Shoes\footnote{\url{http://shoesrb.com/}}. This came shipped with its own version of Ruby. After some discussion, it was decided that we should try to use as many Gems\footnote{Ruby's equivalent of libraries} as possible, rather than stand-alone programs which the user must install. For this reason, the GUI was ported over to Green Shoes\footnote{\url{https://github.com/ashbb/green_shoes}} which can be installed by the standard "gem install" command, loaded in SpLATS by "require green\_shoes" and run as a normal Ruby file.
+  Shoes\footnote{\url{http://shoesrb.com/}} is a stand-alone program which comes shipped with its own version of Ruby. After it was decided to use Gems for bundling, the GUI was ported to Green Shoes\footnote{\url{https://github.com/ashbb/green_shoes}}.
   
   \subsubsection{Design}
-  The GUI was designed to be minimalist with as few buttons as possible. As no one in the group proclaimed to be a designer, the look of the GUI is minimalist as well. The images are used to illustrate the workflow the user goes through when first loading the GUI.
+  The GUI was designed to be minimalist with as few buttons as possible. As no one in the group proclaimed to be a designer, the look of the GUI is minimalist as well. The images are used to illustrate the what the user sees on execution of the GUI.
   
-  Figure \ref{fig:GUI_Page1} shows the page the user sees when they first open the GUI. This gives them the option to load the version of the code to generate tests for. Before the file is loaded, the button saying \verb+Load first version of the code+ is all they see. There is no other information on the first page, because it is assumed that the user wants to just begin testing and they already know what the program does. The \verb+file open+ dialog will not allow the user to cancel, nor allow the user to select a file which isn't '.rb'. Once a valid file is loaded, the \verb+next+ button and the text box appear. The text box is there to show the user what the inside of the file looks like, just so they are certain that they have loaded the correct version to test. There is a bug in Green Shoes, where the scroll bar doesn't appear on these text boxes, however they are scrollable with the mouse. The issues encountered with Green Shoes will be discussed in the "Problems" section. In future implementations of SpLATS, it would be possible to make this file box editable and writeable, but that is not high on the list of priorities.
+  Figure \ref{fig:GUI_Page1} shows the first page. The button \verb+Load first version of the code+ is all that is displayed, giving only one option: to load the version of the code to run tests for. The preferred design would have been to pop up the file dialog box without clicking this button, but Green Shoes has many bugs which are difficult to overcome, and this was one of them. There is no other information on the first page, because it is assumed that the user wants to just begin testing and they already know what the program does. The \verb+file open+ dialog will not allow the user to cancel, nor allow the user to select a file which isn't '.rb'. Once a valid file is loaded, the \verb+next+ button and the text box appear. The text box is there to show the user what the inside of the file looks like, just so they are certain that they have loaded the correct version to test. There is a bug in Green Shoes, where the scroll bar doesn't appear on these text boxes, however they are scrollable with the mouse. The issues encountered with Green Shoes will be discussed in the "Problems" section. In future implementations of SpLATS, it would be possible to make this file box editable and writeable, but that is not high on the list of priorities.
 Figure \ref{fig:GUI_Page2} is the same as the first page, only for the second version of the code.
   
   \begin{figure}
@@ -113,79 +141,35 @@ Figure \ref{fig:GUI_Page2} is the same as the first page, only for the second ve
 
   \section{Test Generator}
     The purpose of the test generator is to produce tests for a given Class
-Under Test (CUT), the generator is also passed a traversal object that is used
+Under Test (CUT). The generator is also passed a traversal object which is used
 to direct the generator's search.
 
     The production of tests in SpLATS can be visualised as a tree where each
 node represents a choice that must be made. The choices in question are which
-method to test, the values to pass that method as arguments, and any primitive
-values that must be created (termed 'mock decisions') during execution of the CUT.
-    The test can be considered as being split into lines each comprising of one
+method to test; the values of the arguments to pass to that method; and any primitive
+values that must be created (termed 'MockDecisions') during the execution of the CUT. A primitive value is defined as those classes which are built into Ruby (e.g. String, Integer, Boolean, etc.).
+    The test can be considered as being split into individual TestLines each comprising one
 method, one set of arguments, and multiple mock decisions.
 
 %TODO: Insert tree diagram
 
-    Each time a decisions is made, the generator offers a selection of options
-(in the case of methods and argument sets), or a type constraint (in the case of
-values) to the traversal object. It is the traverser's responibility to track
-the traversal and to direct the search as it deems best.
+    Each time a decision node is reached, the Generator offers a selection of options to the Traversal object. The Traversal method is responsible for tracking and directing the execution path in the manner it deems best.
+    
+    \paragraph{Method selection} Initially, the CUT must be constructed. Lightweight Ruby assumes the only way of doing so is through the class' \texttt{new} method. This is given to the Traversal class as the only option for updating its internal state. In subsequent iterations, Ruby's in-built reflection libraries are used to retrieve the possible callable public methods on the object.
+    
+    \paragraph{Argument selection} The chosen method's signature is examined and all possible sets of arguments are determined, taking into consideration required and optional parameters. The only arguments which can be chosen are nil or Mock.
+    
+    \paragraph{TestLine} TestLine is executed and the result is recorded. Any Mock objects which were passed into the method record any methods called upon them. They are thus able to trace the execution path from input to output. This solution aims to solve the problems associated with determining acceptable input types under Ruby's duck-typing. After each TestLine or Test is generated, the Traversal object is queried to see if another line should be generated.
+    
+    \paragraph{MockDecision} Under most circumstances, a methoc call made on a Mock object will return either a new Mock object or nil. Some method calls on a Mock object are defined as returning primitive types, as this is what Ruby expects in situations such as numerical operations or type casts. This return of a primitive type also helps to prevent an infinite chain of Mocks being created. Each time one of these primitive values is returned, other options available at that branch point are added to the Traversal search space.    
+    
+    \paragraph{Pruning} If the execution of a line raises an error, further descent of the tree will be halted, and the Traversal object is notified of the Exception. This is the only form of pruning SpLATS currently implements. Further improvements of SpLATS could prune by checking that isomorphic test cases, or similar cases are not being created. 
 
-    Each test line is produced in 3 distinct stages, selection of a method,
-selection of arguments, and execution of this test line - which causes values to
-be generated.
-
-    First, the method selection. Initially, the object must be constructed from
-its class. Our lightweight Ruby assumes that the only way to construct an
-object is through the use of its class' \texttt{new} method. This is given to
-the traversal class as the only option to update its internal state. In
-subsequent test lines, Ruby's in-built reflection is used to retrieve the
-callable (public) methods on the object.
-
-    Then, all the possible sets of arguments for the given method are produced
-by examining the method's signature. The range of numbers of parameters is
-determined by examining the number of required and optional parameters that the
-method can take. The repeated permutation of the input values is then taken
-for the range of possible input sizes. The input values to the methods under
-test are either nil or a Mock object.
-
-    Finally, the test line is executed and the result recorded. Any Mock objects
-that were passed into the method are used to record the methods called upon the
-arguments to the method and thus trace the data flow from the inputs to the
-outputs of the methods. This aims to solve the problems associated with
-determining acceptable input types under the duck typing system.
-
-    Certain method calls upon a Mock object are defined as returning a primitive
-type rather than another Mock object as Ruby expects primitives to be reuturned
-in certain cases (such as numerical addition and cast operations), this also
-helps to prevent an indefinitely long chain of Mock objects forming.
-
-    Each time a a Mock object returns a value, the value returned and the other
-options available at that branch point is added to the search space of the
-traversals.
-
-    If the execution of a line raises an error, further descent of the tree will
-be stopped and the traversal object notified of the exception that was raised.
-
-    After each line is generated, the traversal object is queried to see if
-another line should be generated, and similarly queried after each test is
-generated.
-
-    Three traversal mechanisms have been written so far for use with SpLATS, these
-are Human, Random and Breadth-first. The efficiency of each of these mechanisms
-is confirmed in the evaluation system. The interface is designed so that it is
-easy to write and use new traversal mechanisms and data generators.
+    \paragraph{Implemented Traversal Methods} Three traversal methods have so far been written: Depth-Limited, Manual and Random. The comparison between these methods can be found in the Evaluation section. The interface has been designed so that it is easy to write new traversal methods and primitive data generators.
 
   \subsection{Output}
-    When tests are generated by the Generator, they are added, line by line, to a Test object, which stores them in an internal representation called TestLine.
+    When tests are generated by the Generator, they are added line-by-line to a Test object which stores them in a class called TestLine. If SpLATS is only generating tests from a single input file, then the Test object is passed to TestFile. TestFile is a wrapper around Ruby's in-built IO::File and is used to write the tests to file. If SpLATS is performing regression testing, the files are not written to disk, but are generated and run in memory.
     
-    If SpLATS is set to only generate tests from a single input, then the Test object is passed to TestFile, a wrapper around the built-in IO::File, which is used to write to the tests to a file.
-    However, if SpLATS is set to perform a regression test, then the files will not be written to disk, and instead are generated and run in memory. 
+    Initially all the Tests were stored until the Generator had finished, but the Tests store all the Mock objects associated with them and this caused many out-of-memory errors. This was therefore changed so the Tests could be garbage-collected as soon as possible.
     
-    Initially, the Tests were stored until the Generator had finished, before being wrapped and output to a regular File.
-    However, Tests store all the Mock objects associated with them, and thus this was changed so they could be garbage collected as soon as possible to reduce memory footprint.
-    
-     The tests are output in the Test::Unit framework style. The FlexMock library
-is used for the ability to assert that calls should be made upon the inputs to
-functions and to track the source of the outputs. The FlexMock invocations are a
-representation of the calls made on the SpLATS Mock objects during the test
-generation stage.
+    The tests are output as Test::Units. When these tests are run, FlexMock is used to ensure that calls are made upon the inputs of functions and to track the source of the outputs.
