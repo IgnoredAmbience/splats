@@ -7,6 +7,9 @@
     
     An example of this is in testing a function which retrieves the first character of a string. If the function changes from using the index operator \texttt{[]} to the character function \texttt{chr}, a ``strong'' test would complain about this, when the purpose of SpLATS is not to.
     
+  \subsection{Ruby Interpreter Quirks}
+    When implementing the Mock object, a private method was needed which could be publically accessed through Ruby's in-built ``method\_missing" method, which is called whenever a method is called on an object that is not defined. The Ruby interpreter will call the private method without going through ``method\_missing", which does not adhere to the concept of a private class. The method was therefore defined on a separate object, which was then called through the ``method\_missing". This is not a very satisfactory implementation, but it is the only thing we could think to do.
+    
   \subsection{Output}
     Implementing the output of the execution structure was quite challenging. Mock libraries exist for test suites in Ruby, but they vary in terms of the features and flexibility. The default Mock library bundled with Ruby is MiniTest::Mock, but its implementation uses a hash-map to store results of calls on the Mock object. Once the hash-map has been accessed, the variable is deleted from it. This means that when the same method is called twice in a row on the Mock object, but different values are returned, MiniTest::Mock would not produce the correct results. FlexMock was chosen because it overcomes this limitation by using a stack instead.
 
