@@ -122,15 +122,11 @@ The traversal depth (the number of TestLines produced) does not impact upon the 
 This is because each call on a mock object is treated as splitting the search space.
 As both of these classes call many methods upon the mock objects, QuickSort through recursion, and ISBN-Tools by repeatedly calling a long chain of methods.
 
-  \subsection{Testing by Inspection}
-  - Code coverage showed Tom that it wasn't doing 1 + 1 coerce error.
-  \subsection{Code Coverage}
-  \subsection{ZenTest}
-  \subsection{Test Generation and Comparison}
-    \subsubsection{Analysis}
-    \subsubsection{Design}
-    \subsubsection{Implementation}
-    \subsubsection{Testing}
+\section{Testing SpLATS}
+\subsection{Testing the Core}
+  As this project was heavily research-based, it was unfeasable to write tests before implementing the code as the code underwent frequent and radical refactorings or change of scope.
+  Tests were therefore written for a section of code once it reached a stable point and was considered ready to reach the final product.
+  Code that was in the master branch of the repository before this rule was enforced has since had unit tests written to cover it.
     
 \subsection{Testing of GUI}
 The underlying code of SpLATS has been tested, and so it is assumed that the GUI will work provided all the buttons do what they say they will.
