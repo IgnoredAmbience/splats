@@ -1,36 +1,59 @@
 \chapter{Validation and Conclusions}
 \section{Performance of SpLATS}
-  \subsection{Feature Matrix}
-    \begin{tabular}{p{0.3\textwidth} | p{0.5\textwidth}}
-    Aim & Success \\
+  \subsection{Minimum Requirements}
+    \begin{tabular}{| c | p{\colwidth} |}
     \hline
-    Compare two versions of code &
-    We can generate tests, which can be easily adapted to be run against another version of the code.
-    It is also possible to generate tests based on one version of a piece of code, and then run those tests on another version of the same code, marking the deltas. \\
-    Set configuration options & The user interfaces can be used to control how the search space is traversed, as well as the input and output options \\
-    Inspect code coverage of tests & By default, code coverage of generated tests will be output along with the results of the tests. \\
-    Reproduce tests & Tests are reproducible, given the same input SpLATS will behave in a deterministic way. For the random traversal a seed is provided as input, so although SpLATS will behave
-    in a pseudorandom way, the tests will be recreatable if the same seed is given.\\
-    Have a CLI &
-    A simple wrapper for SpLATS was implemented \\
+    \textbf{Aim} & \textbf{Progress} \\
+    \hline
+    Find out if two versions of my code have the same functionality. &
+    SpLATS automatically performs regression testing on a code base. \\
+    \hline
+    Set configuration options to select which classes and/or methods to test. &
+    This requirement makes no sense in lieu of Lightweight Ruby (each file is considered a class, and the methods are loaded at run-time). \\
+    \hline
+    Inspect code coverage of generated tests. &
+    Code coverage is automatically given to the user in a nice format when SpLATS has finished running. \\
+    \hline
+    Reproduce tests. &
+    SpLATS behaves in a deterministic way, so the same traversal method with the same options will produce the same output. Even when random is chosen as the traversal method, there is a seed that can be used to create the same tests. \\
+    \hline
+    Use a command line interface to interact with the system &
+    A fully functioning CLI has been written. \\
     \hline
     \end{tabular}
-
-    \begin{tabular}{p{0.3\textwidth} | p{0.5\textwidth}}
-    Aim & Success \\
+  \subsection{Extensions}
+    \begin{tabular}{| c | p{\colwidth} | p{\colwidth} |}
     \hline
-    Have a GUI &
-    This works, and is especially useful for manual traversal \\
+    \textbf{Aim} & \textbf{Progress} \\
+    \hline
+    Use a graphical interface to interact with the system &
+    A fully functional GUI has been written which displays graphs to the user. \\
+    \hline
+    Automatically run regression tests on two versions of the code under version control. &
+    We can use the standard Git tools to achieve this result. (Git bisect) \\
+    \hline
     Test basic program semantics &
-    It does this to a very basic level implicitly, but it's not investigated much \\
-    Test code across multiple computers at once &
-    As SpLATS has a CLI suitable for writing scripts around, it is possible to run multiple instances across a distributed system, such as Condor; however, the tool doesn't distribute a single instance. \\
+    We haven't considered this as we could find no reliable easily-accessible documentation for contracts which are always guaranteed to hold. \\
     \hline
-    Have a website &
-    While it would have been useful for any future users it was deemed more important to improve the tool itself. It would be relatively simple to create some online documentation using a tool such as 
-    RDoc\footnote{\url{http://rdoc.sourceforge.net/}} or YARD\footnote{\url{http://yardoc.org/}} \\
-    Have different traversal mechaisms &
-    There are 3 traversal mechanisms: depth-first, random and manual. \\
+    Test my code across multiple computers at once &
+    We haven't considered this, although it would have been useful for the evaluation section for tests with large amounts of branches. \\
+    \hline
+    \end{tabular}
+  \subsection{Future Enhancements}
+    This table has been modified to reflect future enhancements that we have considered as the project has progressed.
+    \begin{tabular}{| c | p{\colwidth} | p{\colwidth} |}
+    \hline
+    \textbf{Aim} & \textbf{Progress} \\
+    \hline
+    Use a website to interact with the testing &
+    We haven't considered this as the GUI proved to be more challenging.
+    \hline
+    Have additional options to generate the tests, for example breadth-first and random-directed &
+    We have implemented this fully. \\
+    \hline
+    Better traversal and pruning methods &
+    This would be useful to generate tests quicker without using so much memory. \\
+    \hline
     \end{tabular}
 
   \subsection{Testing by Inspection}
