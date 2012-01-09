@@ -114,15 +114,45 @@ def get_ruby_file
   file
 end
 
-def read_with_line_numbers
-  stack do
-    line_number = 1
-    file = File.new(@version1, 'r')
-    lines = ""
-    while (line = file.gets)
-      lines += "#{line_number}: #{line}"
-      line_number += 1
+def get_file_array
+  if not @file_array.empty?
+    @file_array = File.new(@version1, 'r').read.split("\n")
+    @file_array = @file_array.each_with_index.map { |x,i| strong(i+1) + ": " + x }
+  end
+  @file_array
+end
+
+# Reads the file and loads it into a different window, highlighting a function name or line number
+def display_file (number, function_name)
+
+  file_array = get_file_array
+  choose_line = 0
+  # Loop through array and get index of line we're looking for
+  file_array.each_with_index do |line, line_number|
+    # Highlight if the correct line
+    if ((number.to_i == (line_number + 1)) || (function_name && line.index("def " + function_name.to_s)))
+      choose_line = line_number
     end
-    edit_box :width => '100%', :height => 500, :text => lines
+  end
+
+  if choose_line != 0
+    # Work out which bit of the array to grab
+    start_line = [0, choose_line - 5].max
+    end_line = [file_array.length - 1, choose_line + 5].min
+    
+    # Choose the before text and put into string
+    before_text = file_array[start_line..choose_line-1].join("\n")
+    # Choose the after text and put into string
+    after_text = file_array[choose_line+1..end_line].join("\n")
+    
+    stack do
+      background white
+      para before_text, :size => "small", :family => "monospace"
+      flow do
+        background wheat
+        para file_array[choose_line], :size => "small", :family => "monospace"
+      end
+      para after_text, :size => "small", :family => "monospace"
+    end
   end
 end

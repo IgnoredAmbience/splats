@@ -35,6 +35,7 @@ class SPLATSGUI < Shoes
     @traversal_method = :depth
     @depth = 2
     @seed = 0
+    @file_array = [1,2,3]
     
     # Shoes height and width initialise - to keep an eye on them
     @height = height
@@ -43,6 +44,7 @@ class SPLATSGUI < Shoes
     # Put in a dummy depth and seed
     @main = stack :margin => 10 do
     end
+      
     next_page
   end
   
@@ -162,14 +164,11 @@ def text_display selection
     @depth = 1
   else
     if @selection["type"] == "arguments"
-      @method ||= "initialise"
-      flow do
-        para "Current method:", :width => 300
-        para strong @method
-      end
+      @method ||= "initialize"
+      para( "Choose an argument for ", strong( @method ), " function." )
     elsif @selection["type"] == "method"
       @depth += 1
-      para "Select next method to test (current depth)"
+      para( "Select next method to test (current depth: ", strong( @depth ), ")." )
     elsif @selection["type"] == "decision"
       para "Choose decision for type on line number " + @selection["line_number"]
     end
@@ -178,6 +177,7 @@ end
 
 def draw_selections
   @main.clear do
+  
     # Present the question/information to the user
     text_display @selection
     
@@ -201,15 +201,41 @@ def draw_selections
         end
       end
     end
-    if @selection["type"] == "decision"
-      read_with_line_numbers
+    # If the user needs to make a decision, show them the file and line number
+    case @selection["type"]
+      when "decision"
+        display_file(@selection["line_number"], nil)
+      when "method"
+        display_graph
+      when "arguments"
+        # Show the highlighted function
+        display_file(nil, @method)
+        if not @depth == 1
+          display_graph
+        end
     end
-    display_graph
   end
 end
 
+# Disgusting.
 def display_graph
-  image("graph.png")
+  if not @graph
+    graph = graph_image = nil
+    @graph_window = window :title => "Progress graph" do
+      @graph = stack do
+        @graph_image = image("graph.png")
+      end
+      graph = @graph
+      graph_image = @graph_image
+    end
+    @graph = graph
+    @graph_image = graph_image
+  else
+    @graph.app do
+      @graph_image.clear
+      @graph_image = image("graph.png")
+    end
+  end
 end
 
 def label_selection input

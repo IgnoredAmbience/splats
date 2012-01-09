@@ -75,7 +75,7 @@ module SPLATS
     end
     
     def self.to_s
-      "An argument"
+      "Mock object"
     end
   end
 
