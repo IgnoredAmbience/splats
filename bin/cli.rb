@@ -38,7 +38,7 @@ optparse = OptionParser.new do |opts|
   end 
   
   options[:random] = [false, nil]
-  opts.on("--random [SEED]", "-r", "Use random traversal with provided SEED (default 0)") do |seed|
+  opts.on("--random [SEED]", "-r", "Use random traversal with provided SEED (default random)") do |seed|
     options[:random] = [true, seed]
   end
   
@@ -95,9 +95,7 @@ begin
     traversal_object = SPLATS::HumanTraversal.new()
   elsif options[:random][0] 
     traversal = :random
-    if options[:random][1].nil?
-      seed = 0
-    else 
+    unless options[:random][1].nil?
       seed = options[:random][1].to_i
     end    
     traversal_object = SPLATS::RandomTraversal.new(seed)
