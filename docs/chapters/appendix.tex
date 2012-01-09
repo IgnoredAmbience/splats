@@ -96,6 +96,31 @@ approaching the problems that arise, for example:
 \item Can you consistently achieve high code coverage of the classes
       being tested?
 \end{itemize}
-\chapter{Report 1}
-\chapter{Report 2}
-\chapter{Report 3}
+
+\chapter{Input/Output Samples}
+\lstset{language=Ruby}
+
+All the following examples show output when run with depth-limited search at a
+depth of 2, to limit the number of tests shown.
+
+\section{Simple Addition}
+\subsection{Input}
+\begin{lstlisting}
+class Addition
+  def add(a)
+    1 + a
+  end
+end
+\end{lstlisting}
+
+\subsection{Test Output}
+\lstinputlisting{listings/test_SimpleAddition.rb}
+
+\section{A Simple Test Case}
+\subsection{Input}
+\lstinputlisting{listings/SimpleTest.rb}
+
+\subsection{Output}
+\lstinputlisting{listings/test_SimpleTest.rb}
+
+
