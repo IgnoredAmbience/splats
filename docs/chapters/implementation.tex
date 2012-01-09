@@ -5,11 +5,32 @@
     Instead of a function requiring parameters to be of specific types, or implementing specific interfaces, any object can have any method called on it.
     If the method is not defined for that object then a runtime error will occur.
     Because of this loose typing mechanism, it's very easy to make a Mock object that can take the place of any other class of object, by responding to all methods, returning another Mock object if output is required.
-    It can subsequently collect all the required methods a given parameter is needed to respond to, building up information about what parameters for a particular code-flow need to be.
+    It can subsequently collect all the required methods a given parameter is
+needed to respond to, building up information about what the parameters for a particular code-flow need to be.
 
     However, this also makes it very difficult to output reusable tests.
-    Given duck typing doesn't lead to explicit types or interfaces, it's difficult to impossible to write an explicit `concrete' output that can be recreated from scratch without having to include the entire execution tree.\\
-    TODO: HOW THIS WAS RESOLVED \\
+    Given duck typing doesn't lead to explicit types, interfaces or values, it's difficult to impossible to write an explicit `concrete' output that can be recreated from scratch without having to include the entire execution tree.
+
+    Our solution to this was to include the entire execution tree of Mock
+objects. It should be noted that this verges on naieve whitebox testing, so may
+produce tests that are too strong and assert about the internal state of the
+program under test rather than merely the input to output mapping.
+
+An example of this is if the implementation of a function that retrieves the
+first character of a string changes from using the index operator [] to the chr
+function, each of which have the same functionality, but would not appear the same
+to the execution structure on the Mock objects.
+
+  \subsection{Search Space Size}
+    The search space of the program grows considerably, if using a complete
+approach to traversing the tree then many repetitive and redundant tests are
+produced. At this time, a traversal mechanism to reduce this redundancy has not
+been produced, this means that SpLATS cannot work effectively on test classes
+that branch widely.
+
+    A related problem is that some chains of execution of Mock objects will not
+reach a method that resolves to a primitive type. This was overcome by limiting
+the maximum length of an execution chain that a Mock object may spawn.
 
   \subsection{GUI}
     Shoes was originally chosen because of its shallow learning curve and simple one-liners which enable rapid GUI development. Due to its standalone nature, it was decided to switch to the gem "Green Shoes", which has proven to be rather problematic. Green Shoes does not yet implement all the features on offer in Shoes, but the functions are still in the documentation, and only some are labelled as not being implemented. Green Shoes offers what it calls slots, and these are implemented in a very buggy way. For example, assigning a slot to a variable can often cause nil access errors. Adding an empty "do end" statement to the end of the slot initialisation can fix this. 
