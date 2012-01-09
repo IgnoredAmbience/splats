@@ -41,11 +41,12 @@
   \small
   \item The user starts a UI of their choice, and passes in the file or files to be tested, a directory to put the finished tests, a traversal method and any parameters for that method.
     The interface then starts the TestController, which creates the output directory if one is needed, and loads the input files and their relevant classes.
-  \item The TestController then initializes a Generator for each class, with the traversal method and parameters.
+  \item The TestController then initialises a Generator for each class, with the traversal method and parameters.
   \item The Generator talks to the traversal method.
   \item The traversal method responds to the Generator.
   \item Every Test produced by the Generator is sent to the TestController.
-  \item The Tests are sent to TestFile, which wraps the tests with the necessary code to be run by Ruby's Test::Unit framework.
+  \item If the tests are being generated for a single file, the tests are sent to TestFile, which wraps the tests with the necessary code to be run by Ruby's Test::Unit framework. 
+  \item If the tests are being generated to compare two files, the tests are generated and run in memory without being saved to disk.
   \end{enumerate}
   
   \subsection{User Interface}
@@ -63,9 +64,9 @@
   The GUI was initially implemented with a stand-alone Ruby program Shoes\footnote{\url{http://shoesrb.com/}}. This came shipped with its own version of Ruby. After some discussion, it was decided that we should try to use as many Gems\footnote{Ruby's equivalent of libraries} as possible, rather than stand-alone programs which the user must install. For this reason, the GUI was ported over to Green Shoes\footnote{\url{https://github.com/ashbb/green_shoes}} which can be installed by the standard "gem install" command, loaded in SpLATS by "require green\_shoes" and run as a normal Ruby file.
   
   \paragraph{Design}
-  The GUI was designed to be minimalist with as few buttons as possible. As no one in the group would proclaim to be a designer, the look of the GUI is minimalist as well. The images are used to illustrate the workflow the user goes through when first loading the GUI.
+  The GUI was designed to be minimalist with as few buttons as possible. As no one in the group proclaimed to be a designer, the look of the GUI is minimalist as well. The images are used to illustrate the workflow the user goes through when first loading the GUI.
   
-  Figure \ref{fig:GUI_Page1} shows the page the user sees when they first open the GUI. This gives them the option to load the version of the code to generate tests for. Before the file is loaded, the button saying "Load first version of the code" is all they see. There is no other information on the first page, because it is assumed that the user wants to just begin testing and they already know what the program does. The "file open" dialog will not allow the user to cancel, nor allow the user to select a file which isn't '.rb'. Once a valid file is loaded, the "next" button and the text box appear. The text box is there to show the user what the inside of the file looks like, just so they are certain that they have loaded the correct version to test. There is a bug in Green Shoes, where the scroll bar doesn't appear on these text boxes, however they are scrollable with the mouse. The issues encountered with Green Shoes will be discussed in the "Problems" section. In future implementations of SpLATS, it would be possible to make this file box editable and writeable, but that is not high on the list of priorities.
+  Figure \ref{fig:GUI_Page1} shows the page the user sees when they first open the GUI. This gives them the option to load the version of the code to generate tests for. Before the file is loaded, the button saying \verb+Load first version of the code+ is all they see. There is no other information on the first page, because it is assumed that the user wants to just begin testing and they already know what the program does. The \verb+file open+ dialog will not allow the user to cancel, nor allow the user to select a file which isn't '.rb'. Once a valid file is loaded, the \verb+next+ button and the text box appear. The text box is there to show the user what the inside of the file looks like, just so they are certain that they have loaded the correct version to test. There is a bug in Green Shoes, where the scroll bar doesn't appear on these text boxes, however they are scrollable with the mouse. The issues encountered with Green Shoes will be discussed in the "Problems" section. In future implementations of SpLATS, it would be possible to make this file box editable and writeable, but that is not high on the list of priorities.
 Figure \ref{fig:GUI_Page2} is the same as the first page, only for the second version of the code.
   
   \begin{figure}
@@ -116,8 +117,10 @@ Figure \ref{fig:GUI_Page2} is the same as the first page, only for the second ve
 
   \subsection{Output}
     When tests are generated by the Generator, they are added, line by line, to a Test object, which stores them in an internal representation called TestLine.
-    This Test object is then passed to a TestFile, a wrapper around the built-in IO::File, which writes it to file.
-
+    
+    If SpLATS is set to only generate tests from a single input, then the Test object is passed to TestFile, a wrapper around the built-in IO::File, which is used to write to the tests to a file.
+    However, if SpLATS is set to perform a regression test, then the files will not be written to disk, and instead are generated and run in memory. 
+    
     Initially, the Tests were stored until the Generator had finished, before being wrapped and output to a regular File.
     However, Tests store all the Mock objects associated with them, and thus this was changed so they could be garbage collected as soon as possible to reduce memory footprint.
     
