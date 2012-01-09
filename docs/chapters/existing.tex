@@ -12,7 +12,7 @@ which is a testing framework.
 Many other competing testing frameworks exist, most providing little added
 benefit other than syntactical differences.
 
-SpLATS targets Test::Unit as its output format.
+SpLATS targets Test::Unit and Minitest::Unit as its output format.
 
 \section{Static Analysis}
 
@@ -30,7 +30,25 @@ SpLATS targets Test::Unit as its output format.
   almost all behaviour can be modified at run time; without running the program,
   it is difficult to infer anything about its behaviour. Furthermore, it was beyond
   the scope of the project.
-  
+
+  \subsection{KLEE}
+  KLEE\footnote{\url{http://klee.llvm.org}} is a KLEE is a symbolic virtual
+  machine that runs on LLVM compiler infrastructure. By annotating the
+  inputs as being symbolic, KLEE traces different paths of execution through 
+  the code dependent on the value of these annotated variables.
+
+  The idea of SpLATS was not to have to annotate parts of the code; we
+  wished to liberate the programmer from having to write their own tests,
+  and having to annotate code is sufficiently close to this that it was
+  deemed to be unsuitable.
+
+\section{Dynamic Analysis} 
+
+  Dynamic analysis analyses code by running it, potentially with modifications
+  to the runtime environment. Code profiling is an example of dynamic analysis;
+  the speed and space requirements of a program are analysed by running the
+  program.
+
   \subsection{ZenTest}
     ZenTest\footnote{\url{http://docs.seattlerb.org/ZenTest/index.html}}
 comprises of a suite of 4 tools designed to assist a software developer with
@@ -61,12 +79,22 @@ writing tests, and to allow a developer to just write code.
   The execution path of KLEE is defined by the programmer as annotations, but the idea of SpLATS is to liberate the programmer from doing anything other than programming. Having to annotate code shifts the paradigm that the programmer is free, therefore using similar architecture or methods to KLEE was deemed unsuitable.
 
   \subsection{IRULAN}
-    IRULAN\footnote{\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}} is an automated blackbox testing system for Haskell written by Dr Allwood as his PhD thesis.
-    IRULAN performs directed random testing, which is a different method to how SpLATS performs (see below).
+    IRULAN\footnote{\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}} is an 
+    automated blackbox testing system for Haskell written by Dr Allwood 
+    as his PhD thesis.
+
+    IRULAN performs directed random testing, whereas SpLATS works using a variety 
+    of methods to traverse the search space.
 
   \subsection{Tickling Java with a Feather}
-    This\footnote{\url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}} is another of Dr Allwood's research papers, where he performs automated testing on a subset of the Java language.
-    Some of the methods outlined here are useful.
+    Tickling Java with a Feather
+    \footnote{\url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}}
+    is another of Dr Allwood's papers, where testing is restricted a well defined
+    subset of the Java language. 
+
+    From this paper, we took the idea of only testing on a subset of Ruby, and 
+    simply ignoring certain other parts of the language.
+
 
   \subsection{Randoop}
     Randoop\footnote{\url{http://code.google.com/p/randoop/}} is another
