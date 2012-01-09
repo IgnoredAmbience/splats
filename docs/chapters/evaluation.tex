@@ -6,9 +6,9 @@
     \hline
     Compare two versions of code &
     We can generate tests, which can be easily adapted to be run against another version of the code.
-    No direct comparison from within the tool as yet, however. \\
-    Set configuration options & The user interfaces can be used ot control how the search space is traversed, as well as the input and output options \\
-    Inspect code coverage of tests & FIAL \\
+    It is also possible to generate tests based on one version of a piece of code, and then run those tests on another version of the same code, marking the deltas. \\
+    Set configuration options & The user interfaces can be used to control how the search space is traversed, as well as the input and output options \\
+    Inspect code coverage of tests & By default, code coverage of generated tests will be output along with the results of the tests. \\
     Reproduce tests & Tests are reproducible, given the same input SpLATS will behave in a deterministic way. For the random traversal a seed is provided as input, so although SpLATS will behave
     in a pseudorandom way, the tests will be recreatable if the same seed is given.\\
     Have a CLI &
@@ -16,11 +16,10 @@
     \hline
     Have a GUI &
     This works, and is especially useful for manual traversal \\
-    Be able to be run automatically & PROBABLE WINNAR \\
     Test basic program semantics &
     It does this to a very basic level implicitly, but it's not investigated much \\
     Test code across multiple computers at once &
-    As it has a CLI suitable for writing scripts around, it is possible to run multiple instances across a distributed system, for example, with Condor, however the tool doesn't distribute a single instance. \\
+    As SpLATS has a CLI suitable for writing scripts around, it is possible to run multiple instances across a distributed system, such as Condor; however, the tool doesn't distribute a single instance. \\
     \hline
     Have a website &
     While it would have been useful for any future users it was deemed more important to improve the tool itself. It would be relatively simple to create some online documentation using a tool such as 
