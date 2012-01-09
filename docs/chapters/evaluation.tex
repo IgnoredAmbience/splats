@@ -100,15 +100,25 @@ ISBN-Tools & 2 (1) & 0:0.056 & 13 & 10/16 (63\%) \\
 \end{tabular}
 
 \subsubsection{Analysis}
-  The simplest classes (Addition and SimpleTest) easily achieved 100\% coverage at the minimum reasonable depth (2). This is because their output values are not dependent upon the object's internal state, thus every execution path can be reached from the first instance method calls.
+  The simplest classes (Addition and SimpleTest) easily achieved 100\% coverage at the minimum reasonable depth (2).
+This is because their output values are not dependent upon the object's internal state, thus every execution path can be reached from the first instance method calls.
 
-  LinkedList is a more interesting example as its internal state determines the output. It can be seen that at a depth of 2, only three-quarters of the lines can be reached, this is because the majority of the execution paths depend upon a list containing more than one element, which is only just possible at a depth of 2.
+  LinkedList is a more interesting example as its internal state determines the output.
+It can be seen that at a depth of 2, only three-quarters of the lines can be reached, this is because the majority of the execution paths depend upon a list containing more than one element, which is only just possible at a depth of 2.
 
-  At a depth of 3 almost all of the lines are accessable to the tests, except for two. The first of these is only reachable in a list of more than two elements, again not possible at this traversal depth. It is seen to be reached at a depth of 4.
+  At a depth of 3 almost all of the lines are accessable to the tests, except for two.
+The first of these is only reachable in a list of more than two elements, again not possible at this traversal depth. It is seen to be reached at a depth of 4.
 
-  The remaining uncovered line is never reached because it is immediately preceded by a line that is outside of our Lightweight Ruby specification. This line always raises an Exception, (due to trying to yield to a non-existant block) meaning that the uncovered line is unreachable by our test generator.
+  The remaining uncovered line is never reached because it is immediately preceded by a line that is outside of our Lightweight Ruby specification.
+This line always raises an Exception, (due to trying to yield to a non-existant block) meaning that the uncovered line is unreachable by our test generator.
 
-  It is quite noticable that QuickSort and ISBN-Tools are less suited to a complete traversal method 
+  It is quite noticable that QuickSort and ISBN-Tools are less suited to a complete traversal method.
+Similarly to the Addition and SimpleTest classes, the methods on these classes do not depend on the internal state of the object to produce their output.
+The traversal depth (the number of TestLines produced) does not impact upon the usefulness of the tests produced.
+
+  However, it can be seen that the permitted upper bound on the length of chains of Mock objects directly impacts upon the number and complexity of tests that are generated.
+This is because each call on a mock object is treated as splitting the search space.
+As both of these classes call many methods upon the mock objects, QuickSort through recursion, and ISBN-Tools by repeatedly calling a long chain of methods.
 
   \subsection{Testing by Inspection}
   - Code coverage showed Tom that it wasn't doing 1 + 1 coerce error.
