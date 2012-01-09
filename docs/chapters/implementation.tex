@@ -1,47 +1,24 @@
 \chapter{Challenges}
 \section{Technical Challenges}
   \subsection{Duck Typing}
-    Duck typing is a method of dynamic typing, named after the phrase "if it looks like a duck and quacks like a duck, it must be a duck".
-    Instead of a function requiring parameters to be of specific types, or implementing specific interfaces, any object can have any method called on it.
-    If the method is not defined for that object then a runtime error will occur.
-    Because of this loose typing mechanism, it's very easy to make a Mock object that can take the place of any other class of object, by responding to all methods, returning another Mock object if output is required.
-    It can subsequently collect all the required methods a given parameter is
-needed to respond to, building up information about what the parameters for a particular code-flow need to be.
+    Duck typing is a method of dynamic typing, named after the phrase``if it looks like a duck and quacks like a duck, it must be a duck". Instead of a function requiring parameters to be typed, any object can syntactically have any method called on it. If the method is not defined on that object then a runtime error will occur. Due to this loose typing mechanism, a Mock object can easily be created which takes the place of any other class of object. It can respond to all methods; return another Mock object if output is required; and can collect information about all the required methods the class it is mocking needs to implement. This information can then be used to determine what the parameters for a particular execution path need to be.
 
-    However, this also makes it very difficult to output reusable tests.
-    Given duck typing doesn't lead to explicit types, interfaces or values, it's difficult to impossible to write an explicit `concrete' output that can be recreated from scratch without having to include the entire execution tree.
-
-    Our solution to this was to include the entire execution tree of Mock
-objects. It should be noted that this verges on naieve whitebox testing, so may
-produce tests that are too strong and assert about the internal state of the
-program under test rather than merely the input to output mapping.
-
-An example of this is if the implementation of a function that retrieves the
-first character of a string changes from using the index operator \texttt{[]} to
-the \texttt{chr}
-function, each of which have the same functionality, but would not appear the same
-to the execution structure on the Mock objects.
-
-    Implementing the output of the execution structure was also challenging,
-Mock libraries exist for test suites, but vary in terms of features and
-flexibility. The default Mock library bundled with Ruby, MiniTest::Mock does not
-support returning multiple values in succession for the same call. An
-alternative, FlexMock was chosen as it can support this use-case.
+    Because duck typing doesn't enable explicit types or values, it is difficult to write an explicit `concrete' output which can be recreated without specifying an execution tree. SpLATS therefore includes the entire execution tree of Mock objects. This is a form of naive whitebox testing so may produce tests which are too ``strong" - i.e. they test something about the internal state of the program being tested, rather than mapping function inputs to outputs.
+    
+    An example of this is in testing a function which retrieves the first character of a string. If the function changes from using the index operator \texttt{[]} to the character function \texttt{chr}, a ``strong'' test would complain about this, when the purpose of SpLATS is not to.
+    
+  \subsection{Output}
+    Implementing the output of the execution structure was quite challenging. Mock libraries exist for test suites in Ruby, but they vary in terms of the features and flexibility. The default Mock library bundled with Ruby is MiniTest::Mock, but its implementation uses a hash-map to store results of calls on the Mock object. Once the hash-map has been accessed, the variable is deleted from it. This means that when the same method is called twice in a row on the Mock object, but different values are returned, MiniTest::Mock would not produce the correct results. FlexMock was chosen because it overcomes this limitation by using a stack instead.
 
   \subsection{Search Space Size}
-    The search space of the program grows considerably, if using a complete
-approach to traversing the tree then many repetitive and redundant tests are
-produced. At this time, a traversal mechanism to reduce this redundancy has not
-been produced, this means that SpLATS cannot work effectively on test classes
-that branch widely.
-
-    A related problem is that some chains of execution of Mock objects will not
-reach a method that resolves to a primitive type. This was overcome by limiting
-the maximum length of an execution chain that a Mock object may spawn.
+    The search space of the program tends to increase exponentially as more branch points are added to the tree. If a complete approach to the traversal is taken, many repetitive and redundant tests are produced. Due to time limitations, a pruning algorithm to reduce this redundancy has not been implemented, which means that SpLATS does not work effectively with test classes which branch widely, unless using an intelligent Manual traversal.
+    When a Mock object has a method called which returns a Mock, the returned Mock might have further methods called which return Mocks. This chain sometimes became infinite in early implementations of Mock. Because there is not yet an intelligent pruning mechanism, the problem has been temporarily overcome by limiting the maximum length of the execution chain that a Mock object may spawn.
 
   \subsection{GUI}
-    Shoes was originally chosen because of its shallow learning curve and simple one-liners which enable rapid GUI development. Due to its standalone nature, it was decided to switch to the gem "Green Shoes", which has proven to be rather problematic. Green Shoes does not yet implement all the features on offer in Shoes, but the functions are still in the documentation, and only some are labelled as not being implemented. Green Shoes offers what it calls slots, and these are implemented in a very buggy way. For example, assigning a slot to a variable can often cause nil access errors. Adding an empty "do end" statement to the end of the slot initialisation can fix this. 
+    Shoes was originally chosen because of its shallow learning curve and simple one-liners which enable rapid GUI development. Due to its standalone nature, it was decided to switch to the gem "Green Shoes", which has proven to be rather problematic. Green Shoes does not yet implement all the features on offer in Shoes, but the functions are still in the documentation, and only some are labelled as not being implemented. Green Shoes offers what it calls slots, and these are implemented in a very buggy way. For example, assigning a slot to a variable without a block will sometimes cause nil access errors.
     
-    Shoes uses GTK to present most of its features, but it does not utilise GTK to its full advantage. There is a part of the GUI where the user is presented with a file and asked to make a decision about a certain line in that file. The preferred design was to highlight the line in some way, either by a different colour or background colour. This proved not to be possible without writing extensions to Shoes, and since none of the group know GTK, there was not enough time to fix this issue.
+    Shoes uses GTK to present most of its features, but it does not utilise GTK to its full advantage. Shoes allows for an element called ``EditBox" which wraps around a GTK element. The GTK element offers the ability to change font colour and style throughout the EditBox. Shoes does not. There was not enough time to learn GTK to fix these issues, so various workarounds were used instead.
     
-    In the stand-alone version of Shoes, there is a slot called a flow, in which elements are placed as tightly together as possible. When displaying text, the command is called "para", and this displays text to the screen. When Shoes shows the "para"s in the flow, they are next to each other, which is useful to change colours and fonts in a sentence. When Green Shoes shows the "para", they are placed on separate lines which means the text looks funny, and part of the design was changed to incorporate this bug.
+    When the graph is presented to the user, it is assumed once they have moved the window, they will want to keep it there. This was far more difficult than it was initially thought to be, and there is an ugly hack in the code that no-one can find a way around.
+    
+    The GUI needed to communicate with SpLATS in the traversal class, which is deeply nested. Therefore, it was decided to use Threads to communicate between the GUI and SpLATS at each point the user needed to make a decision. This proved to be very difficult to implement because we had no way of ensuring the order of the execution of the threads, nor how to determine when to switch thread. Parameters were also not able to be passed between the Threads. After a small amount of research, Fibers were discovered, which solved the problems of Threads. Fibers need to be called and switched explicitly, which means the GUI has complete control over when SpLATS is running. They use stacks, which means that the options available to the user can be passed to the GUI from the TestController, and the GUI can pass back the user's decision without going through the levels of code. Furthermore, without the overheads of a thread manager, Fibers are extremely lightweight and fast.

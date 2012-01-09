@@ -22,8 +22,7 @@
 \end{figure}
 \end{center}
 
-  Ruby calls user-written libraries Gems, and there are many of these available. Once a program is finished, it can be bundled with all the Gems it used into one file which can be executed from any computer. The Gems used and the code that we wrote are discussed in this section.
-  
+  Ruby calls user-written libraries Gems, and there are many of these available. Once a program is finished, it can be bundled with all the Gems it used into one file which can be executed from any computer.
   Figure \ref{fig:Architecture_HighLevel} shows the overall view of the system and figure \ref{fig:Architecture_LowLevel} shows SpLATS at a more in-depth level.
 
   \begin{center}
@@ -47,11 +46,11 @@
   \end{center}
   
   \section{Gems used}
-  \paragraph{Green Shoes} The GUI framework.
-  \paragraph{Graph} Used to draw graphs.
-  \paragraph{SimpleCov} Used in conjunction with Test::Unit to determine how much of the code the tests test. It produces an HTML file of the percentage of code covered, and displays it in a nice format.
-  \paragraph{FlexMock} Used in the generated tests to test the execution path through the methods being tested.
-  \paragraph{Yard} Used to automatically generate documentation.
+  \paragraph{Green Shoes} \footnote{\url{https://github.com/ashbb/green_shoes}} The GUI framework.
+  \paragraph{Graph}\footnote{\url{http://rubygems.org/gems/graph}} Used to draw graphs.
+  \paragraph{SimpleCov}\footnote{\url{https://github.com/colszowka/simplecov}} Used in conjunction with Test::Unit to determine how much of the code the tests test. It produces an HTML file of the percentage of code covered, and displays it in a nice format.
+  \paragraph{FlexMock}\footnote{\url{http://flexmock.rubyforge.org/}} Used in the generated tests to test the execution path through the methods being tested.
+  \paragraph{Yard}\footnote{\url{http://yardoc.org/}} Used to automatically generate documentation.
   
   \section{User Interface}
   \subsection{Command Line Interface (CLI)}
@@ -85,7 +84,7 @@ Usage: splats [options]
   \subsection{Graphical User Interface (GUI)}
   \subsubsection{Choice of framework}
   When researching which GUI to use, the vast majority of those for Ruby are either no longer supported, have a non-native look about them, or work only with Mac or Windows. Since the majority of the group are Unix users, the latter constraint meant that there were only a few to choose from. There is a page on wikipedia comparing the various frameworks on offer\footnote{\url{http://en.wikibooks.org/wiki/Ruby_Programming/GUI_Toolkit_Modules}}, and from this page (and other forums) Ruby Shoes unanimously stood out as it is extremely quick to load elements and has a shallow learning curve.
-  Shoes\footnote{\url{http://shoesrb.com/}} is a stand-alone program which comes shipped with its own version of Ruby. After it was decided to use Gems for bundling, the GUI was ported to Green Shoes\footnote{\url{https://github.com/ashbb/green_shoes}}.
+  Shoes\footnote{\url{http://shoesrb.com/}} is a stand-alone program which comes shipped with its own version of Ruby. After it was decided to use Gems for bundling, the GUI was ported to Green Shoes.
   
   \subsubsection{Design}
   The GUI was designed to be minimalist with as few buttons as possible. As no one in the group proclaimed to be a designer, the look of the GUI is minimalist as well. The images are used to illustrate the what the user sees on execution of the GUI.
@@ -121,7 +120,7 @@ Figure \ref{fig:GUI_Page2} is the same as the first page, only for the second ve
   
   Once the user has input the correct information and they click "next", if they have selected "depth-limited" or "random" as the traversal methods, they will only see a page saying "generating tests", an alert pops up saying "testing complete" and SpLATS GUI will exit. It was decided not to draw graphs for these methods because the graphs will be extremely large.
   
-  If the user has selected "Manual", then the GUI becomes more interesting. In order to have the GUI communicating with the code running SpLATS, threads were initially chosen. In theory, one thread would start the SpLATS process, and then when the user needed to give input, the thread would switch back to the GUI to ask for the user, the user would give input and so on until the end of the generation. The problem with threads is that they are determined by the thread scheduler, and it is difficult to time the threads and dictate exactly which thread should start when. This problem was overcome by using Ruby's in-built Fiber module. This is a much more lightweight implementation of Threads, but they don't need a scheduler, each Fiber has its own stack and the Fibers need to be specifically started and stopped. The three of these in combination were exactly what was needed to make the GUI run. Without the overhead of a scheduler, the GUI is extremely lightweight. The stack means that variables could be passed between Fibers, so the options available to the user are sent from the controller to the GUI, and the user's choice sent from the GUI to the controller. Figure \ref{fig:GUI_Page4a} shows the first choice the user will always have when in manual mode. They have to select which parameters to give to the initialise method (if there are any). When debugging the human traversal in the CLI, the context of the decision being made was difficult to deduce. The design decision was made to show the user the relevant line in the code, plus or minus five lines.
+  If the user has selected "Manual", then the GUI becomes more interesting. The GUI starts interacting with SpLATS' Manual Traversal class, presenting the user with buttons to select at each decision. The user selects a method, selects arguments for that method, decides whether or not to continue down that branch of the tree, decides whether or not to continue generation, and then repeats the options. At the beginning of the execution and after each time they decide not to continue descending the tree, the user is automatically asked to select the arguments for the initialize method. Figure \ref{fig:GUI_Page4a} shows the first choice the user will always have when in manual mode. When debugging guided traversal for the CLI, decisions were presented with no context. The design decision was made to show a snippet of code around the line of code they are being asked to make the decision for. At each method (excluding initialize) and argument decision, the user is presented a graph in a different window which shows (to three levels) the decisions they have made so far. Figure \ref{fig:GUI_Page4b} shows this.
   
   \begin{figure}
     \centering
