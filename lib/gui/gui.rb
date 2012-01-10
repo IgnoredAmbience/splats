@@ -1,8 +1,9 @@
-require '../splats.rb'
 require 'green_shoes'
 require 'graph'
 require 'fiber'
-require './gui_elements.rb'
+require_relative 'gui_elements.rb'
+require_relative '../splats.rb'
+require_relative 'gui_traversal.rb'
 
 class NilClass
   def to_s
@@ -29,10 +30,10 @@ class SPLATSGUI < Shoes
     
     #TODO Put this in a config file
     # Defaults
-    @version1 = '../../samples/LinkedList.rb'
-    @version2 = '../../samples/version2/LinkedList.rb'
+    @version1 = File.join(File.dirname(__FILE__), '../../samples/LinkedList.rb')
+    @version2 = File.join(File.dirname(__FILE__), '../../samples/version2/LinkedList.rb')
     @output_dir = 'tests'
-    @traversal_method = :depth
+    @traversal_method = :human
     @depth = 2
     @seed = 0
     @file_array = [1,2,3]
@@ -51,12 +52,13 @@ class SPLATSGUI < Shoes
   def next_page
     @main.clear
     @main.append do
+      logo_name = File.join(File.dirname(__FILE__), "fly.png")
       # Keeps ticking to ensure the logo stays in the bottom right corner
-      @logo = image("fly.png").move (width - 100), (height - 100)
+      @logo = image(logo_name).move (width - 100), (height - 100)
       every(1) do
         unless height == @height
           @logo.clear
-          @logo = image("fly.png").move (width - 100), (height - 100)
+          @logo = image(logo_name).move (width - 100), (height - 100)
         end
       end
       case @page
@@ -134,11 +136,14 @@ class SPLATSGUI < Shoes
           @choice = Fiber.yield @decision
         end
       end
+
+      # Instantiate the GUI Traversal
+      @traversal = SPLATS::GUITraversal.new @display
       
       # Wrap the test controller in a fiber, passing the GUI fiber in
       # This determines the value of selection
       f = Fiber.new do |input|
-        controller = SPLATS::TestController.new(@version1, @output_dir, @depth, @seed, @traversal_method, @display)
+        controller = SPLATS::TestController.new(@version1, nil, @output_dir, @traversal)
         controller.test_classes
       end
       
@@ -149,7 +154,7 @@ class SPLATSGUI < Shoes
       check_controller_error
       
       # Display the selections to user
-      draw_selections 1
+      draw_selections
     else
       controller = SPLATS::TestController.new(@version1, @output_dir, @depth, @seed, @traversal_method, @display)
       controller.test_classes
@@ -157,16 +162,16 @@ class SPLATSGUI < Shoes
   end
 end
 
-def draw_selections depth
+def draw_selections
   @main.clear do
-    # Set the current depth (decision may need to know)
-    @decision.set_depth depth
+    # Set the current depth in the decision
+    @decision.depth = @depth
     # Present the question to the user
     para @decision.get_question
     
     # Run through all the options to generate clickable buttons
     flow do
-      @decision.get_options.each do |o|
+      @decision.options.each do |o|
         # Get label for the option
         l = label_selection o
         
@@ -176,12 +181,12 @@ def draw_selections depth
           if @decision.change_method?
             @method = o
           end
-          # Send the user's answer back
-          @display.transfer @decision.final_answer o
           # Update the depth
           @depth = @decision.update_depth
+          # Send the user's answer back
+          @display.transfer (@decision.final_answer o)
           # Refresh the screen
-          draw_selections depth
+          draw_selections
         end
       end
     end

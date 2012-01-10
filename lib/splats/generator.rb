@@ -34,7 +34,6 @@ module SPLATS
       decision = @traversal.method(:generate_value)
       method = @traversal.select_method [@class.method(:new)]
       args = @traversal.select_arguments generate_parameters(:initialize)
-
       test.add_line(method, args)
       exception_raised = test.execute_last &decision
 
@@ -52,7 +51,7 @@ module SPLATS
         args = @traversal.select_arguments generate_parameters(method)
         test.add_line(method, args)
 
-        exception_raised = test.execute_last &decision
+        exception_raised = (test.execute_last &decision)
         unless exception_raised
           continue_execution = true
         else

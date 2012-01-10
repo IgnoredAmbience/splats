@@ -2,6 +2,10 @@ module SPLATS
   # This class is responsible for when a human wants to traverse
   class HumanTraversal
     include Traversal
+    
+    def initialize
+      @init = true
+    end
 
     # Continually asks the user to pick a number in the range of the options
     # @param [String] type The type of the decision the user must make
@@ -26,6 +30,11 @@ module SPLATS
     end
 
     def select_method methods
+      if @init
+        @current_method = methods[0]
+        @init = false
+        return @current_method
+      end
       ask_input_options("method", methods)
     end
 
@@ -46,6 +55,7 @@ module SPLATS
       unless @firstrun
         @firstrun = true
       else
+        @init = true
         ask_input_yes_no "Continue generation?"
       end
     end

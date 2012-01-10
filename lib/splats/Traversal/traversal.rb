@@ -13,7 +13,7 @@ module SPLATS
     # @param [Array<Array>] arguments Array of viable argument sets for the
     #   previously returned method
     # @return [Array] The selected argument set
-    def select_arguments(method, arguments)
+    def select_arguments arguments
       raise NotImplementedError
     end
 
