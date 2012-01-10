@@ -1,9 +1,13 @@
+require '/home/caz/Uni/splats/lib/splats/Traversal/decisions.rb'
+
 module SPLATS
+  
   # This class is responsible for when a human wants to traverse
   class HumanTraversal
     include Traversal
     
     def initialize(fiber)
+      p "init"
       # gc initially stood for gui_controller...
       @gc = fiber
       @init = false
@@ -11,6 +15,7 @@ module SPLATS
 
     # There is code duplication because I believe these methods will all be slightly different
     def select_method methods
+      p "select method"
       # If it's the initialiser just return
       if not @init
         @init = true
@@ -25,12 +30,13 @@ module SPLATS
           methods[index-1]
         else
           # Send the GUI controller the options back
-          @gc.transfer Hash["type" => "method", "options" => methods]
+          @gc.transfer MethodDecision.new(methods)
         end
       end
     end
 
-    def select_arguments arguments
+    def select_arguments(method, arguments)
+      p "select arg"
       if @gc.nil?
         begin
           puts "Choose argument (1-indexed): (arguments: #{arguments.inspect})"
@@ -38,11 +44,12 @@ module SPLATS
         end while (index < 1 || index > arguments.length)
         arguments[index-1]
       else
-        @gc.transfer Hash["type" => "arguments", "options" => arguments]
+        @gc.transfer ArgumentDecision.new(method, arguments)
       end
     end
 
     def generate_value type
+      p "gen value"
       decisions = generate_values type
 
       if @gc.nil?
@@ -52,11 +59,12 @@ module SPLATS
         end while (index < 1 || index > decisions.length)
         decisions[index-1]
       else
-        @gc.transfer Hash["type" => "decision", "options" => decisions, "line_number" => caller[2].split(':')[1]]
+        @gc.transfer ValueDecision.new(decisions, caller[2].split(':')[1])
       end
     end
 
     def continue_descent?
+      p "cont desc"
       if @gc.nil?
         begin puts "Continue with descent? (Y or N)"
           # 'gets' includes the newline, so need chomp to prevent the include? from returning false
@@ -64,11 +72,12 @@ module SPLATS
         end while (not (["Y", "y", "N", "n"].include? decision))
         decision == 'Y' || decision == 'y'
       else
-          @gc.transfer Hash["type" => :y_or_n, "question" => "Continue with descent?"]
+          @gc.transfer DescentDecision.new
       end
     end
 
     def continue_generation?
+      p "cont gen"
       # Put init back to false
       @init = false
       unless @firstrun
@@ -81,7 +90,7 @@ module SPLATS
           end while (not (["Y", "y", "N", "n"].include? decision))
           decision == 'Y' || decision == 'y'
         else
-          @gc.transfer Hash["type" => :y_or_n, "question" => "Continue generation?"]
+          @gc.transfer GenerationDecision.new
         end
       end
     end
@@ -91,4 +100,3 @@ module SPLATS
     end
   end
 end
-

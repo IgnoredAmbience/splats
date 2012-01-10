@@ -27,7 +27,7 @@ module SPLATS
       select methods
     end
 
-    def select_arguments arguments
+    def select_arguments(method, arguments)
       select arguments
     end
 

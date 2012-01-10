@@ -22,7 +22,7 @@ module SPLATS
       methods[@rng.rand(methods.length)]
     end
 
-    def select_arguments arguments
+    def select_arguments(method, arguments)
       arguments[@rng.rand(arguments.length)]
     end
 

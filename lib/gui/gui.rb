@@ -123,13 +123,15 @@ class SPLATSGUI < Shoes
     if @traversal_method == :human
       f = nil
       @depth = 1
+      @execution_path = []
+      
       # Cheeky Fiber stuff - create a dummy fiber to allow the
       # transfer methods to work, but keep returning control to
       # this main thread
       @display = Fiber.new do |input|
         while input
-          @selection = f.transfer @choice
-          @choice = Fiber.yield @selection
+          @decision = f.transfer @choice
+          @choice = Fiber.yield @decision
         end
       end
       
@@ -147,7 +149,7 @@ class SPLATSGUI < Shoes
       check_controller_error
       
       # Display the selections to user
-      draw_selections
+      draw_selections 1
     else
       controller = SPLATS::TestController.new(@version1, @output_dir, @depth, @seed, @traversal_method, @display)
       controller.test_classes
@@ -155,75 +157,54 @@ class SPLATSGUI < Shoes
   end
 end
 
-def text_display selection
-  if @selection["type"] == :y_or_n
-    para @selection["question"]
-    @selection["options"] = @y_or_n.keys
-    # Make method 'nil' as we've moved on, and depth 1 again
-    @method = nil
-    @depth = 1
-  else
-    if @selection["type"] == "arguments"
-      @method ||= "initialize"
-      para( "Choose an argument for ", strong( @method ), " function." )
-    elsif @selection["type"] == "method"
-      @depth += 1
-      para( "Select next method to test (current depth: ", strong( @depth ), ")." )
-    elsif @selection["type"] == "decision"
-      para "Choose decision for type on line number " + @selection["line_number"]
-    end
-  end
-end
-
-def draw_selections
+def draw_selections depth
   @main.clear do
-  
-    # Present the question/information to the user
-    text_display @selection
+    # Set the current depth (decision may need to know)
+    @decision.set_depth depth
+    # Present the question to the user
+    para @decision.get_question
     
-    # Run through all the options to generate buttons for the user to click
+    # Run through all the options to generate clickable buttons
     flow do
-      @selection["options"].each do |o|
+      @decision.get_options.each do |o|
+        # Get label for the option
         l = label_selection o
         
-        # If the o is a 'new' method, don't display the button either and carry on
+        # Generate the button
         button l do
-          if @selection["type"] == "method"
-            @method = o            
+          # Decide whether or not to change the method
+          if @decision.change_method?
+            @method = o
           end
-          if @y_or_n.keys.include? o
-            @display.transfer @y_or_n[o]
-          else
-            @display.transfer o
-          end
+          # Send the user's answer back
+          @display.transfer @decision.final_answer o
+          # Update the depth
+          @depth = @decision.update_depth
           # Refresh the screen
-          draw_selections
+          draw_selections depth
         end
       end
     end
-    # If the user needs to make a decision, show them the file and line number
-    case @selection["type"]
-      when "decision"
-        display_file(@selection["line_number"], nil)
+    
+    # If the decision says to display a file, do so
+    case @decision.display_file
+      when "line_number"
+        display_file(@decision.get_line_number, nil)
       when "method"
-        display_graph
-      when "arguments"
-        # Show the highlighted function
         display_file(nil, @method)
-        if not @depth == 1
-          display_graph
-        end
     end
   end
 end
 
-# Disgusting.
+# This method requires passing variables between blocks, so there are a few assignment swaps...
 def display_graph
+  # Generate the graph
+  graph_png = generate_graph
   if not @graph
     graph = graph_image = nil
     @graph_window = window :title => "Progress graph" do
       @graph = stack do
-        @graph_image = image("graph.png")
+        @graph_image = image(graph_png)
       end
       graph = @graph
       graph_image = @graph_image
@@ -233,9 +214,34 @@ def display_graph
   else
     @graph.app do
       @graph_image.clear
-      @graph_image = image("graph.png")
+      @graph_image = image(graph_png)
     end
   end
+end
+
+def generate_graph
+  execution_path = @execution_path
+  puts execution_path
+  # Set up the digraph
+  digraph do
+    # Loop through the execution path
+   execution_path.each_with_index do |n, i|
+      # Start from the nodes before this node
+      if not i == 0
+        # If this is an even thing
+        if(i % 2 == 0)
+          node("moo1", label="blah")
+          node("moo2", label="blah2")
+          edge "moo1", "moo2"
+        # If not even, this is the decision which has been made
+        else
+          node("fill")
+        end
+      end
+    end
+    save "graph", "png"
+  end
+  "graph.png"
 end
 
 def label_selection input

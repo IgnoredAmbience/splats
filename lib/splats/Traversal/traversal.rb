@@ -9,10 +9,11 @@ module SPLATS
     end
 
     # Select an argument set from a given array of argument sets
+    # @param [String] the method we are picking arguments for
     # @param [Array<Array>] arguments Array of viable argument sets for the
     #   previously returned method
     # @return [Array] The selected argument set
-    def select_arguments arguments
+    def select_arguments(method, arguments)
       raise NotImplementedError
     end
 
