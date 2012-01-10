@@ -1,6 +1,3 @@
-require 'simple_cov'
-SimpleCov.start
-
 # Colours!
 require 'minitest/pride'
 

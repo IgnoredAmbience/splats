@@ -1,0 +1,114 @@
+\chapter{Features}
+
+\def \colwidth {0.35\textwidth}
+\section{User Stories}
+  Below is an extract from the first report explaining what the requirements are.
+  These have been modified slightly to take into consideration how the requirements have changed as the project has evolved.
+  \subsection{Minimum Requirements}
+    \begin{tabular}{| c | p{\colwidth} | p{\colwidth} |}
+    \hline
+    \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
+    \hline
+    Ruby developer &
+    Find out if two versions of my code have the same functionality &
+    Any changes to the codebase should not break existing code. \\
+    \hline
+    Ruby developer &
+    Set configuration options to select which classes and/or methods to test &
+    I won't necessarily want to test the entire system \\
+    \hline
+    Ruby developer &
+    Inspect code coverage of generated tests &
+    I need to know how much of my code has been tested \\
+    \hline
+    Ruby developer &
+    Reproduce tests &
+    A test will highlight issues, I will change the code and then want to run the same tests to check the problem has disappeared. \\
+    \hline
+    Ruby developer &
+    Use a command line interface to interact with the system &
+    It's the quickest method for me to run tests and is easily automated, eg, by git bisect \\
+    \hline
+    \end{tabular}
+  \subsection{Extensions}
+    \begin{tabular}{| c | p{\colwidth} | p{\colwidth} |}
+    \hline
+    \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
+    \hline
+    Ruby developer &
+    Use a graphical interface to interact with the system &
+    If I'm not used to command line interfaces, it will be the easiest way for me to use the system. \\
+    \hline
+    Ruby developer &
+    Automatically run regression tests on two versions of the code under version control &
+    I won't have to specify where the versions are, I can let it work that out itself \\
+    \hline
+    Ruby developer &
+    Test basic program semantics &
+    Two versions of the same code may have the same tested functionality, but they could be wrong in other ways \\
+    \hline
+    Ruby developer &
+    Test my code across multiple computers at once &
+    Parallelisation would allow for more tests to be created in less time, either speeding up the test cycle or allowing it to be more rigorous. \\
+    \hline
+    \end{tabular}
+  \subsection{Future Enhancements}
+    \begin{tabular}{| c | p{\colwidth} | p{\colwidth} |}
+    \hline
+    \textbf{As a...} & \textbf{I need to...} & \textbf{Because...} \\
+    \hline
+    Generic user &
+    Use a website to interact with the testing &
+    I want to learn how to test and therefore what good tests should look like. \\
+    \hline
+    Ruby developer &
+    Have additional options to generate the tests, for example breadth-first and random-directed &
+    My program may respond better to different traversal methods \\
+    \hline
+    \end{tabular}
+
+\section{Choice of Language}
+  Initially the project offered a choice of three languages to target: JavaScript, Python or Ruby. The table below is a comparison of their various features.
+
+  \begin{tabular}{| l | c | c | c |}
+  \hline
+  \textbf{Feature} & \textbf{Javascript} & \textbf{Python} & \textbf{Ruby} \\
+  \hline
+  Group experience (number of group members) & 4 & 3 & 0 \\
+  \hline
+  Typing & Weak, Duck & Strong, Duck & Duck \\
+  \hline
+  Purely Object Oriented & No & No & Yes \\
+  \hline
+  Functional & No & Yes & Yes \\
+  \hline
+  \end{tabular}
+  
+These languages are all duck typed\footnote{If quacks like a duck then it can be treated as a duck}, meaning that an object's current set of variables and methods determines its semantics. When writing tests, the finished code must be ``concrete'', which is a difficult challenge to overcome when an object is determined at run-time.
+All three allow object-oriented approaches, but Ruby is the only one which is purely object-oriented, the other two having ``raw'' primitive types, such as integers. Python and JavaScript would therefore need further processing to determine a variable's type than Ruby, making Ruby the easier language to work with.
+
+The main disadvantage of Ruby is that none of the group had used it previously, whereas some members had considerable experience with the other languages. This turned out to not be as big a disadvantage as anticipated, as we all started off on the same level and helped each other learn along the way. Ruby is also a good language to learn, as it is similar to other languages which all members knew.
+
+\section{Choice of Test Method to Implement}
+  There are a number of types of tests we could have produced with SpLATS.
+  The two main methods of testing are whitebox (where testing is performed
+  with a knowledge of how the code works) and blackbox (treating the
+  application as a black box, and testing without regard to how it is, or
+  appears to be, implemented).
+
+  We chose blackbox testing over whitebox testing because we didn't want to lex and parse Ruby, and then inspect that to infer anything. Whitebox testing Ruby would end up more as static code analysis, and because of Ruby's metaprogramming and the possibility of the code being changed at runtime, it would be difficult to make accurate interpretations without running the code.
+
+\section{Lightweight Ruby}
+A subset of Ruby was developed, as running SpLATS on everything Ruby offers is out of the scope of a three month project; we called it Lightweight Ruby. The choice directly impacted what assumptions could be made about the code being tested, and excludes many valid Ruby programs from testing.
+\begin{itemize}
+\item Assume that all code to be tested will be defined in public instance
+methods on a class in the top-level namespace and that the class shall be
+constructed using the standard \texttt{new}/\texttt{initialize} methods
+\item Assume that all methods being tested will not be side-effecting: they will not change global state (i.e. modify the core Ruby run-time system); they will not terminate execution; they will not modify global variables; and that they will not write to system resources. Any limitations not described which are side-effects are not guaranteed to be tested.
+\item Assume no interaction with a \texttt{SpLATS} module in the global namespace
+and any methods prefixed with \texttt{\_\_SPLATS}. These methods are defined by SpLATS for various reasons and are extremely important to its working.
+\item Assume methods do not require blocks to be passed into them (i.e. they do not
+\texttt{yield}).
+\item Assume no inheritance and mixins.
+\item Assume only optional and required parameters are arguments to functions. This means that blocks as arguments and variable sized arguments are not tested.
+\end{itemize}

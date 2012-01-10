@@ -1,11 +1,14 @@
 digraph {
 
-	"CLI"->"TestController" [label="Input file, Test output directory, Traversal method, Traversal parameters"]l=""
-	"TestController" -> "Generator"  [label="Class, traversal method"]
-	"Generator" -> "Traversal"
-	"Traversal" -> "Generator"
-	"Generator" -> "TestController" [label="Generator object"]
-	"TestController" -> "TestFile" [label="class, requirements, output directory"]
-
-
+	"CLI/GUI"->"TestController" [taillabel="1"]
+	"TestController" -> "Generator" [taillabel="2"]
+	"Generator" -> "Traversal" [taillabel="3",dir=both]
+        "Generator" -> "Class Under Test" [taillabel="4"]
+        "Class Under Test" -> "Generator"
+        "Class Under Test" -> "Mock" [taillabel="5"]
+        "Mock" -> "Class Under Test"
+        "Mock" -> "Generator" [taillabel="6"]
+        "Generator" -> "Mock"
+	"Generator" -> "TestController" [taillabel="7"]
+	"TestController" -> "TestFile" [taillabel="8"]
 }

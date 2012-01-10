@@ -27,6 +27,10 @@ module SPLATS
     :!= => :Bool,
     :== => :Bool,
     :=== => :Bool,
+    :< => :Bool,
+    :> => :Bool,
+    :>= => :Bool,
+    :<= => :Bool,
     :to_a => :Array,
     :to_ary => :Array,
 #    :to_c => :Complex,
@@ -38,6 +42,7 @@ module SPLATS
 #    :to_r => :Rational,
     :to_s => :String,
     :to_str => :String,
+    :inspect => :String,
     :to_sym => :Symbol,
   }
 
@@ -74,23 +79,16 @@ module SPLATS
     # @param [String] output_dir The directory for generated tests to be put
     #
     # @note Directory created if necessary
-    def initialize(input_file, output_dir, depth, seed, traversal, fiber=nil)
-      if fiber
-        require 'green_shoes'
-      end
-      @fiber = fiber
+    def initialize(input_file, regression_file, output_dir, traversal)
       @input_classes = SPLATS.load_classes input_file
-      @output_dir = output_dir || "tests/"
-      @depth = depth || 3
-      case traversal
-        when :human
-          @traversal = SPLATS::HumanTraversal.new(fiber)
-        when :random
-          seed = seed || 0
-          @traversal = SPLATS::RandomTraversal.new(seed, fiber)
-        else
-          @traversal = SPLATS::DepthLimitedTraversal.new(@depth, fiber)
+      @regression_file = regression_file
+      if output_dir == :notgiven
+        @output_dir = "tests/"
+      else 
+        @output_dir = output_dir
       end
+      #@depth = param || 3
+      @traversal = traversal       
       if not File::directory?(@output_dir)
         Dir.mkdir(@output_dir)
       end
@@ -105,7 +103,11 @@ module SPLATS
         @fiber.transfer [:error, "Could not find any classes"]
       end
       @input_classes.each do |c|
-        single_class_test c
+        if @regression_file.nil?
+          single_class_test(c)
+        else
+          double_class_test(c,@regression_file)
+        end
       end
     end
 
@@ -124,6 +126,35 @@ module SPLATS
         end
       end
     end
-  end
 
+    def double_class_test(first_test_class, second_test_class)
+      cur_testing_class = Generator.new(first_test_class, @traversal)
+
+      require "test/unit"
+      require "flexmock/test_unit"
+      
+      cur_testing_class.test_class do |test|
+        eval("class TestClass < ::Test::Unit::TestCase\ninclude FlexMock::TestCase\n" + test.to_s + "\n" + 'end')
+      end
+      
+      ::Test::Unit::Runner.class_variable_set :@@stop_auto_run, true
+
+      t = MiniTest::Unit.new
+      t.run
+      t.errors
+      t.failures
+      
+      Object.send(:remove_const, first_test_class.name.to_sym)
+
+      load second_test_class
+
+      t = MiniTest::Unit.new
+      t.run
+      t.errors
+      t.failures
+
+    end
+
+    
+  end
 end

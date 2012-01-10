@@ -1,0 +1,135 @@
+\chapter{Software Engineering Methods}
+
+\section{Collaboration and Coordination}
+
+  \subsection{Meeting Styles}
+    The group first tried short, daily meetings, with longer meetings where possible or necessary.
+    We quickly found that conflicting schedules made the short meetings impossible for all group members to attend and served little purpose: most days not enough progress was made to warrant discussion.
+    Daily meetings are useful in the workplace where team members can meet everyday for considerable periods of time. They are not so possible when the group members between them do seven modules and two humanities options. Therefore, there were two hour-long meetings per week, where one was directly followed by a meeting with the project supervisor.
+
+    After trying several online communication methods, we found a project IRC channel was helpful, hosted on EsperNet\footnote{\url{http://esper.net}}.
+    Commit messages from Git were posted there, and it was especially useful for discussions during the winter holidays, when we couldn't be in the same physical location. The conversations are also automatically logged, so members who were not present in the chat room at the time could catch up.
+
+    Commit messages were also posted to a twitter account, which then pushed to mobile phones.
+
+\section{Development Methods}
+
+  \subsection{Working Styles}
+  The big group meetings would highlight areas where group members were having problems. Possible ways to resolve the issues were discussed, and it would be decided how to proceed with the problem. The big meetings would also establish what each team member would be doing for the week. When one member of the group had an issue, another member of the group would sit down with them to help solve the problem. The paired programming would not last for too long, as it was discovered early on that we make more progress when working individually. This is because all five of us think about problems in different ways, which was helpful in the early stages of the project when deciding how to continue, but became a bit more problematic towards the end. This is because there would be many ideas of how to solve the problem, and time constraints started to press and concrete code needed writing.
+  
+  Big programming sessions happened occasionally, and these proved to be the most productive. The group would sit in the same room, working on their individual sections. This ensured that everyone continued to work throughout the day, but it also ensured that breaks were had when needed. Towards the end of the project, these sessions happened more frequently, and it's a shame that timetable constraints during the term meant that we were unable to do this as often as we would have liked.
+
+  \subsection{Tools Used}
+    \subsubsection{Version Control}
+      We decided at the outset to use the git\footnote{\url{http://git-scm.com}} revision control system for various reasons:
+      \begin{itemize}
+      \item We had all used it in the past and were comfortable with it.
+      \item It is a distributed revision control system, which grants additional flexibility compared to centralised systems, as it allows for such things as offline working and private branches.
+      \item It works very well with Unix-like systems, such as Linux, which all but one of the group uses.
+      \item Git handles complex merging extremely well, and when there is a merge conflict, it is very easy to sort manually.
+      \end{itemize}
+
+      For where to host the central repository, we had 3 main options: github\footnote{\url{http://github.com}}, bitbucket\footnote{\url{http://bitbucket.org}} and the department's own servers.
+      Some of us already had github accounts and workflows set up for it, however private repositories are a paid-only feature.
+      The department's own servers have good uptime, but have been known to become inaccessible at short notice, and they don't offer as many options or extra features as the others.
+      Bitbucket allow private repositories for unpaid accounts, and have other additional extras, such as a project wiki and bug tracking system.
+
+      As such, we decided to use Bitbucket.
+      For the vast majority of the project, it seemed a good choice, stable and available, with the wiki being useful.
+      However, shortly before the deadline for this report, it went down, and we had to switch to a backup repo on the Department of Computing servers for the purposes of collaboration.  
+    \subsubsection{Documentation Control}
+      For writing reports, we primarily used two systems for both writing and revision control.
+
+      Initial drafts were done in Google Docs\footnote{\url{http://docs.google.com}}.
+      In addition to a simple WSYWIG\footnote{``What You See Is What You Get''} interface, it allows for real-time simultaneous editing and collaboration, as well as rudimentary revision control, and as such is well suited to rapid prototyping of a document.
+
+      Final drafts were done in \LaTeX\footnote{\url{http://latex-project.org}}, a document markup language and typesetter.
+      \LaTeX is more complex to use than Google Docs, but produces `prettier' output. As \LaTeX is written in plain text, this also means that it's easy to track changes using the existing git setup.
+
+      Code documentation is produced automatically from specially-formatted
+comments in the code using the YARD\footnote{\url{http://yardoc.org}} documentation tool. This parses the source
+code for defined classes, methods and variables and presents them with the
+associated comments. YARD can output documentation in many formats, including
+HTML and in a database format suitable for command-line \texttt{man}-like tools.
+
+  \subsection{Code Style Guidelines}
+  We followed the standard Ruby naming conventions
+    \begin{itemize}
+      \item All method, symbol and variable names are wholly lowercase with words separated by underscores e.g. \texttt{this\_is\_a\_variable}
+      \item All class names are capitalised camel case e.g \texttt{ArbitraryClass}
+      \item All constants are wholly uppercase with words separated by underscores e.g \texttt{MAX\_SIZE}
+      \item All project code is placed within the \texttt{SPLATS} module, so not to
+pollute the global namespace. Any methods defined on global
+objects are prefixed with \texttt{\_\_SPLATS}.
+    \end{itemize}
+
+
+\section{Summary of team member contributions}
+% http://www.doc.ic.ac.uk/~tw1509/splatstats/
+  A brief summary of each member's contributions to the project, complete with the number of commits and lines changed.
+
+  The number of commits is not a particularly useful measure of contribution as some commits added considerable features, whereas many were simple one line additions. 
+  Due to the research-oriented nature of the project, a large amount of time was spent resolving problems without making any commits
+
+  \subsection{Ethel}
+    \begin{itemize}
+      \item Wrote the code which generates the test files.
+      \item Wrote a revision of the command-line interface.
+      \item Tweaked and documented various other bits of code.
+      \item Wrote large portions of the final report.
+      \item Wrote large portions of Report One.
+      \item Researched how to test side effects.
+    \end{itemize}
+   
+    \begin{description}
+      \item[Commits] 144
+    \end{description}
+
+  \subsection{Caz}
+    \begin{itemize}
+    \item Secretary
+    \item Wrote large portions of all reports.
+    \item Designed and implemented the GUI.
+    \item Some implementation of the abstract traversal class.
+    \item Wrote the manual traversal class.
+    \item Wrote some tests.
+    \end{itemize}
+    \begin{description}
+      \item[Commits] 103
+    \end{description}
+
+  \subsection{Chris}
+    \begin{itemize}
+     \item Created TestController class.
+     \item Additions to the mock object.
+     \item CLI features and refactoring, in order to make it more modular once the GUI was added.
+     \item Implemented Mock object graph generator.
+     \item Various code tweaks and documentation.
+     \item Worked on Report Two.
+    \end{itemize}
+    \begin{description}
+      \item[Commits] 44
+    \end{description}
+
+  \subsection{Joe}
+    \begin{itemize}
+      \item Initial CLI design.
+      \item Wrote the code which runs the tests against the second version of the code.
+      \item Helped with the reports.
+    \end{itemize}
+    \begin{description}
+      \item[Commits] 42
+    \end{description}
+
+  \subsection{Tom}
+    \begin{itemize}
+      \item Lead developer.
+      \item Wrote much of the mock object.
+      \item Implemented and extended the traversal methods.
+      \item Large portions of Report Two and the final report.
+      \item Wrote the generator.
+      \item Oversaw the version control and fixed issues as they happened.
+    \end{itemize}
+    \begin{description}
+      \item[Commits] 170
+    \end{description}

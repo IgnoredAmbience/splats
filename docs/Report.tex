@@ -1,8 +1,14 @@
 \documentclass{report}
-\usepackage{hyperref}
+\usepackage{graphicx, hyperref, subfig, tikz, verbatim, wrapfig, listings, cite}
+\usetikzlibrary{shapes,arrows}
 \usepackage[parfill]{parskip}
 \usepackage[a4paper]{geometry}
 \newcommand{\mail}[1]{\href{mailto:#1@doc.ic.ac.uk}{#1@doc.ic.ac.uk}}
+\renewcommand{\thefootnote}{\roman{footnote}}
+
+\graphicspath{{images/}}
+
+\newcommand{\graphic}[4]{\begin{figure}\includegraphics[#1]{#2}\caption{#3}\label{#4}\end{figure}}
 
 \title{SpLATS Lazy Automated Test System}
 \author{Ethel Bardsley, Caroline Glassberg-Powell, Christopher Keeley,\\ Joseph Slade and Thomas Wood}
@@ -15,12 +21,14 @@
 \tableofcontents
 
 \include{chapters/introduction}
-
-\include{chapters/design}
-
-\include{chapters/engineering}
-
-\include{chapters/conclusions}
-
+\include{chapters/existing}
+\include{chapters/features}
+\include{chapters/architecture}
+\include{chapters/tools}
+\include{chapters/implementation}
+\include{chapters/evaluation}
 \include{chapters/appendix}
+
+\bibliographystyle{plain}
+\bibliography{bibliography}
 \end{document}

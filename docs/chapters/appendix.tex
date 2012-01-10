@@ -1,4 +1,128 @@
 \appendix
-\chapter{Report 1}
-\chapter{Report 2}
-\chapter{Report 3}
+\chapter{Project Proposal}
+\label{appx:proposal}
+\textbf{Title:} Automated lazy testing for JavaScript (or Ruby or Python or
+Dart)
+
+\textbf{Proposer:} Susan Eisenbach
+
+Good software engineers build large test suites as they develop their code (or before) in order to ensure that they deliver bug free code.
+But writing tests is a time consuming task and it is always frustrating to spend significant time in development that is not visible to your user.
+The solution: automatically generate the tests.
+This is easier said than done, and Tristan Allwood has done a PhD in generating tests for Haskell programs and has also worked on automatic test suite generation for Java.
+This project comes from him and he would provide technical supervision for it.
+
+There could be an interesting project in automated lazy testing for
+JavaScript or Ruby / Python (i.e. dynamic, structural languages).
+
+So:
+
+Fully automated regression test suite generation for
+JavaScript/Ruby/Python.
+
+For example, given:
+\begin{verbatim}
+class LinkedList
+  ... standard linked list implementation ...
+
+  def add(param)
+  ...
+  end
+
+  def size
+  ...
+  end
+
+  ... etc ..
+end
+\end{verbatim}
+
+Then \emph{magic happens} and you get:
+
+\begin{verbatim}
+unit test 1:
+  l = new LinkedList
+  assert (l.size == 0)
+
+unit test 2:
+  l = new LinkedList
+  l.add(true)
+  assert (l.size == 1)
+
+unit test 3:
+  l = new LinkedList
+  l.add(true)
+  i = l.iterator
+  assert (i.hasNext)
+
+...
+\end{verbatim}
+
+(where the unit tests are human readable, executable code using an
+appropriate unit testing framework for the language)
+
+Given a class definition (or prototype in JavaScript), the aim of this
+project would be to completely automatically generate a set of unit
+tests that specify the behaviour of the class, that could be suitable
+for use in incremental regression testing.
+
+There are many challenges to this project, and several ways of
+approaching the problems that arise, for example:
+
+\begin{itemize}
+\item Constructors and methods in the class will need objects or primitive
+  values passing in as parameters. These objects/values will need
+  to be created, and should be suitable for testing.
+
+\item For some primitives, e.g. Integer values, there could be an exponential
+  blow up of meaningless testing
+
+\item For object values, how do you create the instances?
+\begin{itemize}
+\item For example, you could try to guess which class is supposed to be
+      passed in as an argument, and create an instance of that.
+\item In Java and Haskell, we have been exploring a ``lazy
+      instantiation'' technique, whereby dummy objects are passed in,
+      and only as their methods are actually invoked do we generate
+      test data for their return values. Would this work for dynamic
+      languages?
+\end{itemize}
+
+\item Generating unit tests will require establishing what should be the
+      assertions of the unit test, and capturing those values to be put
+      into unit tests.
+      Experimental evaluation, how do you know how good your tests are?
+
+\item Can you find bugs between different versions of existing libraries?
+
+\item Can you consistently achieve high code coverage of the classes
+      being tested?
+\end{itemize}
+
+\chapter{Input/Output Samples}
+\lstset{language=Ruby}
+
+All the following examples show output when run with depth-limited search at a
+depth of 2, to limit the number of tests shown.
+
+\section{Simple Addition}
+\subsection{Input}
+\begin{lstlisting}
+class Addition
+  def add(a)
+    1 + a
+  end
+end
+\end{lstlisting}
+
+\subsection{Test Output}
+\lstinputlisting{listings/test_SimpleAddition.rb}
+
+\section{A Simple Test Case}
+\subsection{Input}
+\lstinputlisting{listings/SimpleTest.rb}
+
+\subsection{Output}
+\lstinputlisting{listings/test_SimpleTest.rb}
+
+

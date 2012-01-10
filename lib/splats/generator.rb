@@ -49,7 +49,7 @@ module SPLATS
 
       while continue_execution and @traversal.continue_descent?
         method = @traversal.select_method @class.public_instance_methods(false)
-        args = @traversal.select_arguments(method, generate_parameters(method))
+        args = @traversal.select_arguments generate_parameters(method)
         test.add_line(method, args)
 
         exception_raised = test.execute_last &decision

@@ -14,8 +14,9 @@ module SPLATS
 
     @@id = 0
 
-    def initialize &branch_block
+    def initialize depth=5, &branch_block
       @object = MockImplementation.new self
+      @depth = depth
       @child_objects = []
       @id = @@id
       @@id += 1
@@ -26,7 +27,6 @@ module SPLATS
 
     # Prints information about the failed method call
     def method_missing(symbol, *args, &block)
-      #::Kernel.puts "Method '#{symbol}' called with arguments #{args} on mock ##{@id}"
       if RETURN_TYPES.include? symbol
         result = @branch_block.call RETURN_TYPES[symbol]
       elsif symbol[-1] == '?'
@@ -34,21 +34,19 @@ module SPLATS
       elsif @object.__SPLATS_orig_respond_to? symbol
         result = @object.__SPLATS_orig_send(symbol, *args, &block)
       else
-        result = Mock.new &@branch_block
+        if @depth > 0
+          result = @branch_block.call :Unknown
+          if result == Mock
+            result = Mock.new(@depth-1, &@branch_block)
+          end
+        else
+          result = nil
+        end
       end
-      @child_objects << ([symbol, result] + args)
+      @child_objects << ([symbol, result, args])
+      #::Kernel.puts "?> Method '#{symbol}' called with arguments #{args} on #{__SPLATS_print} returns #{result.__SPLATS_print}"
       result
     end
-
-    # def __graph_gen
-      # digraph do
-        # @child_objects.each  do |child|
-          # edge @id, child[1].id #[label= @child[0].to_s]
-          # # Call again on child[1]
-        # end
-        # save "mock_graph", "png"
-      # end  
-    # end
     
     # Predicate to test if an object is mock 
     # @return true
@@ -105,5 +103,9 @@ end
 class BasicObject
   def __SPLATS_is_mock?
     false
+  end
+
+  def __SPLATS_print
+    inspect
   end
 end

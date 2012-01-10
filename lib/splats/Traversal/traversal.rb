@@ -63,20 +63,23 @@ module SPLATS
       values = [nil]
       case type
       when :Bool
-        values + [true, false]
-      when :Integer
-        values + [0, 1, -1]
+        values += [true, false]
+      when :Integer, :Fixnum, :Bignum
+        values += [0, 1, -1]
       when :Float
-        values + [0.0, 1.1, -1.1]
+        values += [0.0, 1.1, -1.1]
       when :String
-        values + ["", "string"]
+        values += ["", "string"]
       when :Symbol
-        values + [:Symbol]
+        values += [:Symbol]
       when :Array
-        values + [[]]
+        values += [[]]
       when :Hash
-        values + [{}]
+        values += [{}]
+      when :Unknown
+        values += [Mock]
       end
+      values
     end
   end
 end
