@@ -21,7 +21,7 @@ SpLATS targets Test::Unit and Minitest::Unit as its output format.
 
   For example, lint\footnote{\url{http://www.manpages.unixforum.co.uk/man-pages/unix/freebsd-6.2/1/lint-man-page.html}}
   is a tool which was originally designed to detect potential errors in
-  code. Examples of this include checking for assignment instead of equality in "if" statements; type mismatches; and dereferencing null pointers.
+  code. Examples of this include checking for assignment instead of equality in ``if'' statements; type mismatches; and dereferencing null pointers.
 
   Ultimately, static analysis is hard in Ruby. The nature of the language is that
   almost all behaviour can be modified at run time. Without running the program,
@@ -53,12 +53,12 @@ writing tests, and to allow a developer to just write code.
   program.
   
   \subsection{KLEE}
-  KLEE\footnote{\url{http://klee.llvm.org/}} is a symbolic virtual machine which can run on most compiled languages. It can automatically generate tests which achieve high code coverage on complex and memory-intensive programs. KLEE constructs symbolic command line strings and calls the main function with these symbols. When these arguments are called, KLEE constructs a constraint solver, forks on the options and follows all possible paths of execution. When an error can possibly occur, KLEE checks if any possible value for the symbol will cause that error. It then prunes the tree, generates concrete values, and continues following the execution path.\footnote{\url{http://www.usenix.org/event/osdi08/tech/full_papers/cadar/cadar_html/}}
+  KLEE\footnote{\url{http://klee.llvm.org/}}\cite{klee_paper} is a symbolic virtual machine which can run on most compiled languages. It can automatically generate tests which achieve high code coverage on complex and memory-intensive programs. KLEE constructs symbolic command line strings and calls the main function with these symbols. When these arguments are called, KLEE constructs a constraint solver, forks on the options and follows all possible paths of execution. When an error can possibly occur, KLEE checks if any possible value for the symbol will cause that error. It then prunes the tree, generates concrete values, and continues following the execution path.
 
   The execution path of KLEE is defined by the programmer as annotations, but the idea of SpLATS is to liberate the programmer from doing anything other than programming. Having to annotate code shifts the paradigm that the programmer is free, therefore using similar architecture or methods to KLEE was deemed unsuitable.
 
   \subsection{IRULAN}
-    IRULAN\footnote{\url{http://www.doc.ic.ac.uk/~tora/thesis.pdf}} is an 
+    IRULAN\cite{irulan} is an 
     automated blackbox testing system for Haskell written by Dr Allwood 
     as his PhD thesis.
 
@@ -66,17 +66,14 @@ writing tests, and to allow a developer to just write code.
     of methods to traverse the search space.
 
   \subsection{Tickling Java with a Feather}
-    Tickling Java with a Feather
-    \footnote{\url{http://pubs.doc.ic.ac.uk/testing-Java-with-fj/testing-Java-with-fj.pdf}}
-    is another of Dr Allwood's papers, where testing is restricted a well defined
-    subset of the Java language. 
+    Tickling Java with a Feather\cite{tjwaf} is another of Dr Allwood's papers, where testing is restricted a well defined subset of the Java language. 
 
     From this paper, we took the idea of only testing on a subset of Ruby, and 
     simply ignoring certain other parts of the language.
 
 
   \subsection{Randoop}
-    Randoop\footnote{\url{http://code.google.com/p/randoop/}} is another
+    Randoop\cite{randoop}\footnote{\url{http://code.google.com/p/randoop/}} is another
 feedback-directed random testing framework for Java.
 
     It generates a progressively growing sequence of method calls, which are
@@ -90,13 +87,10 @@ the Java Language Specification. Further contracts can be added to the system by
 the user. Randoop has been used to find errors in a number of commonly used libraries.
 
   \subsection{RuTeG}
-    RuTeG\footnote{S. Mairhofer, R. Feldt, R. Torkar, Search-based software
-testing and Test Data Generation for a Dynamic Programming Language} (Ruby Test
-case Generator) is a project with similar aims to SpLATS, but approaches the
-problem from a slightly different angle.
+    RuTeG\cite{ruteg} (Ruby Test case Generator) is a project with similar aims to SpLATS, but approaches the problem from a slightly different angle.
 
 RuTeG attempts to find the appropriate type of variable to pass into the CUT
-methods by using a "selecting data generator" for each argument. This selection
+methods by using a ``selecting data generator'' for each argument. This selection
 forms a part of the search space of the test generation, which is directed using
 a genetic algorithm.
 

@@ -1,6 +1,6 @@
 digraph {
   a1[label="No arguments"];
-  a2[label="[An argument]"];
+  a2[label="[Mock object]"];
   a3[label="[nil]"];
   "initialise" -> a1
   "initialise" -> a2
@@ -13,7 +13,7 @@ digraph {
   a2 -> b2
   a2 -> b3
   a2 -> b4
-  c1[label="[An argument]"]
+  c1[label="[Mock object]"]
   c2[label="[nil]"]
   b1 -> c1
   b1 -> c2

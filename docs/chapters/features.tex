@@ -84,8 +84,8 @@
   \hline
   \end{tabular}
   
-These languages are all duck typed\footnote{If quacks like a duck then it can be treated as a duck}, meaning that an object's current set of variables and methods determines its semantics. When writing tests, the finished code must be "concrete", which is a difficult challenge to overcome when an object is determined at run-time.
-All three allow object-oriented approaches, but Ruby is the only one which is purely object-oriented, the other two having "raw" types, such as integers. Python and JavaScript would therefore need further processing to determine a variable's type than Ruby, making Ruby the easier language to work with.
+These languages are all duck typed\footnote{If quacks like a duck then it can be treated as a duck}, meaning that an object's current set of variables and methods determines its semantics. When writing tests, the finished code must be ``concrete'', which is a difficult challenge to overcome when an object is determined at run-time.
+All three allow object-oriented approaches, but Ruby is the only one which is purely object-oriented, the other two having ``raw'' primitive types, such as integers. Python and JavaScript would therefore need further processing to determine a variable's type than Ruby, making Ruby the easier language to work with.
 
 The main disadvantage of Ruby is that none of the group had used it previously, whereas some members had considerable experience with the other languages. This turned out to not be as big a disadvantage as anticipated, as we all started off on the same level and helped each other learn along the way. Ruby is also a good language to learn, as it is similar to other languages which all members knew.
 
@@ -104,10 +104,11 @@ A subset of Ruby was developed, as running SpLATS on everything Ruby offers is o
 \item Assume that all code to be tested will be defined in public instance
 methods on a class in the top-level namespace and that the class shall be
 constructed using the standard \texttt{new}/\texttt{initialize} methods
-\item Assume that all methods being tested will not be side-affecting: they will not change global state (i.e. modify the core Ruby run-time system); they will not terminate execution; they will not modify global variables; and that they will not write to system resources. Any limitations not described which are side-effects are not guaranteed to be tested.
+\item Assume that all methods being tested will not be side-effecting: they will not change global state (i.e. modify the core Ruby run-time system); they will not terminate execution; they will not modify global variables; and that they will not write to system resources. Any limitations not described which are side-effects are not guaranteed to be tested.
 \item Assume no interaction with a \texttt{SpLATS} module in the global namespace
 and any methods prefixed with \texttt{\_\_SPLATS}. These methods are defined by SpLATS for various reasons and are extremely important to its working.
 \item Assume methods do not require blocks to be passed into them (i.e. they do not
 \texttt{yield}).
 \item Assume no inheritance and mixins.
+\item Assume only optional and required parameters are arguments to functions. This means that blocks as arguments and variable sized arguments are not tested.
 \end{itemize}

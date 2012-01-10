@@ -6,12 +6,14 @@ Dart)
 
 \textbf{Proposer:} Susan Eisenbach
 
-Good software engineers build large test suites as they develop their code (or before) in order to ensure that they deliver bug free code. But writing tests is a time consuming task and it is always frustrating to spend significant time in development that is not visible to your user. The solution: automatically generate the tests. This is easier said than done, and Tristan Allwood has done a PhD in generating tests for Haskell programs and has also worked on automatic test suite generation for Java. This project comes from him and he would provide technical supervision for it.
+Good software engineers build large test suites as they develop their code (or before) in order to ensure that they deliver bug free code.
+But writing tests is a time consuming task and it is always frustrating to spend significant time in development that is not visible to your user.
+The solution: automatically generate the tests.
+This is easier said than done, and Tristan Allwood has done a PhD in generating tests for Haskell programs and has also worked on automatic test suite generation for Java.
+This project comes from him and he would provide technical supervision for it.
 
 There could be an interesting project in automated lazy testing for
 JavaScript or Ruby / Python (i.e. dynamic, structural languages).
-
-
 
 So:
 
@@ -79,8 +81,8 @@ approaching the problems that arise, for example:
 \begin{itemize}
 \item For example, you could try to guess which class is supposed to be
       passed in as an argument, and create an instance of that.
-\item In Java and Haskell, we have been exploring a "lazy
-      instantiation" technique, whereby dummy objects are passed in,
+\item In Java and Haskell, we have been exploring a ``lazy
+      instantiation'' technique, whereby dummy objects are passed in,
       and only as their methods are actually invoked do we generate
       test data for their return values. Would this work for dynamic
       languages?

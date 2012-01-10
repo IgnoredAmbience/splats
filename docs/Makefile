@@ -2,7 +2,7 @@ GRAPHS = $(wildcard images/*.gv)
 TIKZ = $(GRAPHS:.gv=.tex)
 
 pdf:
-	pdflatex Report.tex && pdflatex Report.tex > /dev/null
+	pdflatex Report.tex && bibtex Report.aux && pdflatex Report.tex > /dev/null && pdflatex Report.tex > /dev/null
 
 images: $(TIKZ)
 

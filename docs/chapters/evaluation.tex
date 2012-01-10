@@ -1,44 +1,164 @@
 \chapter{Validation and Conclusions}
 \section{Performance of SpLATS}
-  \subsection{Feature Matrix}
-    \begin{tabular}{p{0.3\textwidth} | p{0.5\textwidth}}
-    Aim & Success \\
+  \subsection{Minimum Requirements}
+    \begin{tabular}{|p{0.5\textwidth}|p{0.5\textwidth}|}
     \hline
-    Compare two versions of code &
-    We can generate tests, which can be easily adapted to be run against another version of the code.
-    It is also possible to generate tests based on one version of a piece of code, and then run those tests on another version of the same code, marking the deltas. \\
-    Set configuration options & The user interfaces can be used to control how the search space is traversed, as well as the input and output options \\
-    Inspect code coverage of tests & By default, code coverage of generated tests will be output along with the results of the tests. \\
-    Reproduce tests & Tests are reproducible, given the same input SpLATS will behave in a deterministic way. For the random traversal a seed is provided as input, so although SpLATS will behave
-    in a pseudorandom way, the tests will be recreatable if the same seed is given.\\
-    Have a CLI &
-    A simple wrapper for SpLATS was implemented \\
+    \textbf{Aim} & \textbf{Progress} \\
+    \hline
+    Find out if two versions of my code have the same functionality. &
+    SpLATS automatically performs regression testing on a code base. \\
+    \hline
+    Set configuration options to select which classes and/or methods to test. &
+    This requirement makes no sense in lieu of Lightweight Ruby (each file is considered a class, and the methods are loaded at run-time). \\
+    \hline
+    Inspect code coverage of generated tests. &
+    Code coverage is automatically given to the user in a nice format when SpLATS has finished running. \\
+    \hline
+    Reproduce tests. &
+    SpLATS behaves in a deterministic way, so the same traversal method with the same options will produce the same output. Even when random is chosen as the traversal method, there is a seed that can be used to create the same tests. \\
+    \hline
+    Use a command line interface to interact with the system &
+    A fully functioning CLI has been written. \\
     \hline
     \end{tabular}
-
-    \begin{tabular}{p{0.3\textwidth} | p{0.5\textwidth}}
-    Aim & Success \\
+  \subsection{Extensions}
+    \begin{tabular}{|p{0.5\textwidth}|p{0.5\textwidth}|}
     \hline
-    Have a GUI &
-    This works, and is especially useful for manual traversal \\
+    \textbf{Aim} & \textbf{Progress} \\
+    \hline
+    Use a graphical interface to interact with the system &
+    A fully functional GUI has been written which displays graphs to the user. \\
+    \hline
+    Automatically run regression tests on two versions of the code under version control. &
+    We can use the standard Git tools to achieve this result. (Git bisect) \\
+    \hline
     Test basic program semantics &
-    It does this to a very basic level implicitly, but it's not investigated much \\
-    Test code across multiple computers at once &
-    As SpLATS has a CLI suitable for writing scripts around, it is possible to run multiple instances across a distributed system, such as Condor; however, the tool doesn't distribute a single instance. \\
+    We haven't considered this as we could find no reliable easily-accessible documentation for contracts which are always guaranteed to hold. \\
     \hline
-    Have a website &
-    While it would have been useful for any future users it was deemed more important to improve the tool itself. It would be relatively simple to create some online documentation using a tool such as 
-    RDoc\footnote{\url{http://rdoc.sourceforge.net/}} or YARD\footnote{\url{http://yardoc.org/}} \\
-    Have different traversal mechaisms &
-    There are 3 traversal mechanisms: depth-first, random and manual. \\
+    Test my code across multiple computers at once &
+    We haven't considered this, although it would have been useful for the evaluation section for tests with large amounts of branches. \\
+    \hline
+    \end{tabular}
+  \subsection{Future Enhancements}
+    This table has been modified to reflect future enhancements that we have considered as the project has progressed.
+    
+    \begin{tabular}{|p{0.5\textwidth}|p{0.5\textwidth}|}
+    \hline
+    \textbf{Aim} & \textbf{Progress} \\
+    \hline
+    Use a website to interact with the testing &
+    We haven't considered this as the GUI proved to be more challenging. \\
+    \hline
+    Have additional options to generate the tests, for example breadth-first and random-directed &
+    We have implemented this fully. \\
+    \hline
+    Better traversal and pruning methods &
+    This would be useful to generate tests quicker without using so much memory. \\
+    \hline
     \end{tabular}
 
-  \subsection{Testing by Inspection}
-  - Code coverage showed Tom that it wasn't doing 1 + 1 coerce error.
-  \subsection{Code Coverage}
-  \subsection{ZenTest}
-  \subsection{Test Generation and Comparison}
-    \subsubsection{Analysis}
-    \subsubsection{Design}
-    \subsubsection{Implementation}
-    \subsubsection{Testing}
+  \subsection{Evaluation of Quality of Generated Tests}
+    Several sample CUTs are used to evaluate and test the quality of SpLATS'
+test generation. We will also compare the ability of the depth-limited search to
+reach full coverage to the random traversal strategy.
+
+    The test classes used were:
+    \begin{itemize}
+      \item \textbf{Addition}: 1 plus the argument, used to test Ruby's arithmetic
+internals
+      \item \textbf{SimpleTest}: Tests arbitrary methods called upon arguments to the
+function, branches based upon the result of the method call
+      \item \textbf{LinkedList}: A standard LinkedList implementation, uses both
+iterative and recursive algorithms
+      \item \textbf{QuickSort}: A recursive quick sort implementation
+      \item \textbf{ISBN-Tools}: An open-source library to check the validity of ISBN
+numbers, makes heavy use of regular expressions and string methods
+    \end{itemize}
+
+  \subsubsection{Result}
+
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{CUT} & \textbf{Search Depth} & \textbf{Generation Time/m:s} & \textbf{Tests} & \textbf{Coverage} \\
+& \textbf{(Mock Depth)} & & & \\
+\hline
+Addition & 2 & 0:0.051 & 6 & 3/3 (100\%) \\
+\hline
+SimpleTest & 2 & 0:0.064 & 32 & 12/12 (100\%) \\
+\hline
+LinkedList & 2 & 0:0.056 & 31 & 35/47 (74\%) \\
+& 3 & 0:0.147 & 306 & 45/47 (96\%) \\
+& 4 & 0:2.118 & 3859 & 46/47 (98\%)\\
+\hline
+QuickSort & 2 (1) & 0:0.344 & 87 & 8/8 (100\%) \\
+& 2 (2) & 0:3.356 & 4272 & 8/8 (100\%) \\
+& 2 (3) & 5:57.2 & 351927 & Not testable\\
+\hline
+ISBN-Tools & 2 (1) & 0:0.056 & 13 & 10/16 (63\%) \\
+& 2 (2) & 0:0.072 & 57 & 10/16 (63\%) \\
+& 2 (3) & Stopped after 30:00 & 341472 & Not testable \\
+\hline
+\end{tabular}
+
+\subsubsection{Analysis}
+  The simplest classes (Addition and SimpleTest) easily achieved 100\% coverage at the minimum reasonable depth of 2.
+This is because their output values are not dependent upon the object's internal state so every execution path can be reached from the first method called after the constructor.
+
+  LinkedList is a more interesting example as its internal state determines the output.
+It can be seen that at a depth of 2, only three-quarters of the lines can be reached as the majority of the execution paths depend on a list containing more than one element, which is only just possible at a depth of 2.
+
+  At a depth of 3 almost all of the lines are accessible to the tests, except for two.
+The first of these is only reachable in a list of more than two elements, again not possible at this traversal depth.
+This is possible at a depth of 4.
+
+  The remaining uncovered line is never reached because it is immediately preceded by a line that is outside of our Lightweight Ruby specification.
+This line always raises an Exception, (due to trying to yield to a non-existent block) meaning that the uncovered line is unreachable by our test generator.
+
+  It is quite noticeable that QuickSort and ISBN-Tools are less suited to a complete traversal method.
+Similarly to the Addition and SimpleTest classes, the methods on these classes do not depend on the internal state of the object to produce their output.
+The traversal depth (the number of TestLines produced) does not impact on the usefulness of the tests produced.
+
+  However, it can be seen that the permitted upper bound on the length of chains of Mock objects directly impacts upon the number and complexity of tests that are generated.
+This is because each call on a mock object is treated as splitting the search space, i.e. a new branching node is added to the tree.
+As both of these classes call many methods on the mock objects, QuickSort through recursion, and ISBN-Tools by repeatedly calling a long chain of methods, the upper bound has an effect.
+
+\subsubsection{Validation}
+  Further validation of these results was performed by modifying the CUTs to
+change their functionality.
+For example, changing the Addition class to function as a Subtraction class, or
+introducing bugs into the LinkedList class.
+
+When running the two versions of the code and comparing the test runs, the first
+version passed all the tests, as expected. The second version would fail a
+subset of tests, for example in the Addition/Subtraction pair $1 + 1 \neq 1 -
+1$, but $1 + 0 = 1 - 0$.
+
+It can generally be assumed that there will not be a 100\% failure rate between versions, since the most basic of tests (i.e. asserting the constructor of a class will return an object of that class) will generally pass in all versions.
+
+As such, SpLATS conforms to our expectations.
+
+\section{Testing SpLATS}
+\subsection{Testing the Core}
+  As this project was heavily research-based, it was unfeasible to write tests before implementing the code as the code underwent frequent and radical refactorings or change of scope.
+  Tests were therefore written for a section of code once it reached a stable point and was considered ready to reach the final product.
+  Code that was in the master branch of the repository before this rule was enforced has since had unit tests written to cover it.
+    
+\subsection{Testing of GUI}
+The underlying code of SpLATS has been tested, and so it is assumed that the GUI will work provided all the buttons do what they say they will.
+A thorough run-through of the GUI was performed with complicated and simple execution paths. Some errors were found, and these were easily uncovered and easily fixed.
+There are a few libraries which exist that can be used to automatically test Ruby GUIs; however, with so few buttons and a very limited range of behaviours, these were deemed too complicated to learn for very little benefit.
+
+\subsection{What we Learned}
+\begin{itemize}
+  \item A project leader is needed. We did not have one because we could not decide who to place in charge. This caused many issues, such as team members not necessarily knowing what they had to do, and not being able to find the initiative to find tasks for themselves.
+  \item In loosely specified projects, it is important to ensure that each group member receives an even distribution of work, even if it means performing a task that might not necessarily be vital to the end result. For example, the GUI was not necessary for the completion of SpLATS, but it ensured that the team members all had work to do.
+  \item Assigning a group member a task should be done based upon their abilities to perform the task. When the group members lack familiarity with each other, a long discussion should be held at the beginning of the project where team members highlight what they perceive to be their strengths and weaknesses. This should be kept in mind by the project leader at all times, and by other team members when criticising other members of the team.
+\end{itemize}
+
+\section{Conclusions on the Project}
+This project has introduced us to the field of search-based automated software testing.
+It has been interesting, and some of our members wish to pursue this in the future.
+
+It also taught us about larger scale collaboration than we were used to, such as the need for regular check-ins, meetings, and direct supervision by a senior.
+
+SpLATS has scope for future improvement, by implementing smarter feedback-driven traversal methods, and supporting more language features.
