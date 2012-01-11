@@ -4,7 +4,6 @@ require 'fiber'
 require_relative 'gui_elements.rb'
 require_relative '../splats.rb'
 require_relative 'gui_traversal.rb'
-require_relative 'execution_graph.rb'
 
 class SPLATSGUI < Shoes
 
@@ -19,9 +18,10 @@ class SPLATSGUI < Shoes
     
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 1
+    @page = 3
     @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
     @selected_radio = nil
+    @file_array = [1,2,3]
     
     #TODO Put this in a config file
     # Defaults
@@ -31,7 +31,7 @@ class SPLATSGUI < Shoes
     @traversal_method = :human
     @depth = 2
     @seed = 0
-    @file_array = [1,2,3]
+    @path_tracker = []
     
     # Shoes height and width initialise - to keep an eye on them
     @height = height
@@ -113,10 +113,10 @@ class SPLATSGUI < Shoes
   end
   
   def start_tests
-    if @traversal_method == :human
+    case @traversal_method
+    when :human
       f = nil
       @depth = 1
-      @execution_path = []
       
       # Cheeky Fiber stuff - create a dummy fiber to allow the
       # transfer methods to work, but keep returning control to
@@ -146,21 +146,39 @@ class SPLATSGUI < Shoes
       
       # Display the selections to user
       draw_selections
-    else
-      controller = SPLATS::TestController.new(@version1, @output_dir, @depth, @seed, @traversal_method, @display)
+    when :depth
+      traversal = SPLATS::DepthLimitedTraversal.new(@depth)
+      controller = SPLATS::TestController.new(@version1, @version2, @output_dir, traversal)
       controller.test_classes
+      alert("Test complete")
+    when :random
+      traversal = SPLATS::RandomTraversal.new(@seed)
+      controller = SPLATS::TestController.new(@version1, @version2, @output_dir, traversal)
+      controller.test_classes
+      alert("Test complete")
     end
   end
 end
 
 def draw_selections
+  # Draw a graph if requested
+  if @decision.display_graph
+    # If depth is 1, add :new to the path track
+    if @depth == 1
+      @path_tracker = []
+      add_decision_to_path_tracker "new"
+    end
+    # First push the options to the execution tracker
+    add_options_to_path_tracker @decision.options
+    draw_graph
+    display_graph
+  end
+  
   @main.clear do
     # Set the current depth in the decision
     @decision.depth = @depth
     # Present the question to the user
     para @decision.get_question
-    # Update the graph with the choices
-    @execution_path.push @decision.options
     
     # Run through all the options to generate clickable buttons
     flow do
@@ -170,18 +188,28 @@ def draw_selections
         
         # Generate the button
         button l do
-          # Decide whether or not to change the method
+          # Format the choice with final answer
+          fa = @decision.final_answer o
+          
+          # If the object wants the method to change, change it to the final answer
           if @decision.change_method?
-            @method = o
+            @method = fa
           end
-          # Update the depth
+          
+          # If the decision was graphable, add the information to a tracker
+          if @decision.display_graph
+            add_decision_to_path_tracker fa
+          end
+          
+          # Update the depth on the decision
           @depth = @decision.update_depth
-          # Update the graph with the user's choice and send back
-          choice = @decision.final_answer o
-          @execution_path.push (choice.to_s)
-          @display.transfer (choice)
-          # Refresh the screen
+
+          # This call will update the @choice and @decision variables
+          @display.transfer (fa)
+          
+          # Once the decision has been updated
           if @decision.continue?
+            # Refresh the screen
             draw_selections
           else
             alert("Testing complete")
@@ -198,23 +226,94 @@ def draw_selections
       when "method"
         display_file(nil, @method)
     end
-    
-    # If the decision says to display a graph, do so
-    if @decision.display_graph?
-      display_graph
+  end
+end
+
+# Everything crashes with the decisions, to need to pass through
+# an additional function to add to the path tracker
+def add_decision_to_path_tracker decision
+  @path_tracker.push decision.inspect
+end
+
+# Because everything crashes when trying to read a decision array,
+# have to pass it through here
+def add_options_to_path_tracker options
+  temp = []
+  options.each do |o|
+    temp.push (o.inspect)
+  end
+  @path_tracker.push temp
+end
+
+def draw_graph
+  path_tracker = @path_tracker
+  outside_depth = @depth
+  
+  # Generate and save the graph
+  digraph do
+    depth = 1
+        
+    path_tracker.each_with_index do |n, index|
+      # If node is an array then it's a set of decisions
+      if n.is_a? Array
+        # If the graph has just been initialized
+        if @graph_init
+          @graph_init = false
+          # Set the previous node
+          previous_node = [(index-1), depth].join("_")
+        else
+          # Find the index of the previous node
+          p "Index : #{path_tracker[index-1]}"
+          if path_tracker[index-1] == "\"nil\""
+            p path_tracker[index-2]
+            to_look_for = "nil"
+          else
+            to_look_for = path_tracker[index-1]
+          end
+          pni = (path_tracker[index-2]).index to_look_for
+          previous_node = [(index-2), (depth-1), pni].join("_")
+        end
+        
+        # Loop through all possible decisions and create a node for them
+        n.each_with_index do |decision, ii|
+          node_name = [index, depth, ii].join("_")
+          node(node_name, decision)
+          edge previous_node, node_name
+        end
+        
+        # If currently on the last choices, make the previous green
+        if index == path_tracker.length - 1
+          node(previous_node).attributes << filled
+          node(previous_node).attributes << green
+        end
+
+      # Otherwise it's a choice
+      else
+        # Only care about the initialize method in the choice
+        # If it's the initialize method, reset depth to 1
+        if n == "new".inspect
+          depth = 1
+          node_name = [index.to_s, depth.to_s].join("_")
+          node(node_name, "initialize")
+          @graph_init = true
+        else
+          depth += 1
+        end
+      end
     end
+    save "graph", "png"
   end
 end
 
 # This method requires passing variables between blocks, so there are a few assignment swaps...
 def display_graph
+  filename = "graph.png"
   # Generate the graph
-  graph_png = generate_graph
   if not @graph
     graph = graph_image = nil
     @graph_window = window :title => "Progress graph" do
       @graph = stack do
-        @graph_image = image(graph_png)
+        @graph_image = image(filename)
       end
       graph = @graph
       graph_image = @graph_image
@@ -224,35 +323,9 @@ def display_graph
   else
     @graph.app do
       @graph_image.clear
-      @graph_image = image(graph_png)
+      @graph_image = image(filename)
     end
   end
-end
-
-def generate_graph
-  execution_path = @execution_path
-  digraph do
-    execution_path.each_with_index do |ep, i|
-      if ep.is_a? Array
-#        node ep
-      end
-    end
-    save "graph", "png"
-  end
-#  puts execution_path
-=begin  digraph do
-    execution_path.each_with_index do |ep, i|
-      if ep.is_a? Array
-        if ep.length == 0
-          puts "No arguments"
-        else
-          puts ep.to_s
-        end
-      end
-    end
-  end
-=end
-  "graph.png"
 end
 
 def label_selection input

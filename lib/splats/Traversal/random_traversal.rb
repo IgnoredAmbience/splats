@@ -4,8 +4,7 @@ module SPLATS
     include Traversal
     # If there's already a seed in use, then initialise the RNG with the seed
     # Also keeps an eye on the seed, for possibly returning it in the future
-    def initialize (seed=nil, gui_controller)
-      @gc = gui_controller
+    def initialize seed=nil
       if seed
         @rng = Random.new seed
       else
@@ -22,7 +21,7 @@ module SPLATS
       methods[@rng.rand(methods.length)]
     end
 
-    def select_arguments(method, arguments)
+    def select_arguments arguments
       arguments[@rng.rand(arguments.length)]
     end
 

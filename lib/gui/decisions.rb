@@ -1,6 +1,6 @@
 module SPLATS
   class Decision
-    attr_accessor :depth, :continue
+    attr_accessor :depth, :continue, :choice
     attr_reader :options, :update_execution_path, :change_method, :display_graph, :display_file, :line_number
     alias_method :update_execution_path?, :update_execution_path
     alias_method :continue?, :continue
@@ -87,6 +87,7 @@ module SPLATS
       super(options)
       @line_number = line_number
       @display_file = "line_number"
+      @display_graph = true
     end
     
     def get_question
@@ -125,7 +126,6 @@ module SPLATS
     
     def final_answer input
       @continue = (input == yes_or_no[0])
-      @continue
     end
     
     def get_question
@@ -135,7 +135,6 @@ module SPLATS
     # Resets the depth to 1
     def update_depth
       @depth = 1
-      @depth
     end
   end
   

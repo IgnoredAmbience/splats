@@ -17,12 +17,13 @@ module SPLATS
       end
 
       # Send the GUI controller the options back
-      @fiber.transfer MethodDecision.new(methods)
+      p @fiber.transfer MethodDecision.new(methods)
     end
     
     def select_arguments arguments
       # Send the arguments back to the GUI
-      @fiber.transfer ArgumentDecision.new(@current_method, arguments)
+      ad = ArgumentDecision.new(@current_method, arguments)
+      @fiber.transfer ad
     end
     
     def generate_value type
@@ -30,8 +31,7 @@ module SPLATS
       decisions = generate_values type
       
       # Transfer back to GUI
-      line_number = caller[2].split(':')[1]
-      @fiber.transfer ValueDecision.new(decisions, line_number)
+      p @fiber.transfer ValueDecision.new(decisions, caller[2].split(':')[1])
     end
     
     def continue_descent?

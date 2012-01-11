@@ -64,7 +64,7 @@ module SPLATS
     end
 
     def __SPLATS_print
-      "mock#{@id}mo"
+      "mock#{@id}"
     end
 
     def __SPLATS_child_objects
@@ -73,7 +73,7 @@ module SPLATS
     end
     
     def self.to_s
-      "Mock object"
+      "Mock class"
     end
   end
 
