@@ -62,7 +62,8 @@ class SPLATSGUI < Shoes
           ask_for_version "first"
         when 2
           # Loads the version 2 variable with the file info
-          ask_for_version "second"
+          next_page
+#          ask_for_version "second"
         when 3
           page_3
         else
@@ -79,6 +80,9 @@ class SPLATSGUI < Shoes
     @output_display = flow do
       para "Current output directory:"
       para strong @output_dir
+    end
+    if @output_dir.nil?
+      @output_dir = "tests"
     end
     next_button true
   end
@@ -191,9 +195,12 @@ def draw_selections
           # Format the choice with final answer
           fa = @decision.final_answer o
           
+          p fa
+          
           # If the object wants the method to change, change it to the final answer
           if @decision.change_method?
             @method = fa
+            p "change!"
           end
           
           # If the decision was graphable, add the information to a tracker
