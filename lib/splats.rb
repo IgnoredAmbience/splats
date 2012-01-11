@@ -82,7 +82,7 @@ module SPLATS
     def initialize(input_file, regression_file, output_dir, traversal)
       @input_classes = SPLATS.load_classes input_file
       @regression_file = regression_file
-      if output_dir == :notgiven
+      if output_dir == :notgiven || output_dir.nil?
         @output_dir = "tests/"
       else 
         @output_dir = output_dir
