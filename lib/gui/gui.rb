@@ -5,12 +5,6 @@ require_relative 'gui_elements.rb'
 require_relative '../splats.rb'
 require_relative 'gui_traversal.rb'
 
-class NilClass
-  def to_s
-    "nil"
-  end
-end
-
 class SPLATSGUI < Shoes
 
   url '/', :setup
@@ -113,7 +107,6 @@ class SPLATSGUI < Shoes
           end
           return false
         end
-      end
     end
     true
   end
@@ -189,11 +182,16 @@ def draw_selections
     end
     
     # If the decision says to display a file, do so
-    case @decision.display_file
+    case @decision.display_file?
       when "line_number"
         display_file(@decision.line_number, nil)
       when "method"
         display_file(nil, @method)
+    end
+    
+    # If the decision says to display a graph, do so
+    if @decision.display_graph?
+#      display_graph
     end
   end
 end
@@ -201,7 +199,7 @@ end
 # This method requires passing variables between blocks, so there are a few assignment swaps...
 def display_graph
   # Generate the graph
-  graph_png = generate_graph
+  graph_png = @traversal.graph.save_graph
   if not @graph
     graph = graph_image = nil
     @graph_window = window :title => "Progress graph" do
@@ -219,31 +217,6 @@ def display_graph
       @graph_image = image(graph_png)
     end
   end
-end
-
-def generate_graph
-  execution_path = @execution_path
-  puts execution_path
-  # Set up the digraph
-  digraph do
-    # Loop through the execution path
-   execution_path.each_with_index do |n, i|
-      # Start from the nodes before this node
-      if not i == 0
-        # If this is an even thing
-        if(i % 2 == 0)
-          node("moo1", label="blah")
-          node("moo2", label="blah2")
-          edge "moo1", "moo2"
-        # If not even, this is the decision which has been made
-        else
-          node("fill")
-        end
-      end
-    end
-    save "graph", "png"
-  end
-  "graph.png"
 end
 
 def label_selection input

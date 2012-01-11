@@ -9,6 +9,7 @@ module SPLATS
       @class = c
       @pass_parameters = [Mock, nil]
       @traversal = traversal
+      @traversal.class = c
     end
 
     # Displays the Generator as a string

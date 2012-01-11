@@ -6,7 +6,7 @@ module SPLATS
     alias_method :continue?, :continue
     alias_method :change_method?, :change_method
     alias_method :display_graph?, :display_graph
-    alias_method :display_file?, :display_graph
+    alias_method :display_file?, :display_file
     
     def initialize options
       @options = options
@@ -39,6 +39,9 @@ module SPLATS
     
     # This tidies up the answer sent back to the Traversal class
     def final_answer input
+      if input.nil?
+        return "nil"
+      end
       input
     end
   end
@@ -87,7 +90,7 @@ module SPLATS
     end
     
     def get_question
-      "Choose decision for type on line number " + @line_number
+      "Choose decision for type on line number " + @line_number.to_s
     end
     
   end
@@ -116,8 +119,8 @@ module SPLATS
   class GenerationDecision < Decision
     
     def initialize exception=nil
-      @exception = exception
       super(yes_or_no)
+      @exception = exception
     end
     
     def final_answer input
@@ -138,8 +141,8 @@ module SPLATS
   
   class ExceptionDecision < Decision
     def initialize e
-      @e = e
       super(["OK"])
+      @e = e
     end
     def get_question
       "Exception " + strong(@e.to_s) + " raised."

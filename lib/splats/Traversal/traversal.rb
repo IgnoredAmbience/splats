@@ -1,6 +1,8 @@
 module SPLATS
   # @abstract Include this module and implement all methods
   module Traversal
+    attr_accessor :class
+    
     # Select a method from a given array of methods
     # @param [Array<Method,Symbol>] methods Array of viable method calls
     # @return [Method,Symbol] The selected method
