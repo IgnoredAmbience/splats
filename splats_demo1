@@ -1,0 +1,27 @@
+#!/bin/sh
+
+function pause(){
+  read -p "$*"
+}
+
+git checkout master > /dev/null 2&> /dev/null
+
+echo "ruby bin/cli.rb -G -f samples/VerySimple.rb"
+
+pause
+
+ruby bin/cli.rb -G -f samples/VerySimple.rb
+
+pause Continue...
+
+vim tests/test_VerySimple.rb
+
+vim +3s/VerySimple/VerySimpleMinus +wq tests/test_VerySimple.rb
+
+mv tests/test_VerySimple.rb samples
+
+echo "ruby samples/test_VerySimple.rb"
+
+pause
+
+ruby samples/test_VerySimple.rb
