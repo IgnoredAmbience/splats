@@ -1,6 +1,6 @@
 module SPLATS
   class Decision
-    attr_accessor :depth, :continue, :choice
+    attr_accessor :depth, :continue, :choice, :reset
     attr_reader :options, :update_execution_path, :change_method, :display_graph, :display_file, :line_number
     alias_method :update_execution_path?, :update_execution_path
     alias_method :continue?, :continue
@@ -15,6 +15,7 @@ module SPLATS
       @continue = true
       @display_graph = false
       @display_file = false
+      @reset = false
     end
     
     def yes_or_no
