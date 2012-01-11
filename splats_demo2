@@ -6,9 +6,7 @@ function pause(){
 
 cp samples/VerySimpleMinus.rb /tmp/VerySimple.rb
 
-vim +sp\ /tmp/VerySimple.rb samples/VerySimple.rb
-
-echo "ruby bin/cli.rb -C -f samples/VerySimple.rb -g /tmp/VerySimple.rb"
+echo "$ ruby bin/cli.rb -C -f samples/VerySimple.rb -g /tmp/VerySimple.rb"
 
 pause
 

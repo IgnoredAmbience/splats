@@ -6,6 +6,11 @@ function pause(){
 
 git checkout master > /dev/null 2&> /dev/null
 
+cp samples/VerySimpleMinus.rb /tmp/VerySimple.rb
+
+vim +sp\ /tmp/VerySimple.rb samples/VerySimple.rb
+
+
 echo "ruby bin/cli.rb -G -f samples/VerySimple.rb"
 
 pause
