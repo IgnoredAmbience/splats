@@ -9,7 +9,7 @@ module SPLATS
       @class = c
       @pass_parameters = [Mock, nil]
       @traversal = traversal
-      @traversal.class = c
+      @traversal.classy = c
     end
 
     # Displays the Generator as a string
@@ -78,7 +78,7 @@ module SPLATS
     #   valid for the given method.
     def generate_parameters(method)
       # If it's not a method, try to make it one
-      unless method.respond_to? :parameters
+      unless method.respond_to? :parameters      
         method = @class.instance_method method
       end
 

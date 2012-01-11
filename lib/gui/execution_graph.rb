@@ -17,10 +17,16 @@ module SPLATS
     # Otherwise, it will draw the whole graph
     # @param [String] filename The name of the file to save the graph to. Defaults to "graph.png"
     # @param [Int] depth The depth to generate backwards to. Defaults to 3.
-    def save_graph(filename="graph", depth=3)
+    def save(filename="graph", depth=3)
       execution_path = @execution_path
+      puts execution_path
+      
       # The naming scheme of the nodes is depth, i and then ii if applicable
       digraph do
+=begin
+        execution_path.each_with_index do |a, i|
+          puts "moo"
+        end
         # Something about the blocks that doesn't make sense to me requires this
 #        gnn = lambda {|a| a.join("_")}
         depth = 1
@@ -29,8 +35,8 @@ module SPLATS
           # If the current thing is an Array, it means they are the possible choices
           if ep.is_a? Array
             # Loop through the ep and draw a line from the previous node to all these options
-            ep.each_with_index do |option, ii|
-#              puts option
+            ep.each_with_index do |o, ii|
+              puts o
               l = "poo"
               node_name = "moo"
 #              node_name = gnn.call([depth.to_s, i.to_s, ii.to_s])
@@ -46,6 +52,7 @@ module SPLATS
             node(node_name, ep)
           end
         end
+=end
         save "graph", "png"
       end
       filename + ".png"

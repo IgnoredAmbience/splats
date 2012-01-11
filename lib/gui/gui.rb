@@ -4,6 +4,7 @@ require 'fiber'
 require_relative 'gui_elements.rb'
 require_relative '../splats.rb'
 require_relative 'gui_traversal.rb'
+require_relative 'execution_graph.rb'
 
 class SPLATSGUI < Shoes
 
@@ -18,7 +19,7 @@ class SPLATSGUI < Shoes
     
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 3
+    @page = 1
     @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
     @selected_radio = nil
     
@@ -128,12 +129,12 @@ class SPLATSGUI < Shoes
       end
 
       # Instantiate the GUI Traversal
-      @traversal = SPLATS::GUITraversal.new @display
+      traversal = SPLATS::GUITraversal.new(@display)
       
       # Wrap the test controller in a fiber, passing the GUI fiber in
       # This determines the value of selection
       f = Fiber.new do |input|
-        controller = SPLATS::TestController.new(@version1, nil, @output_dir, @traversal)
+        controller = SPLATS::TestController.new(@version1, nil, @output_dir, traversal)
         controller.test_classes
       end
       
@@ -158,6 +159,8 @@ def draw_selections
     @decision.depth = @depth
     # Present the question to the user
     para @decision.get_question
+    # Update the graph with the choices
+    @execution_path.push @decision.options
     
     # Run through all the options to generate clickable buttons
     flow do
@@ -173,10 +176,17 @@ def draw_selections
           end
           # Update the depth
           @depth = @decision.update_depth
-          # Send the user's answer back
-          @display.transfer (@decision.final_answer o)
+          # Update the graph with the user's choice and send back
+          choice = @decision.final_answer o
+          @execution_path.push (choice.to_s)
+          @display.transfer (choice)
           # Refresh the screen
-          draw_selections
+          if @decision.continue?
+            draw_selections
+          else
+            alert("Testing complete")
+            exit
+          end
         end
       end
     end
@@ -191,7 +201,7 @@ def draw_selections
     
     # If the decision says to display a graph, do so
     if @decision.display_graph?
-#      display_graph
+      display_graph
     end
   end
 end
@@ -199,7 +209,7 @@ end
 # This method requires passing variables between blocks, so there are a few assignment swaps...
 def display_graph
   # Generate the graph
-  graph_png = @traversal.graph.save_graph
+  graph_png = generate_graph
   if not @graph
     graph = graph_image = nil
     @graph_window = window :title => "Progress graph" do
@@ -217,6 +227,32 @@ def display_graph
       @graph_image = image(graph_png)
     end
   end
+end
+
+def generate_graph
+  execution_path = @execution_path
+  digraph do
+    execution_path.each_with_index do |ep, i|
+      if ep.is_a? Array
+#        node ep
+      end
+    end
+    save "graph", "png"
+  end
+#  puts execution_path
+=begin  digraph do
+    execution_path.each_with_index do |ep, i|
+      if ep.is_a? Array
+        if ep.length == 0
+          puts "No arguments"
+        else
+          puts ep.to_s
+        end
+      end
+    end
+  end
+=end
+  "graph.png"
 end
 
 def label_selection input
