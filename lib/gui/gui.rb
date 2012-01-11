@@ -18,7 +18,7 @@ class SPLATSGUI < Shoes
     
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 3
+    @page = 1
     @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
     @selected_radio = nil
     @file_array = [1,2,3]
@@ -62,6 +62,7 @@ class SPLATSGUI < Shoes
           ask_for_version "first"
         when 2
           # Loads the version 2 variable with the file info
+          @page += 1
           next_page
 #          ask_for_version "second"
         when 3
