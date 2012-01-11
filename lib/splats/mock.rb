@@ -73,7 +73,7 @@ module SPLATS
     end
     
     def self.to_s
-      "Mock class"
+      "Mock object"
     end
   end
 
