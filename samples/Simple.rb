@@ -1,5 +1,5 @@
 # Taken from http://www.doc.ic.ac.uk/~tora/LazyJavaCheck/Test.java-v1.txt
-class SimpleTest
+class Simple
   def initialize(obj)
     x = obj.foo
     if x == 1
