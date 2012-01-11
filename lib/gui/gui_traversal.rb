@@ -31,10 +31,18 @@ module SPLATS
       # Generate the possible values Mock can take
       decisions = generate_values type
       
-      puts caller
+      c_value = nil
+      
+      # Find out the line number
+      caller.each do |c|
+        if not c.index "lib/splats"
+          c_value = c
+          break
+        end
+      end
       
       # Transfer back to GUI
-      @fiber.transfer ValueDecision.new(decisions, caller[2].split(':')[1])
+      @fiber.transfer ValueDecision.new(@current_method, decisions, c_value.split(':')[1])
     end
     
     def continue_descent?

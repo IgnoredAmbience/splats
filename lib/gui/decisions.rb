@@ -83,15 +83,16 @@ module SPLATS
 
   class ValueDecision < Decision
   
-    def initialize(options, line_number)
+    def initialize(method, options, line_number)
       super(options)
       @line_number = line_number
       @display_file = "line_number"
       @display_graph = true
+      @current_method = method
     end
     
     def get_question
-      "Choose decision for type on line number " + @line_number.to_s
+      "Choose decision for type on line number #{strong(@line_number.to_s)} for method #{strong(@current_method.to_s)}."
     end
     
   end
