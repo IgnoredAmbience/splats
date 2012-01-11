@@ -53,7 +53,8 @@ module SPLATS
 
       begin
         if test_line.method.respond_to? :call
-          @result = @object = test_line.method.call *arguments
+          @object = (test_line.method.call(*arguments))
+					@result = @object
         else
           @result = @object.send(test_line.method, *arguments)
         end
