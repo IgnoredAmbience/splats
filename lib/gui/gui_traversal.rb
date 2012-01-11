@@ -17,7 +17,8 @@ module SPLATS
       end
 
       # Send the GUI controller the options back
-      p @fiber.transfer MethodDecision.new(methods)
+      r = @fiber.transfer MethodDecision.new(methods)
+      @current_method = r
     end
     
     def select_arguments arguments
@@ -30,8 +31,10 @@ module SPLATS
       # Generate the possible values Mock can take
       decisions = generate_values type
       
+      puts caller
+      
       # Transfer back to GUI
-      p @fiber.transfer ValueDecision.new(decisions, caller[2].split(':')[1])
+      @fiber.transfer ValueDecision.new(decisions, caller[2].split(':')[1])
     end
     
     def continue_descent?
@@ -48,6 +51,7 @@ module SPLATS
     end
 
     def notify_exception_raised exception
+      puts "Exception"
       @fiber.transfer ExceptionDecision.new(exception)
     end
   end
