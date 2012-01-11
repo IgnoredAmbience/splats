@@ -1,5 +1,5 @@
 class VerySimple
-  def add mock
-    1 - mock
+  def add foo
+    1 - foo
   end
 end
