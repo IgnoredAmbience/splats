@@ -1,20 +1,24 @@
 module SPLATS
   class Decision
-    attr_accessor :depth
-    attr_reader :options
+    attr_accessor :depth, :continue
+    attr_reader :options, :update_execution_path, :change_method, :display_graph, :display_file, :line_number
+    alias_method :update_execution_path?, :update_execution_path
+    alias_method :continue?, :continue
+    alias_method :change_method?, :change_method
+    alias_method :display_graph?, :display_graph
+    alias_method :display_file?, :display_graph
     
     def initialize options
       @options = options
+      @update_execution_path = false
+      @change_method = false
+      @continue = true
+      @display_graph = false
+      @display_file = false
     end
     
-    # Whether or not to draw/update the graph of progress
-    def display_graph?
-      false
-    end
-    
-    # Whether or not to push the decision onto the stack
-    def update_execution_path?
-      false
+    def yes_or_no
+      ["Yes", "No"]
     end
     
     # Usually just returns the current depth
@@ -33,40 +37,18 @@ module SPLATS
       "<b>" + input + "</b>"
     end
     
-    # Whether or not to update the method stored
-    # This should only be overridden by MethodDecision
-    def change_method?
-      false
-    end
-    
     # This tidies up the answer sent back to the Traversal class
     def final_answer input
       input
     end
-    
-    # This is for those yes or no questions
-    def yes_or_no
-      ["Yes", "No"]
-    end
-    
-    # Whether or not to show the snippet of file, usually no
-    def display_file
-      ""
-    end
   end
 
   class MethodDecision < Decision
-    
-    def change_method?
-      true
-    end 
-    
-    def display_graph?
-      true
-    end
-    
-    def update_execution_path?
-      true
+    def initialize methods
+      super(methods)
+      @change_method = true
+      @display_graph = true
+      @update_execution_path = true
     end
     
     def get_question
@@ -78,17 +60,11 @@ module SPLATS
   class ArgumentDecision < Decision
     
     def initialize(method, options)
-      puts method
+      super(options)
       @current_method = method
-      @options = options
-    end
-    
-    def display_graph?
-      true
-    end
-    
-    def update_execution_path?
-      true
+      @display_graph = true
+      @update_execution_path = true
+      @display_file = "method"
     end
     
     def get_question
@@ -100,29 +76,18 @@ module SPLATS
       end
       "Choose an argument for " + strong(name) + " method."
     end
-    
-    def display_file
-      "method"
-    end
   end
 
   class ValueDecision < Decision
   
     def initialize(options, line_number)
-      @options = options
+      super(options)
       @line_number = line_number
-    end
-    
-    def get_line_number
-      @line_number
+      @display_file = "line_number"
     end
     
     def get_question
       "Choose decision for type on line number " + @line_number
-    end
-    
-    def display_file
-      "line_number"
     end
     
   end
@@ -130,7 +95,7 @@ module SPLATS
   class DescentDecision < Decision
     
     def initialize
-      @options = yes_or_no
+      super(yes_or_no)
     end
     
     def get_question
@@ -151,12 +116,13 @@ module SPLATS
   class GenerationDecision < Decision
     
     def initialize exception=nil
-      @options = yes_or_no
       @exception = exception
+      super(yes_or_no)
     end
     
     def final_answer input
-      input == yes_or_no[0]
+      @continue = (input == yes_or_no[0])
+      @continue
     end
     
     def get_question
@@ -173,10 +139,10 @@ module SPLATS
   class ExceptionDecision < Decision
     def initialize e
       @e = e
-      @options = ["OK"]
+      super(["OK"])
     end
     def get_question
-      "Exception " + strong(@exception.to_s) + " raised."
+      "Exception " + strong(@e.to_s) + " raised."
     end
   end
 end

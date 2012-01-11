@@ -67,9 +67,9 @@ module SPLATS
     
     def continue_generation?
       unless @first_run 
-        @init = true
         @first_run = true
       else
+        @init = true
         @fiber.transfer GenerationDecision.new
       end
     end

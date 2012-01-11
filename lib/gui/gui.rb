@@ -96,15 +96,14 @@ class SPLATSGUI < Shoes
           @option_area.clear do
             display_depth_box "zero"
           end
-          false
+          return false
         elsif @depth.to_i == 0
           @option_area.clear do
             display_depth_box true
           end
-          false
+          return false
         else
           @depth = @depth.to_i
-          true
         end
       when :random
         # Seed as 0 is perfectly acceptable
@@ -112,13 +111,11 @@ class SPLATSGUI < Shoes
           @option_area.clear do
             display_seed_box true
           end
-          false
-        else
-          true
+          return false
         end
-      else
-        true
+      end
     end
+    true
   end
   
   def start_tests
@@ -194,7 +191,7 @@ def draw_selections
     # If the decision says to display a file, do so
     case @decision.display_file
       when "line_number"
-        display_file(@decision.get_line_number, nil)
+        display_file(@decision.line_number, nil)
       when "method"
         display_file(nil, @method)
     end
