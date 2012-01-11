@@ -82,6 +82,7 @@ class SPLATSGUI < Shoes
       para strong @output_dir
     end
     if @output_dir.nil?
+      puts @output_dir
       @output_dir = "tests"
     end
     next_button true
