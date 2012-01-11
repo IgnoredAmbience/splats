@@ -50,12 +50,6 @@ class SPLATSGUI < Shoes
       logo_name = File.join(File.dirname(__FILE__), "fly.png")
       # Keeps ticking to ensure the logo stays in the bottom right corner
       @logo = image(logo_name).move (width - 100), (height - 100)
-      every(1) do
-        unless height == @height
-          @logo.clear
-          @logo = image(logo_name).move (width - 100), (height - 100)
-        end
-      end
       case @page
         when 1
           # Loads the version 1 variable with the file info
@@ -152,7 +146,7 @@ class SPLATSGUI < Shoes
       traversal = SPLATS::DepthLimitedTraversal.new(@depth)
       controller = SPLATS::TestController.new(@version1, @version2, @output_dir, traversal)
       controller.test_classes
-      alert("Test complete")
+      alert("Test generation complete")
     when :random
       traversal = SPLATS::RandomTraversal.new(@seed)
       controller = SPLATS::TestController.new(@version1, @version2, @output_dir, traversal)
