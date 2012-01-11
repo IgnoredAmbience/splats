@@ -137,6 +137,10 @@ module SPLATS
     def update_depth
       @depth = 1
     end
+    
+    def change_method?
+      true
+    end
   end
   
   class ExceptionDecision < Decision

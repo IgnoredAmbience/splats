@@ -18,7 +18,7 @@ class SPLATSGUI < Shoes
     
     # Initialise variables
     @y_or_n = Hash["Yes" => true, "No" => false]
-    @page = 1
+    @page = 3
     @traversal_methods = Hash[:depth => "Depth-Limited", :human => "Manual", :random => "Random"]
     @selected_radio = nil
     @file_array = [1,2,3]
@@ -187,12 +187,9 @@ def draw_selections
           # Format the choice with final answer
           fa = @decision.final_answer o
           
-          p fa
-          
           # If the object wants the method to change, change it to the final answer
           if @decision.change_method?
             @method = fa
-            p "change!"
           end
           
           # If the decision was graphable, add the information to a tracker
@@ -262,7 +259,6 @@ def draw_graph
           previous_node = [(index-1), depth].join("_")
         else
           # Find the index of the previous node
-          p "Index : #{path_tracker[index-1]}"
           if path_tracker[index-1] == "\"nil\""
             p path_tracker[index-2]
             to_look_for = "nil"

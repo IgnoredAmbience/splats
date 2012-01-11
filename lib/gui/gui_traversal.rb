@@ -23,8 +23,7 @@ module SPLATS
     
     def select_arguments arguments
       # Send the arguments back to the GUI
-      ad = ArgumentDecision.new(@current_method, arguments)
-      @fiber.transfer ad
+      @fiber.transfer ArgumentDecision.new(@current_method, arguments)
     end
     
     def generate_value type
@@ -59,7 +58,6 @@ module SPLATS
     end
 
     def notify_exception_raised exception
-      puts "Exception"
       @fiber.transfer ExceptionDecision.new(exception)
     end
   end
