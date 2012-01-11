@@ -1,74 +1,40 @@
-\documentclass{report}
-
+\documentclass{article}
 \usepackage[margin=1in]{geometry}
-\usepackage{tikz}
 
-\usetikzlibrary{shapes,arrows}
+\title{SpLATS Executive Summary}
 
 \begin{document}
+\maketitle
 
-\title{SpLATS Lazy Automated Test System}
+\section{Introduction}
 
+SpLATS Lazy Automated Test System is intended for Ruby developers. Its aim is to automatically perform regression testing on Ruby programs. 
+In agile development, a piece of code may be refactored multiple times; it is important to ensure that version changes do not break existing functionality. SpLATS aims to automate this process by generating tests for the one version of the code, and running it against the other version. The differences between the two are made apparent by how many tests pass. A web page can be generated to demonstrate the percentage of code covered by the generated tests.
+It is anticipated that SpLATS will save time and find edge cases in the code which may not have been immediately apparent.
+A subset of Ruby was specified which we call Lightweight Ruby, and SpLATS is only guaranteed to work within this subset; not all programs will be tested in their entirety.
 
-\section*{About}
+\section{Existing Solutions}
+Automatic test generators have been written for a variety of languages, including Java, Haskell and Ruby, but there are no products ready for ‘real world’ usage. 
+There also exists a program for Ruby called ZenTest which analyses a programmer’s code and generates method stubs for missing tests which the programmer then needs to write. This is not the purpose of SpLATS, which instead aims to remove the need to write tests altogether. 
+A paper has been written on a program called RuTeG (Ruby Test case Generator) a product which has similar aims to SpLATS, but the source code has not been published, and its methodologies are somewhat different to SpLATS.
 
-This report explains the purpose and development of SpLATS Lazy Automated Test System (SpLATS), a tool used to automatically generate regression tests for Ruby.  Regression tests are tests that ensure that a program does not break any existing functionality when code is refactored, added to or patched. The aim of the project is to develop methods of automated testing in Ruby, to ultimately to reduce the amount of time Ruby developers spend writing tests and finding and fixing bugs. As Ruby is a fully-featured programming language a subset for SpLATS to use was defined, called Lightweight Ruby, so that the scope of the project was of reasonable size.
+\section{Features}
+For Lightweight Ruby, SpLATS can automatically generate tests to demonstrate whether or not two versions of code exhibit the same functionality; deterministic behaviour ensures that all tests are reproducible. There is both a command line interface and a graphical interface to SpLATS, each offering different options to the user. 
+There are currently three different ways SpLATS generates the tests (in the form of different search space traversal algorithms), selectable from either interface. The program was designed to allow new traversal algorithms to be easily written; users can choose more suitable means of traversing the search space if they wish.
 
+\section{Architecture}
+We used a variety of third-party libraries to provide frameworks for testing, code coverage, document generation and a graphical interface.
+To run, SpLATS requires a file to generate tests for. The class contained in the file is loaded, and passed to the test controller, which initialises a test generator, and a means of traversal. The generator and traversal algorithm determine what tests are generated, and these tests are then executed on the test class by the generator. The methods called on the class under test are passed mock objects as parameters; these mock objects either take primitive values from the generator, or become new mock objects. The generator the yields these tests back to the test controller, which writes them out to file.
 
+\section{Software Engineering Methods}
+The group met twice a week, one meeting was directly followed by a meeting with our supervisors. The group meetings were used to establish what each member would be doing for the week and members assisting each other with issues. They were also used to make decisions on how the project would work.
+For group collaboration and version control we used Git. We used Ruby’s built in testing framework (Test::Unit) both for our own tests of our own code, and to run the tests we generated.
 
+\section{Technical Challenges}
+The biggest obstacle is a pathological one; exponential growth of the search space makes it harder to detect the useful tests that have been generated, and the sheer number of generated tests is unwieldy. To run all of the tests generated can exhaust the memory of a modest machine, even when search parameters are well chosen, but to filter out the most ‘useful’ tests is an even harder problem than generating the tests, and is beyond the scope of the project.
+The other major issue was related to typing. The mock object must be able to stand in for any other object making it difficult to realise the mock object as something concrete, or containing ‘useful’ information. This was ultimately resolved by rebuilding it in each test and utilising a lookup table containing sample values for common types.
 
-\section*{Technical Details}
-
-\begin{tikzpicture}
-    \coordinate(origin);
-    \node(core) at (origin) [draw] {Generate tests};
-    \node(control) at ([left=3cm] core) [draw] {Load classes};
-    \node(output) at ([right=3cm] core) [draw] {Write tests};
-    \node(compare) at ([right=3cm] output) [draw] {Compare versions};
-    \node(gui) at ([left=2cm,above=1cm] control) [draw] {GUI};
-    \node(cli) at ([left=2cm,below=1cm] control) [draw] {CLI};
-
-    \draw[->] (control) -> (core);
-    \draw[->] (core) -> (output);
-    \draw[->] (output) -> (compare);
-    \draw[->] (gui) -> (control);
-    \draw[->] (cli) -> (control);
-  \end{tikzpicture}\\
-{A simplified summary of the control flow of SpLATS} \\
-
-
-\section*{Software Engineering}
-
-The research-oriented nature of the project made it difficult to use agile methods as group methods often saw conflicting solutions to problems, and often it proved to be quicker for a single member to prototype code instead of explaining complex ideas.
-
-Timetabling constraints were a recurring problem, there were few times where all group members were available.
-
-
-The group first tried short, daily meetings, with longer meetings where possible or necessary.
-    We quickly found that conflicting schedules made the short meetings impossible for all group members to attend and served little purpose: most days not enough progress was made to warrant discussion.
-    Daily meetings are useful in the workplace where team members can meet everyday for considerable periods of time. They are not so possible when the group members between them do seven modules and two humanities options. Therefore, there were two hour-long meetings per week, where one was directly followed by a meeting with the project supervisor.
-
-    After trying several online communication methods, we found a project IRC channel was helpful, hosted on EsperNet.
-    Commit messages from Git were posted there, and it was especially useful for discussions during the winter holidays, when we couldn't be in the same physical location. The conversations are also automatically logged, so members who were not present in the chat room at the time could catch up.
-
-
-
-
-
-
-We decided at the outset to use the git revision control system for various reasons:
-      \begin{itemize}
-      \item We had all used it in the past and were comfortable with it.
-      \item It is a distributed revision control system, which grants additional flexibility compared to centralised systems, as it allows for such things as offline working and private branches.
-      \item It works very well with Unix-like systems, such as Linux, which all but one of the group uses.
-      \item Git handles complex merging extremely well, and when there is a merge conflict, it is very easy to sort manually.
-      \end{itemize}
-
-\section*{Conclusions}
- 
-On the whole, SpLATS has succeeded. All of the requirements and many of the extensions were fulfilled, and it has been demonstrated to work on several test cases. The predominant open problem is reducing the exponential growth of the search space so that a limit imposed on the complexity of each test could be relaxed. If this were possible then the tests would instantly become considerably more complex and useful for testing purposes.
-The group members have learned about larger scale collaboration, including the need for regular check-ins, meetings, and direct supervision by a senior.
-SpLATS has scope for future improvement, by implementing smarter feedback-driven traversal methods, and supporting more language features.
+\section{Evaluation}
+SpLATS has succeeded in passing its minimum requirements and many of its extensions. SpLATS generated tests which achieved 100\% code coverage on some simpler examples, even with only a search depth of two. For more complicated programs the depth becomes the limiting factor; a depth of three will test a large proportion of methods in a class but the exponential growth of the search space usually means that at depths of four or greater, either too many tests are produced to run the code without exhausting RAM, or it takes too long to generate the tests. In some programs it is also not possible to achieve 100\% coverage because language features are used that are not a part of Lightweight Ruby. The search space issue is an open problem in academia; were it solved, SpLATS would work considerably better.
 
 \end{document}
-
