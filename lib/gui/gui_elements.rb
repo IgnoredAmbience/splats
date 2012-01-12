@@ -142,16 +142,24 @@ def display_file (number, function_name)
     
     # Choose the before text and put into string
     before_text = file_array[start_line..choose_line-1].join("\n")
+    before_text.gsub!("<=", "&lt;=")
+    before_text.gsub!(">=", "&gt;=")
     # Choose the after text and put into string
     after_text = file_array[choose_line+1..end_line].join("\n")
+    after_text.gsub!("<=", "&lt;=")
+    after_text.gsub!(">=", "&gt;=")
     
     stack do
       background white
       para before_text, :size => "small", :family => "monospace"
       flow do
         background wheat
+        line = file_array[choose_line]
+        line.gsub!("<=", "&lt;=")
+        line.gsub!(">=", "&gt;=")
         para file_array[choose_line], :size => "small", :family => "monospace"
       end
+      
       para after_text, :size => "small", :family => "monospace"
     end
   end
