@@ -116,10 +116,10 @@ module SPLATS
 
     # The final assert statement
     def assert
-      if is_base_class? @result
-        ["assert_equal #{result_to_s}, result"]
-      elsif @result.__SPLATS_is_mock?
+      if @result.__SPLATS_is_mock?
         ["assert_operator #{result_to_s}, :===, result"]
+      elsif is_base_class? @result
+        ["assert_equal #{result_to_s}, result"]
       else
         ["assert_instance_of #{@result.class}, result"]
       end
