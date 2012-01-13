@@ -25,8 +25,7 @@ class SPLATSGUI < Shoes
     
     #TODO Put this in a config file
     # Defaults
-    @version1 = File.join(File.dirname(__FILE__), '../../samples/LinkedList.rb')
-    @version2 = File.join(File.dirname(__FILE__), '../../samples/version2/LinkedList.rb')
+    @version1 = @version2 = ""
     @output_dir = 'tests'
     @traversal_method = :human
     @depth = 2
@@ -56,9 +55,7 @@ class SPLATSGUI < Shoes
           ask_for_version "first"
         when 2
           # Loads the version 2 variable with the file info
-          @page += 1
-          next_page
-#          ask_for_version "second"
+          ask_for_version "second"
         when 3
           page_3
         else
@@ -98,7 +95,11 @@ class SPLATSGUI < Shoes
         end
       when :random
         # Seed as 0 is perfectly acceptable
-        if not @seed == "0" && @seed.to_i == 0
+        if @seed == "0" || @seed == 0
+          return true
+        end
+        # If clearly not an integer, display falsity
+        if @seed.to_i == 0
           @option_area.clear do
             display_seed_box true
           end
@@ -130,7 +131,7 @@ class SPLATSGUI < Shoes
       # Wrap the test controller in a fiber, passing the GUI fiber in
       # This determines the value of selection
       f = Fiber.new do |input|
-        controller = SPLATS::TestController.new(@version1, nil, @output_dir, traversal)
+        controller = SPLATS::TestController.new(@version1, @version2, @output_dir, traversal)
         controller.test_classes
       end
       
@@ -143,15 +144,15 @@ class SPLATSGUI < Shoes
       # Display the selections to user
       draw_selections
     when :depth
-      traversal = SPLATS::DepthLimitedTraversal.new(@depth)
+      traversal = SPLATS::DepthLimitedTraversal.new(@depth.to_i)
       controller = SPLATS::TestController.new(@version1, @version2, @output_dir, traversal)
       controller.test_classes
       alert("Test generation complete")
     when :random
-      traversal = SPLATS::RandomTraversal.new(@seed)
+      traversal = SPLATS::RandomTraversal.new(@seed.to_i)
       controller = SPLATS::TestController.new(@version1, @version2, @output_dir, traversal)
       controller.test_classes
-      alert("Test complete")
+      alert("Test complete with seed #{traversal.seed}")
     end
   end
 end
