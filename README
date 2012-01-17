@@ -1,0 +1,5 @@
+SpLATS Lazy Automated Testing System
+====================================
+
+Sample usage:
+ ruby bin/cli.rb -G -f myclass.rb
