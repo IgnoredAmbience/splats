@@ -71,8 +71,13 @@ module SPLATS
   # Takes in a ruby code file and a directory to place the generated tests
   class TestController
 
-    # @param [String] input_file The ruby code file to be tested
+    # @param [String] input_file The ruby code file to have tests generated for
+    # it
+    # @param [String] regression_file The file to be tested against in
+    # Comparison mode
     # @param [String] output_dir The directory for generated tests to be put
+    # @param [Traversal] traversal The traversal object used to direct the
+    # search
     #
     # @note Directory created if necessary
     def initialize(input_file, regression_file, output_dir, traversal)
@@ -107,7 +112,7 @@ module SPLATS
     # Creates tests for a class by generating and traversing the tree
     # then generating the code from the abstract syntax
     #
-    # @param [Class] testing_class The class to be tested
+    # @param [Class] testing_class The class to have tests generated for it
     def single_class_test(testing_class)
       cur_testing_class = Generator.new(testing_class, @traversal)
       TestFile.open(testing_class,[],@output_dir) do |file|
@@ -117,6 +122,12 @@ module SPLATS
       end
     end
 
+    # Generates tests for one class, then tests them directly against the other
+    #
+    # @param [Class] first_test_class The class to have tests generated based
+    # on it
+    # @param [Class] second_test_class The class to be tested against the first
+    # class
     def double_class_test(first_test_class, second_test_class)
       cur_testing_class = Generator.new(first_test_class, @traversal)
 
