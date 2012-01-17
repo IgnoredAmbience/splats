@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 require 'green_shoes'
 require 'graph'
 require 'fiber'
