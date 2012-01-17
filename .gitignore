@@ -13,5 +13,10 @@ doc
 # Backups
 *~
 .*
+*.bak
 
 coverage
+
+# BibTeX crap
+*.bbl
+*.blg
