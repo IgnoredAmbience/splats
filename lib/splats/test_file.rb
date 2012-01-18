@@ -1,15 +1,12 @@
 require_relative "test"
 
 module SPLATS
-  # Wrapper around the File class to wrap all piped output in a class including
-  # all the required boilerplate statements
+  # Wraps the inbuilt File class in something to more easily print Tests
   class TestFile < File
 
-    # Opens an output file and wraps all content created in the class
-    # boilerplate output
-    #
+    # Behaves similarly to File.open, but automates some parameters and adds others
     # @param [Class] klass The class having tests printed
-    # @param [<#to_s>] reqs The list of file requirements
+    # @param [Array] reqs The list of file requirements
     # @param [String] out_dir The output directory
     # @yield [File] The file to write to
     def self.open(klass, reqs, out_dir, &block)
