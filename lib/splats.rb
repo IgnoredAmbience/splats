@@ -8,8 +8,11 @@ require_relative 'splats/Traversal/human_traversal'
 require_relative 'splats/Traversal/random_traversal'
 require_relative 'splats/Traversal/depth_limited_traversal'
 
+# SPLATS - SpLATS Lazy Automated Testing System
 module SPLATS
 
+  # Classes that we infer to be primitive - objects that can be constructed
+  # through the syntax of the language
   BASE_CLASSES = [
     Integer,
     String,
@@ -22,6 +25,7 @@ module SPLATS
     Hash
   ]
 
+  # Well-defined Ruby 'interfaces' that we can assume
   RETURN_TYPES = {
     :! => :Bool,
     :!= => :Bool,
@@ -47,26 +51,6 @@ module SPLATS
   }
 
 
-  # Loads given file and returns classes defined within
-  #
-  # This does *not* guarantee that any other code held within the file will not
-  # be executed.
-  #
-  # A second call to this method with the same filename will return an empty
-  # list (unless a new class has been defined in the file).
-  #
-  # @param [String] filename The ruby source file to load
-  # @return [Array<Class>] The classes defined within the file
-  def self.load_classes filename
-    constants = Module.constants
-
-    load filename
-
-    (Module.constants - constants).map do |sym|
-      const_get sym
-    end
-  end
-
 
   # Takes in a ruby code file and a directory to place the generated tests
   class TestController
@@ -81,7 +65,7 @@ module SPLATS
     #
     # @note Directory created if necessary
     def initialize(input_file, regression_file, output_dir, traversal)
-      @input_classes = SPLATS.load_classes input_file
+      @input_classes = load_classes input_file
       @regression_file = regression_file
       if output_dir == :notgiven
         @output_dir = "tests/"
@@ -156,6 +140,24 @@ module SPLATS
 
     end
 
-    
+    # Loads given file and returns classes defined within
+    #
+    # This does *not* guarantee that any other code held within the file will not
+    # be executed.
+    #
+    # A second call to this method with the same filename will return an empty
+    # list (unless a new class has been defined in the file).
+    #
+    # @param [String] filename The ruby source file to load
+    # @return [Array<Class>] The classes defined within the file
+    def load_classes filename
+      constants = Module.constants
+
+      load filename
+
+      (Module.constants - constants).map do |sym|
+        Module.const_get sym
+      end
+    end
   end
 end

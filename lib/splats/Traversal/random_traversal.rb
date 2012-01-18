@@ -1,9 +1,11 @@
 module SPLATS
   # This class is responsible for randomly traversing
+  #
+  # Includes the Traversal abstract class, see there for interface documentation
   class RandomTraversal
     include Traversal
-    # If there's already a seed in use, then initialise the RNG with the seed
-    # Also keeps an eye on the seed, for possibly returning it in the future
+ 
+    # @param [Integer] seed The seed to use for test generation
     def initialize seed=nil
       if seed
         @rng = Random.new seed
@@ -12,11 +14,11 @@ module SPLATS
       end
     end
 
+    # @return [Integer] The seed used for this traversal object
     def seed
       @rng.seed
     end
 
-    # This is passed a list of methods - will return a randomly selected item
     def select_method methods
       methods[@rng.rand(methods.length)]
     end

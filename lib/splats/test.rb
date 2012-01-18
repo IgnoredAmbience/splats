@@ -1,7 +1,10 @@
 module SPLATS
   # This encapsulates a single test.
-  # It is responsible pretty printing the test i.e. writing the code of the test.
-  # It will become responsible for executing the test it encapsulates during the generation phase.
+  #
+  # It is responsible for pretty printing the test i.e. writing the code of the test.
+  #
+  # It is also responsible for executing and maintaining the execution state
+  # of the test it encapsulates during the generation phase.
   class Test
     def initialize
       @test_lines = []
@@ -10,6 +13,9 @@ module SPLATS
       @mocks = []
     end
 
+    # Adds a test line to the test
+    # @param [Symbol] method The method to be called
+    # @param [Array] parameters The parameters to be passed to the method
     def add_line (method, parameters)
       @test_lines.push(TestLine.new(method, parameters))
     end
@@ -65,12 +71,15 @@ module SPLATS
       return true
     end
 
+    # Returns the name of the test
+    # @return [String] The name of the test
     def name
       "test_#{hash.abs}"
     end
 
     # Returns a string of the translation of the abstract code into a
     # test::unit testing method
+    # @return [String] The statements of the test
     def to_s
       if @exception
         (header + mocks + assert_raises + footer).join("\n")
@@ -82,10 +91,14 @@ module SPLATS
     private
 
     # The function header
+    # @return [<String>] The function definition statement
     def header
       ["def #{name}"]
     end
 
+    # Produces a set of statements to recreate the execution sequence of all
+    # mock objects used by the test
+    # @return [<String>] The mock execution statements
     def mocks
       calls = @mocks.flat_map {|m| m.__SPLATS_child_objects }
 
@@ -106,12 +119,14 @@ module SPLATS
     end
 
     # The body of instructions
+    # @return [<String>] The test execution statements
     def body
       # The -2 is because we drop the last line; The last line output by the assert method.
       @test_lines[0..-2] + ["result = " + @test_lines[-1].to_s]
     end
 
     # The final assert statement
+    # @return [<String>] The assert statement
     def assert
       if is_base_class? @result
         ["assert_equal #{result_to_s}, result"]
@@ -122,15 +137,23 @@ module SPLATS
       end
     end
 
+    # The statements wrapping a body of execution statements if an exception is
+    # expected to be raised during their execution
+    # @return [<String>] Raises exectuion statements
     def assert_raises
       ["assert_raises #{@exception.class.name} do"] + body + ["end"]
     end
 
     # The function footer
+    # @return [<String>] The footer statement
     def footer
       ["end"]
     end
 
+    # True if the given value is determined to be a 'primitive'
+    #
+    # @note Mock objects should ''NOT'' be passed into this.
+    # @param [Object] value The object to test for primitivity
     def is_base_class? value
       BASE_CLASSES.include? value.class
     end
@@ -140,6 +163,12 @@ module SPLATS
       self.class.construct_value @result
     end
 
+    # Produces a string suitable for use in a source file to construct a
+    # primitive type
+    #
+    # @param [Object] value The object to drop to string
+    # @return [String] The object represented as a string suitable for use in
+    #   source
     def self.construct_value value
       if value.__SPLATS_is_mock?
         value.__SPLATS_print
@@ -154,6 +183,10 @@ module SPLATS
       end
     end
 
+    # Produces an argument list suitable for use with a method call
+    #
+    # @param [<Object>] args The array of arguments
+    # @return [String] The argument string
     def self.args_to_s args
       if args.empty?
         ""
@@ -163,11 +196,13 @@ module SPLATS
     end
 
 
-    # Private inner class
+    # Internal representation of one line of execution within a Test
     class TestLine
-      attr_reader :object, :method, :decisions, :arguments, :output
+      attr_reader :method, :arguments, :output
 
-      def initialize method, arguments, decisions=nil, object=nil
+      # @param [Symbol] method The method
+      # @param [<nil,Mock>] arguments The argument template to use
+      def initialize method, arguments
         if method.respond_to? :to_sym
           @method = method.to_sym
         elsif method.respond_to? :call
@@ -177,16 +212,16 @@ module SPLATS
         end
 
         @arguments = arguments
-        @decisions = decisions || []
-        @object = object
       end
 
+      # @return [String] String representation of the TestLine
       def to_s
         assignment + object_call + method_name + args_to_s
       end
 
       private
 
+      # @return [String] Assignment of the constructor
       def assignment
         if @method.is_a? Method and @method.name == :new
           'object = '
@@ -195,16 +230,16 @@ module SPLATS
         end
       end
 
+      # @return [String] The object/class name with . appended
       def object_call
-        if @object
-          @object.to_s + '.'
-        elsif @method.is_a? Method
+        if @method.is_a? Method
           @method.receiver.name + '.'
         else
           'object.'
         end
       end
 
+      # @return [String] Method name
       def method_name
         if @method.is_a? Symbol
           @method.to_s
@@ -213,7 +248,7 @@ module SPLATS
         end
       end
 
-      # Turns the array of arguments to a string
+      # @return [String] The argument string
       def args_to_s
         Test.args_to_s @arguments
       end
