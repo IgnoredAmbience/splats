@@ -101,3 +101,4 @@ class BinaryTree
 
     end
 end
+end
