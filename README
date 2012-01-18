@@ -1,5 +1,11 @@
 SpLATS Lazy Automated Testing System
 ====================================
 
+Prerequisites:
+  * flexmock
+  * yard (optional, for documentation)
+'rake gems' will install all dependencies, initially attempting to the system
+gemdir, then the userdir
+
 Sample usage:
  ruby bin/cli.rb -G -f myclass.rb
