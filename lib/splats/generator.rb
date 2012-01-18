@@ -31,8 +31,14 @@ module SPLATS
     # @return [Test] A generated test
     def produce_test
       test = Test.new
+
+      # Tell traversal object to reset its state
       @traversal.notify_new_traversal
+
+      # Retrieved for passing into the Mock object
       decision = @traversal.method(:generate_value)
+
+      # Always begin with calling the constructor (new/initialize)
       method = @traversal.select_method [@class.method(:new)]
       args = @traversal.select_arguments generate_parameters(:initialize)
       test.add_line(method, args)
@@ -47,6 +53,8 @@ module SPLATS
         continue_execution = false
       end
 
+      # While the traversal allows it, and no execption is raised in execution,
+      # continue generating lines
       while continue_execution and @traversal.continue_descent?
         method = @traversal.select_method @class.public_instance_methods(false)
         args = @traversal.select_arguments generate_parameters(method)

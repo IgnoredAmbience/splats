@@ -1,5 +1,10 @@
 module SPLATS
-  # This class is responsible for when a human wants to traverse
+  # This class is responsible for when a human wants to traverse by hand
+  #
+  # Each method is simply a call out to the console to request an option be
+  # entered
+  #
+  # Includes the Traversal abstract class, see there for interface documentation
   class HumanTraversal
     include Traversal
     
@@ -29,6 +34,7 @@ module SPLATS
       decision == 'Y' || decision == 'y'
     end
 
+    # @see Traversal#select_method
     def select_method methods
       if @init
         @current_method = methods[0]
@@ -38,19 +44,23 @@ module SPLATS
       ask_input_options("method", methods)
     end
 
+    # @see Traversal#select_arguments
     def select_arguments arguments
       ask_input_options("argument", arguments)
     end
 
+    # @see Traversal#generate_value
     def generate_value type
       decisions = generate_values type
       ask_input_options("decision", decisions)
     end
 
+    # @see Traversal#continue_descent?
     def continue_descent?
       ask_input_yes_no "Continue descent?"
     end
 
+    # @see Traversal#continue_generation?
     def continue_generation?
       unless @firstrun
         @firstrun = true

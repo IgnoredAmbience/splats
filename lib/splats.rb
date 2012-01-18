@@ -8,8 +8,11 @@ require_relative 'splats/Traversal/human_traversal'
 require_relative 'splats/Traversal/random_traversal'
 require_relative 'splats/Traversal/depth_limited_traversal'
 
+# SPLATS - SpLATS Lazy Automated Testing System
 module SPLATS
 
+  # Classes that we infer to be primitive - objects that can be constructed
+  # through the syntax of the language
   BASE_CLASSES = [
     Integer,
     String,
@@ -22,6 +25,7 @@ module SPLATS
     Hash
   ]
 
+  # Well-defined Ruby 'interfaces' that we can assume
   RETURN_TYPES = {
     :! => :Bool,
     :!= => :Bool,
@@ -47,40 +51,20 @@ module SPLATS
   }
 
 
-  # Loads given file and returns classes defined within
-  #
-  # This does *not* guarantee that any other code held within the file will not
-  # be executed.
-  #
-  # A second call to this method with the same filename will return an empty
-  # list (unless a new class has been defined in the file).
-  #
-  # @param [String] filename The ruby source file to load
-  # @return [Array<Class>] The classes defined within the file
-  def self.load_classes filename
-    constants = Module.constants
-    
-    # Have to wrap in thread because otherwise causes seg fault in GUI
-    t = Thread.new do
-      load filename
-    end
-    t.join
-
-    (Module.constants - constants).map do |sym|
-      const_get sym
-    end
-  end
-
-
   # Takes in a ruby code file and a directory to place the generated tests
   class TestController
 
-    # @param [String] input_file The ruby code file to be tested
+    # @param [String] input_file The ruby code file to have tests generated for
+    # it
+    # @param [String] regression_file The file to be tested against in
+    # Comparison mode
     # @param [String] output_dir The directory for generated tests to be put
+    # @param [Traversal] traversal The traversal object used to direct the
+    # search
     #
     # @note Directory created if necessary
     def initialize(input_file, regression_file, output_dir, traversal)
-      @input_classes = SPLATS.load_classes input_file
+      @input_classes = load_classes input_file
       @regression_file = regression_file
       if output_dir == :notgiven || output_dir.nil?
         @output_dir = "tests/"
@@ -117,7 +101,7 @@ module SPLATS
     # Creates tests for a class by generating and traversing the tree
     # then generating the code from the abstract syntax
     #
-    # @param [Class] testing_class The class to be tested
+    # @param [Class] testing_class The class to have tests generated for it
     def single_class_test(testing_class)
       cur_testing_class = Generator.new(testing_class, @traversal)
       TestFile.open(testing_class,[],@output_dir) do |file|
@@ -127,6 +111,12 @@ module SPLATS
       end
     end
 
+    # Generates tests for one class, then tests them directly against the other
+    #
+    # @param [Class] first_test_class The class to have tests generated based
+    # on it
+    # @param [Class] second_test_class The class to be tested against the first
+    # class
     def double_class_test(first_test_class, second_test_class)
       cur_testing_class = Generator.new(first_test_class, @traversal)
 
@@ -155,6 +145,28 @@ module SPLATS
 
     end
 
-    
+    # Loads given file and returns classes defined within
+    #
+    # This does *not* guarantee that any other code held within the file will not
+    # be executed.
+    #
+    # A second call to this method with the same filename will return an empty
+    # list (unless a new class has been defined in the file).
+    #
+    # @param [String] filename The ruby source file to load
+    # @return [Array<Class>] The classes defined within the file
+    def load_classes filename
+      constants = Module.constants
+
+      # Have to wrap in thread because otherwise causes seg fault in GUI
+      t = Thread.new do
+        load filename
+      end
+      t.join
+
+      (Module.constants - constants).map do |sym|
+        Module.const_get sym
+      end
+    end
   end
 end
