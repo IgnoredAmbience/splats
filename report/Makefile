@@ -10,7 +10,7 @@ images: $(TIKZ)
 	dot2tex --figonly $< > $@
 
 clean:
-	rm -f {*,*/*}.{aux,toc,log,out}
+	rm -f {*,*/*}.{aux,toc,log,out,bbl,blg}
 
 clobber: clean
 	rm -f {*,*/*}.{pdf,ps,dvi} images/*.tex

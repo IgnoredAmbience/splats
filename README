@@ -9,3 +9,35 @@ gemdir, then the userdir
 
 Sample usage:
  ruby bin/cli.rb -G -f myclass.rb
+
+Directory structure:
+splats/
+|- bin/                   - Executables
+|  |- splats              - The SpLATS CLI
+|  |- splats_gui          - The SpLATS GUI
+|  |- splats_demo         - The script used to demo SpLATS during the presentation
+|- lib/
+|  |- splats.rb           - The classloader, API suitable for use from other ruby scripts
+|  |- splats/             - Files within the SPLATS module
+|  |  |- generator.rb
+|  |  |- mock.rb
+|  |  |- test_file.rb
+|  |  |- test.rb
+|  |  |- traversal/       - Traversal classes for use with the generator
+|  |     |- traversal.rb
+|  |     |- depth_limited_traversal.rb
+|  |     |- human_traversal.rb
+|  |     |- random_traversal.rb
+|  |- gui/                - GUI source files
+|     |- gui.rb           - Main GUI source
+|     |- gui_elements.rb  - Supporting methods
+|     |- gui_traversal.rb - Traversal method for use with generator
+|     |- decisions.rb
+|- report/                - The final report, executive summary and presentation
+|- samples/               - Code samples for use with SpLATS
+|- test/                  - SPLATS unit tests
+|- wiki/                  - Project wiki, also contains interim reports
+|- doc/                   - Auto-generated code documentation
+|- Rakefile               - Like a Makefile
+|- README                 - This file
+

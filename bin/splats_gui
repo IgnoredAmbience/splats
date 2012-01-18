@@ -1,2 +1,2 @@
 #!/bin/sh
-ruby lib/gui/gui.rb
+ruby lib/gui/gui.rb > /dev/null 2>&1

@@ -3,10 +3,10 @@ require_relative 'splats/generator'
 require_relative 'splats/mock'
 require_relative 'splats/test'
 require_relative 'splats/test_file'
-require_relative 'splats/Traversal/traversal'
-require_relative 'splats/Traversal/human_traversal'
-require_relative 'splats/Traversal/random_traversal'
-require_relative 'splats/Traversal/depth_limited_traversal'
+require_relative 'splats/traversal/traversal'
+require_relative 'splats/traversal/human_traversal'
+require_relative 'splats/traversal/random_traversal'
+require_relative 'splats/traversal/depth_limited_traversal'
 
 # SPLATS - SpLATS Lazy Automated Testing System
 module SPLATS
