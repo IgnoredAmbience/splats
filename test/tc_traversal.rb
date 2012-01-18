@@ -42,7 +42,7 @@ class TraversalTest < Test::Unit::TestCase
 
   def test_notify_exception_raised
     assert_nothing_raised do
-      Traversal.new.notify_exception_raised
+      Traversal.new.notify_exception_raised Exception.new
     end
   end
 end

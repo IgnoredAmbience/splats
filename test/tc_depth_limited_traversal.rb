@@ -60,7 +60,7 @@ class DepthLimitedTraversalTest < Test::Unit::TestCase
         path << args
 
         if args == 1
-          d.notify_exception_raised
+          d.notify_exception_raised Exception.new
           break
         end
       end while d.continue_descent?
