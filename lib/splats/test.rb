@@ -89,7 +89,7 @@ module SPLATS
         child_map.each do |node|
           node[1].each do |childnode|
             edge(node[0].__SPLATS_print, Test.construct_value(childnode[1]))
-            .label(childnode[0].to_s)
+            .label(childnode[0].to_s + Test.args_to_s(childnode[2]))
           end 
         end
         save "single_mock_graph", "png"
