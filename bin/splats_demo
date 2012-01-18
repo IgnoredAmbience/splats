@@ -1,10 +1,9 @@
 #!/bin/sh
+# This should probably be executed from the project root
 
 function pause(){
   read -p "$*"
 }
-
-git checkout master > /dev/null 2&> /dev/null
 
 cp samples/VerySimpleMinus.rb /tmp/VerySimple.rb
 
@@ -12,15 +11,15 @@ vim +sp\ samples/VerySimple.rb /tmp/VerySimple.rb
 
 clear
 
-ruby bin/cli.rb -h
+bin/splats -h
 
 pause
 
-echo "$ ruby bin/cli.rb -G -f samples/VerySimple.rb"
+echo "$ bin/splats -G -f samples/VerySimple.rb"
 
 pause
 
-ruby bin/cli.rb -G -f samples/VerySimple.rb
+bin/splats -G -f samples/VerySimple.rb
 
 pause Continue...
 
@@ -40,8 +39,8 @@ pause
 
 clear
 
-echo "$ ruby bin/cli.rb -C -f samples/VerySimple.rb -g /tmp/VerySimple.rb"
+echo "$ bin/splats -C -f samples/VerySimple.rb -g /tmp/VerySimple.rb"
 
 pause
 
-ruby bin/cli.rb -C -f samples/VerySimple.rb -g /tmp/VerySimple.rb
+bin/splats -C -f samples/VerySimple.rb -g /tmp/VerySimple.rb
